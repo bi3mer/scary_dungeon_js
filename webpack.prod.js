@@ -4,14 +4,14 @@ module.exports = {
   mode: "production",
   entry: "./src/index.ts",
   output: {
-  filename: "bundle.js"
+    filename: "bundle.js"
   },
   optimization: {
     chunkIds: false,
   },
   resolve: {
-  // Add `.ts` and `.tsx` as a resolvable extension.
-  extensions: [".ts", ".tsx", ".js"]
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: [".ts", ".tsx", ".js"]
   },
   module: {
   rules: [

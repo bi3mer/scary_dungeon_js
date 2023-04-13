@@ -1,4 +1,5 @@
 import { Display, Map, RNG } from "rot-js";
+import { Entity } from "./entity/entity";
 
 export class Game {
   private display: Display
@@ -31,7 +32,8 @@ export class Game {
     digger.create(callback);
     for (var i = 0; i < 10; ++i) {
       const index = Math.floor(RNG.getUniform() * freeCells.length);
-      this.map[freeCells[index]] = "*";
+      const key = freeCells.splice(index, 1)[0]; // get key and remove it 
+      this.map[key] = "*";
     }
   }
 
@@ -45,6 +47,8 @@ export class Game {
   }
 
   start() {
+    let player = new Entity();
+    let test = player.spawn(0, 0);
     this.generateMap();
     this.drawWholeMap();
   }
