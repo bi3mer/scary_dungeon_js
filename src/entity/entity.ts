@@ -1,3 +1,5 @@
+import { Action } from "../action/action";
+import { ActionPass } from "../action/actionPass";
 import { assert } from "../utility/error";
 import { RenderOrder } from "../utility/renderOrder";
 
@@ -31,7 +33,7 @@ export class Entity {
   }
 
   // => Entity
-  spawn(x: number, y: number)  {
+  spawn(x: number, y: number): Entity  {
     let clone = new Entity(
       x,
       y,
@@ -43,5 +45,17 @@ export class Entity {
     );
 
     return clone;
+  }
+
+  update(): Action {
+    console.error('Base update call on entity not allowed.')
+    console.trace();
+
+    return new ActionPass();
+  }
+
+  move(dx: number, dy: number) {
+    this.x += dx;
+    this.y += dy;
   }
 }

@@ -1,10 +1,15 @@
 import { Display, Map, RNG } from "rot-js";
 import { Entity } from "./entity/entity";
+import { Actor } from "./entity/actor";
+
+import entityFactory from "./entity/entityFactory";
 
 export class Game {
   private display: Display
   private map: { [name: string]: string }
   private config: { width: number, height: number };
+  private player: Actor;
+  private entities: Entity[]
 
   constructor() {
     this.config = { width: 40, height: 40};
@@ -15,6 +20,9 @@ export class Game {
 
     this.map = {};
     document.body.appendChild(this.display.getContainer()!);
+
+    this.player = entityFactory.player.spawn(0, 0);
+    this.entities = [];
   }
 
   private generateMap() {
@@ -47,8 +55,6 @@ export class Game {
   }
 
   start() {
-    let player = new Entity();
-    let test = player.spawn(0, 0);
     this.generateMap();
     this.drawWholeMap();
   }
