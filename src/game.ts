@@ -3,10 +3,13 @@ import { Entity } from "./entity/entity";
 import { Actor } from "./entity/actor";
 
 import entityFactory from "./entity/entityFactory";
+import { GameMap } from "./game/gameMap";
+import tileFactory from "./tile/tileFactory";
 
 export class Game {
   private display: Display
-  private map: { [name: string]: string }
+  // private map: { [name: string]: string }
+  private map: GameMap
   private config: { width: number, height: number };
   private player: Actor;
   private entities: Entity[]
@@ -18,7 +21,7 @@ export class Game {
       height: this.config.height,
     });
 
-    this.map = {};
+    this.map = new GameMap(this.config.width, this.config.height);
     document.body.appendChild(this.display.getContainer()!);
 
     this.player = entityFactory.player.spawn(0, 0);
@@ -27,35 +30,36 @@ export class Game {
 
   private generateMap() {
     let digger = new Map.Digger(this.config.width, this.config.height);
-    let freeCells: string[] = new Array();
+    let freeCells: [number, number][] = new Array();
 
     let callback = (x: number, y: number, value: number) => {
       if (value) return; // do not store walls
 
-      const key = `${x},${y}`;
-      freeCells.push(key);
-      this.map[key] = ".";
+      freeCells.push([x, y]);
+      this.map.setTile(x, y, tileFactory.floor);
     }
 
     digger.create(callback);
-    for (var i = 0; i < 10; ++i) {
-      const index = Math.floor(RNG.getUniform() * freeCells.length);
-      const key = freeCells.splice(index, 1)[0]; // get key and remove it 
-      this.map[key] = "*";
-    }
+
+    // console.warn('boxes not placed yet!');
+    // for (var i = 0; i < 10; ++i) {
+    //   const index = Math.floor(RNG.getUniform() * freeCells.length);
+    //   const key = freeCells.splice(index, 1)[0]; // get key and remove it 
+    //   this.map[key] = "*";
+    // }
   }
 
-  private drawWholeMap() {
-    for (var key in this.map) {
-      const parts = key.split(",");
-      const x = parseInt(parts[0]);
-      const y = parseInt(parts[1]);
-      this.display.draw(x, y, this.map[key], null, null);
-    }
-  }
+  // private drawWholeMap() {
+  //   for (var key in this.map) {
+  //     const parts = key.split(",");
+  //     const x = parseInt(parts[0]);
+  //     const y = parseInt(parts[1]);
+  //     this.display.draw(x, y, this.map[key], null, null);
+  //   }
+  // }
 
   start() {
     this.generateMap();
-    this.drawWholeMap();
+    this.map.render(this.display);
   }
 }
