@@ -2,6 +2,7 @@ import { Tile } from "../tile/tile";
 import tileFactory from "../tile/tileFactory";
 import { Display } from "rot-js";
 import { assert } from "../utility/error";
+import { Entity } from "../entity/entity";
 
 export class GameMap {
   private width: number
@@ -9,6 +10,7 @@ export class GameMap {
   private tiles: Tile[]
   private visible: boolean[]
   private explored: boolean[]
+  private entities: Entity[]
 
   constructor(width: number, height:number) {
     this.width = width;
@@ -17,6 +19,8 @@ export class GameMap {
     this.tiles = Array(this.width*this.height).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height).fill(true);  // TODO: set to false
     this.explored = Array(this.width*this.height).fill(true); // TODO: set to false
+
+    this.entities = [];
   }
 
   private inBounds(x: number, y: number): boolean {
@@ -46,5 +50,15 @@ export class GameMap {
         index++;
       }
     }
+  }
+
+  entityAtLocation(x: number, y: number): Entity | null {
+    for(var entity of this.entities) {
+      if (entity.x == x && entity.y == y) {
+        return entity;
+      }
+    }
+
+    return null;
   }
 }

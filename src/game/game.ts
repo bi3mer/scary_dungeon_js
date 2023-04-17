@@ -1,14 +1,13 @@
 import { Display, Map, RNG } from "rot-js";
-import { Entity } from "./entity/entity";
-import { Actor } from "./entity/actor";
+import { Entity } from "../entity/entity";
+import { Actor } from "../entity/actor";
 
-import entityFactory from "./entity/entityFactory";
-import { GameMap } from "./game/gameMap";
-import tileFactory from "./tile/tileFactory";
+import entityFactory from "../entity/entityFactory";
+import { GameMap } from "./gameMap";
+import tileFactory from "../tile/tileFactory";
 
 export class Game {
   private display: Display
-  // private map: { [name: string]: string }
   private map: GameMap
   private config: { width: number, height: number };
   private player: Actor;
@@ -49,17 +48,13 @@ export class Game {
     // }
   }
 
-  // private drawWholeMap() {
-  //   for (var key in this.map) {
-  //     const parts = key.split(",");
-  //     const x = parseInt(parts[0]);
-  //     const y = parseInt(parts[1]);
-  //     this.display.draw(x, y, this.map[key], null, null);
-  //   }
-  // }
-
   start() {
     this.generateMap();
     this.map.render(this.display);
+  }
+
+  addMessage(message: string) {
+    // TODO: use an actual message log
+    console.warn(message);
   }
 }
