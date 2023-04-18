@@ -1,8 +1,9 @@
-import { Tile } from "../tile/tile";
 import tileFactory from "../tile/tileFactory";
+import { Tile } from "../tile/tile";
 import { Display } from "rot-js";
 import { assert } from "../utility/error";
 import { Entity } from "../entity/entity";
+
 
 export class GameMap {
   private width: number
@@ -16,15 +17,23 @@ export class GameMap {
     this.width = width;
     this.height = height;
 
-    this.tiles = Array(this.width*this.height).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height).fill(true);  // TODO: set to false
-    this.explored = Array(this.width*this.height).fill(true); // TODO: set to false
+    this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
+    this.visible = Array(this.width*this.height + this.width).fill(true);  // TODO: set to false
+    this.explored = Array(this.width*this.height + this.width).fill(true); // TODO: set to false
 
     this.entities = [];
   }
 
-  private inBounds(x: number, y: number): boolean {
-    return y * this.height + x <= this.width * this.height + this.width;
+  inBounds(x: number, y: number): boolean {
+    return y * this.width + x < this.tiles.length;
+  }
+
+  isWalkable(x: number, y: number): boolean {
+    if (!this.inBounds(x, y)) {
+      return false;
+    }
+    
+    return this.tiles[y*this.width + x].walkable;
   }
 
   setTile(x: number, y: number, tile: Tile) {
@@ -50,6 +59,17 @@ export class GameMap {
         index++;
       }
     }
+
+    // TODO: render order not handled
+
+    for (let e of this.entities) {
+      e.render(display);
+    }
+  }
+
+  addEntity(entity: Entity) {
+    assert(this.entityAtLocation(entity.x, entity.y) == null);
+    this.entities.push(entity);
   }
 
   entityAtLocation(x: number, y: number): Entity | null {

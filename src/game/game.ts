@@ -5,13 +5,15 @@ import { Actor } from "../entity/actor";
 import entityFactory from "../entity/entityFactory";
 import { GameMap } from "./gameMap";
 import tileFactory from "../tile/tileFactory";
+import { InputManager, Key } from "./inputManager";
+import actorFactory from "../entity/actorFactory";
 
 export class Game {
   private display: Display
   private map: GameMap
-  private config: { width: number, height: number };
-  private player: Actor;
-  private entities: Entity[]
+  private config: { width: number, height: number }
+  private player: Actor
+  private delta: number;
 
   constructor() {
     this.config = { width: 40, height: 40};
@@ -23,8 +25,8 @@ export class Game {
     this.map = new GameMap(this.config.width, this.config.height);
     document.body.appendChild(this.display.getContainer()!);
 
-    this.player = entityFactory.player.spawn(0, 0);
-    this.entities = [];
+    this.player = actorFactory.player.spawn(0, 0, this.map);
+    this.delta = 0;
   }
 
   private generateMap() {
@@ -40,6 +42,10 @@ export class Game {
 
     digger.create(callback);
 
+    let [x,y] = freeCells[0];
+    this.player.x = x;
+    this.player.y = y;
+
     // console.warn('boxes not placed yet!');
     // for (var i = 0; i < 10; ++i) {
     //   const index = Math.floor(RNG.getUniform() * freeCells.length);
@@ -49,8 +55,42 @@ export class Game {
   }
 
   start() {
+    InputManager.init();
     this.generateMap();
     this.map.render(this.display);
+
+    let oldTimeStamp : number;
+    let fps : number;
+
+    const gameLoop = (timeStamp : number) => {
+      // Calculate the number of seconds passed since the last frame
+      this.delta = (timeStamp - oldTimeStamp) / 1000;
+      oldTimeStamp = timeStamp;
+      fps = Math.round(1 / this.delta);
+
+      // game engine operations
+      // this.map.update();
+
+      if (this.player.act(this.map)) {
+        // TODO: AI act the next frame;
+      }
+
+      this.map.render(this.display);
+
+      // // Draw FPS
+      // if (this.displayFPS && this.clearBackground) {
+      //   const tempSize = this.fontSize;
+      //   const tempFont = this.font;
+
+      //   this.setFont(8, 'Courier New');
+      //   this.drawText(this.width - 60, 15, `FPS: ${fps}`, 'red');
+      //   this.setFont(tempSize, tempFont);
+      // }
+
+      window.requestAnimationFrame(gameLoop);
+    }
+
+    window.requestAnimationFrame(gameLoop);
   }
 
   addMessage(message: string) {
