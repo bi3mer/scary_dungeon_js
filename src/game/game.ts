@@ -68,9 +68,6 @@ export class Game {
       oldTimeStamp = timeStamp;
       fps = Math.round(1 / this.delta);
 
-      // game engine operations
-      // this.map.update();
-
       if (this.player.act(this.map)) {
         // TODO: AI act the next frame;
       }

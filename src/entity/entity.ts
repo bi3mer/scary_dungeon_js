@@ -55,13 +55,6 @@ export class Entity {
     return clone;
   }
 
-  update(): Action {
-    console.error('Base update call on entity not allowed.')
-    console.trace();
-
-    return new ActionPass();
-  }
-
   move(dx: number, dy: number) {
     this.x += dx;
     this.y += dy;
