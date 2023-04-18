@@ -5,10 +5,12 @@ import { Action } from "./action"
 export class DirectionAction implements Action {
   dx: number
   dy: number
+  cost: number;
 
   constructor(dx: number, dy: number) {
     this.dx = dx;
     this.dy = dy;
+    this.cost = 1;
   }
 
   execute(actor: Actor, map: GameMap): void {

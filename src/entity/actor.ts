@@ -21,14 +21,14 @@ export class Actor extends Entity {
     this.behavior = behavior;
   }
 
-  public act(map: GameMap): boolean {
+  public act(map: GameMap): number {
     let action = this.behavior.act(this, map);
     if (action !== undefined) {
       action.execute(this, map);
-      return true;
+      return action.cost;
     }
 
-    return false;
+    return 0;
   }
 
   public override spawn(x: number, y: number, map: GameMap): Actor {

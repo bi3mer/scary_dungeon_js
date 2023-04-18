@@ -1,5 +1,4 @@
 import { Display, Map, RNG } from "rot-js";
-import { Entity } from "../entity/entity";
 import { Actor } from "../entity/actor";
 
 import entityFactory from "../entity/entityFactory";
@@ -16,7 +15,7 @@ export class Game {
   private delta: number;
 
   constructor() {
-    this.config = { width: 40, height: 40};
+    this.config = { width: 80, height: 40};
     this.display = new Display({
       width: this.config.width,
       height: this.config.height,
@@ -62,38 +61,29 @@ export class Game {
     let oldTimeStamp : number;
     let fps : number;
 
+    let turnNumber = 1;
+
     const gameLoop = (timeStamp : number) => {
       // Calculate the number of seconds passed since the last frame
       this.delta = (timeStamp - oldTimeStamp) / 1000;
       oldTimeStamp = timeStamp;
       fps = Math.round(1 / this.delta);
 
-      if (this.player.act(this.map)) {
-        InputManager.clear();
-        this.display.clear();
-        this.map.render(this.display);
-        // TODO: AI act the next frame;
+      if (turnNumber % 3 == 0) {
+        turnNumber = 1;
+      } else {
+        const cost = this.player.act(this.map);
+        if (cost > 0) {
+          InputManager.clear();
+          this.display.clear();
+          this.map.render(this.display);
+          turnNumber = Math.min(turnNumber+cost, 3);
+        }
       }
-
-
-      // // Draw FPS
-      // if (this.displayFPS && this.clearBackground) {
-      //   const tempSize = this.fontSize;
-      //   const tempFont = this.font;
-
-      //   this.setFont(8, 'Courier New');
-      //   this.drawText(this.width - 60, 15, `FPS: ${fps}`, 'red');
-      //   this.setFont(tempSize, tempFont);
-      // }
 
       window.requestAnimationFrame(gameLoop);
     }
 
     window.requestAnimationFrame(gameLoop);
-  }
-
-  addMessage(message: string) {
-    // TODO: use an actual message log
-    console.warn(message);
   }
 }

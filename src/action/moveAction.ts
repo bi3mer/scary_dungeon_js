@@ -10,7 +10,7 @@ export class MoveAction extends DirectionAction {
   
   execute(actor: Actor, map: GameMap): void {
     let [x, y] = this.destination(actor);
-    if (!map.isWalkable(x, y) || map.entityAtLocation(x, y) !== null) {
+    if (!map.isWalkable(x, y) || map.actorAtLocation(x, y) !== null) {
       MessageLog.addErrorMessage("That way is blocked.", true);
     } else {
       actor.move(this.dx, this.dy);

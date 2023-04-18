@@ -1,6 +1,4 @@
 import { Color, toRGB } from "rot-js/lib/color";
-import { Action } from "../action/action";
-import { ActionPass } from "../action/actionPass";
 import { assert } from "../utility/error";
 import { RenderOrder } from "../utility/renderOrder";
 import { Display } from "rot-js";
@@ -58,7 +56,6 @@ export class Entity {
   move(dx: number, dy: number) {
     this.x += dx;
     this.y += dy;
-    console.log(this.x, this.y);
   }
 
   render(display: Display) {
