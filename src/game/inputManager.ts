@@ -88,4 +88,10 @@ export class InputManager {
 
     return false;
   }
+
+  static clear() {
+    for(let i = 0; i < InputManager._keys.length; ++i) {
+      InputManager._keys[i] = false;
+    }
+  }
 }

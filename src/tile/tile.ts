@@ -1,5 +1,3 @@
-import { Color, toRGB } from "rot-js/lib/color";
-
 export class Tile {
   char: string
   walkable: boolean
@@ -11,16 +9,16 @@ export class Tile {
   constructor(
     char: string, 
     walkable: boolean,
-    inViewFG: Color, 
-    inViewBG: Color,
-    outOfViewFG: Color, 
-    outOfViewBG: Color,
+    inViewFG: string, 
+    inViewBG: string,
+    outOfViewFG: string, 
+    outOfViewBG: string,
   ) {
     this.char = char;
     this.walkable = walkable;
-    this.inViewFG = toRGB(inViewFG);
-    this.inViewBG = toRGB(inViewBG);
-    this.outOfViewFG = toRGB(outOfViewFG);
-    this.outOfViewBG = toRGB(outOfViewBG);
+    this.inViewFG = inViewFG;
+    this.inViewBG = inViewBG;
+    this.outOfViewFG = outOfViewFG;
+    this.outOfViewBG = outOfViewBG;
   }
 }

@@ -1,3 +1,4 @@
+import colors from "../utility/colors";
 import { Tile } from "./tile";
 
 let tileFactory: {[name: string]: Tile} = {};
@@ -5,28 +6,28 @@ let tileFactory: {[name: string]: Tile} = {};
 tileFactory.floor = new Tile(
   ' ',
   true,
-  [100, 100, 100],
-  [0, 0, 0],
-  [200, 200, 200],
-  [0, 0, 0]
+  colors.lightGray,
+  colors.black,
+  colors.darkGray,
+  colors.black
 )
 
 tileFactory.wall = new Tile(
-  '#',
+  ' ',
   false,
-  [100, 100, 100],
-  [0, 0, 0],
-  [200, 200, 200],
-  [0, 0, 0]
+  colors.lightGray,
+  colors.lightGray,
+  colors.darkGray,
+  colors.black
 )
 
 tileFactory.downStairs = new Tile(
   '>',
   false,
-  [100, 100, 100],
-  [0, 0, 0],
-  [200, 200, 200],
-  [0, 0, 0]
+  colors.lightGray,
+  colors.black,
+  colors.darkGray,
+  colors.black
 )
 
 

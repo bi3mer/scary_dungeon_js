@@ -69,10 +69,12 @@ export class Game {
       fps = Math.round(1 / this.delta);
 
       if (this.player.act(this.map)) {
+        InputManager.clear();
+        this.display.clear();
+        this.map.render(this.display);
         // TODO: AI act the next frame;
       }
 
-      this.map.render(this.display);
 
       // // Draw FPS
       // if (this.displayFPS && this.clearBackground) {
