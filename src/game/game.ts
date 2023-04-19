@@ -62,6 +62,19 @@ export class Game {
     log.style.width = `${canvas.width}px`;
   }
 
+  render(menu: Menu | null, computeFOV: boolean) {
+    this.display.clear();
+    if (computeFOV) {
+      this.map.computeFOV(this.player.x, this.player.y);
+    }
+
+    this.map.render(this.display);
+
+    if (menu !== null) {
+      menu.render(this.display);
+    }
+  }
+
   start() {
     document.getElementById('game')!.appendChild(this.display.getContainer()!);
     this.setUISize();
@@ -70,7 +83,7 @@ export class Game {
     
     InputManager.init();
     this.generateMap();
-    this.map.render(this.display);
+    this.render(null, true);
 
     let oldTimeStamp : number;
     let fps : number;
@@ -90,12 +103,9 @@ export class Game {
 
         if (menu.shouldExit) {
           menu = null;
-          this.display.clear();
-          this.map.render(this.display);
+          this.render(menu, false);
         } else if (menu.shouldRender) {
-          this.display.clear();
-          this.map.render(this.display);
-          menu.render(this.display);
+          this.render(menu, false);
         }
       } else if (InputManager.isKeyDown(Key.H)) {
         // Create the help menu
@@ -108,9 +118,7 @@ export class Game {
         const cost = this.player.act(this.map);
         if (cost > 0) {
           InputManager.clear();
-          this.display.clear();
-          this.map.render(this.display);
-          turnNumber = Math.min(turnNumber+cost, 3);
+          this.render(menu, true);
         }
       }
 

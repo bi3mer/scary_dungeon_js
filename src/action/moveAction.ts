@@ -14,7 +14,6 @@ export class MoveAction extends DirectionAction {
     if (!map.isWalkable(x, y) || map.actorAtLocation(x, y) !== null) {
       MessageLog.addErrorMessage("That way is blocked.", true);
     } else {
-      MessageLog.addMessage('You moved.', colors.lightGray, true);
       actor.move(this.dx, this.dy);
     }
   }

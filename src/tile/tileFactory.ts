@@ -4,7 +4,7 @@ import { Tile } from "./tile";
 let tileFactory: {[name: string]: Tile} = {};
 
 tileFactory.floor = new Tile(
-  ' ',
+  '.',
   true,
   colors.lightGray,
   colors.black,
@@ -13,10 +13,10 @@ tileFactory.floor = new Tile(
 )
 
 tileFactory.wall = new Tile(
-  ' ',
+  '#',
   false,
   colors.lightGray,
-  colors.lightGray,
+  colors.black,
   colors.darkGray,
   colors.black
 )

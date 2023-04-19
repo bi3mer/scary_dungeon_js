@@ -4,6 +4,7 @@ import { Display } from "rot-js";
 import { assert } from "../utility/error";
 import { Entity } from "../entity/entity";
 import { Actor } from "../entity/actor";
+import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 
 
 export class GameMap {
@@ -20,11 +21,15 @@ export class GameMap {
     this.height = height;
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height + this.width).fill(true);  // TODO: set to false
-    this.explored = Array(this.width*this.height + this.width).fill(true); // TODO: set to false
+    this.visible = Array(this.width*this.height + this.width).fill(false);  // TODO: set to false
+    this.explored = Array(this.width*this.height + this.width).fill(false); // TODO: set to false
 
     this.entities = [];
     this.actors = [];
+  }
+
+  private index(x: number, y: number): number {
+    return y*this.width + x;
   }
 
   inBounds(x: number, y: number): boolean {
@@ -32,7 +37,8 @@ export class GameMap {
   }
 
   isWalkable(x: number, y: number): boolean {
-    if (!this.inBounds(x, y)) {
+    const index = this.index(x, y);
+    if (index >= this.tiles.length) {
       return false;
     }
     
@@ -40,8 +46,9 @@ export class GameMap {
   }
 
   setTile(x: number, y: number, tile: Tile) {
-    assert(this.inBounds(x, y));
-    this.tiles[y * this.width + x] = tile;
+    const index = this.index(x, y);
+    assert(index < this.tiles.length);
+    this.tiles[index] = tile;
   }
 
   render(display: Display) {
@@ -111,5 +118,28 @@ export class GameMap {
 
   locationOccupied(x: number, y: number): boolean {
     return this.entityAtLocation(x, y) != null || this.actorAtLocation(x, y) != null;
+  }
+
+  computeFOV(x: number, y: number): void {
+    const fov = new PreciseShadowcasting((x, y) => {
+      const index = this.index(x, y);
+      if (index < this.tiles.length && index >= 0) {
+        return this.tiles[index].walkable;
+      }
+
+      return false;
+    });
+
+    this.visible.fill(false);
+
+    fov.compute(x, y, 10, (x: number, y: number, r: number, visibility: number) => {
+      const index = this.index(x, y);
+      if (visibility > 0.0) {
+        this.explored[index] = true;
+        this.visible[index] = true;
+      } else {
+        this.visible[index] = false;
+      }
+    });
   }
 }
