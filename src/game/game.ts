@@ -6,6 +6,9 @@ import { GameMap } from "./gameMap";
 import tileFactory from "../tile/tileFactory";
 import { InputManager, Key } from "./inputManager";
 import actorFactory from "../entity/actorFactory";
+import { Menu } from "../ui/menu";
+import { Button } from "../ui/button";
+import colors from "../utility/colors";
 
 export class Game {
   private display: Display
@@ -62,6 +65,7 @@ export class Game {
     let fps : number;
 
     let turnNumber = 1;
+    let menu: Menu | undefined;
 
     const gameLoop = (timeStamp : number) => {
       // Calculate the number of seconds passed since the last frame
@@ -69,7 +73,19 @@ export class Game {
       oldTimeStamp = timeStamp;
       fps = Math.round(1 / this.delta);
 
-      if (turnNumber % 3 == 0) {
+      if (menu !== undefined) {
+        menu.update();
+        if (menu.shouldRender) {
+          this.display.clear();
+          this.map.render(this.display);
+          menu.render(this.display);
+        }
+      } else if (InputManager.isKeyDown(Key.H)) {
+        // create menu 
+        menu = new Menu(this.config.width/4, this.config.height/4, this.config.width/2, this.config.height/2, "Help", true, "#fff", true);
+        menu.addButton(new Button(this.config.width/4 + 4, this.config.height/4 + 5, 8, 3, "Hi", colors.lightGray, colors.white, colors.lightGray, colors.white));
+        menu.addButton(new Button(this.config.width/4 + 12, this.config.height/4 + 5, 8, 3, "Ok", colors.lightGray, colors.white, colors.lightGray, colors.white));
+      } else if (turnNumber % 3 == 0) {
         turnNumber = 1;
       } else {
         const cost = this.player.act(this.map);
