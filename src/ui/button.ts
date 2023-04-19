@@ -1,5 +1,10 @@
 import { Display } from "rot-js"
 import { drawFrame } from "./util"
+import { InputManager, Key } from "../game/inputManager"
+
+interface ButtonCallback {
+  (): void
+}
 
 export class Button {
   x: number      
@@ -12,6 +17,7 @@ export class Button {
   frameColor: string
   frameHighlightedColor: string
   highlighted: boolean
+  callback: ButtonCallback
 
   constructor(
     x: number, 
@@ -23,6 +29,7 @@ export class Button {
     textHighlightedColor: string, 
     frameColor: string,
     frameHighlightedColor: string,
+    callback: ButtonCallback
   ) {
     this.x = x;
     this.y = y;
@@ -35,6 +42,7 @@ export class Button {
     this.frameColor = frameColor;
     this.frameHighlightedColor = frameHighlightedColor;
     this.highlighted = false;
+    this.callback = callback;
   }
 
   render(display: Display) {
@@ -49,5 +57,11 @@ export class Button {
     // draw text in the center of the button
     let center = this.width / 2;
     display.drawText(this.x + center - this.text.length/2, this.y + 1, `%c{${textColor}}${this.text}`);
+  }
+
+  update() {
+    if(this.highlighted && InputManager.isKeyDown(Key.ENTER)) {
+      this.callback();
+    }
   }
 }

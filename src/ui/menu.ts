@@ -2,6 +2,7 @@ import { Display } from "rot-js"
 import { Button } from "./button"
 import { drawFrameWithTitle, drawFrame } from "./util"
 import { InputManager, Key } from "../game/inputManager"
+import { Text } from "./text"
 
 export class Menu {
   x: number
@@ -14,7 +15,9 @@ export class Menu {
   backgroundColor: string
   buttons: Button[]
   buttonIndex: number
+  text: Text[]
   shouldRender: boolean
+  shouldExit: boolean
 
   constructor(
     x: number, 
@@ -37,18 +40,24 @@ export class Menu {
     this.exitOnEscape = exitOnEscape;
     this.buttons = [];
     this.buttonIndex = 0;
+    this.text = [];
 
     this.shouldRender = true;
+    this.shouldExit = false;
   }
 
-  addButton(button: Button) {
+  addButton(button: Button): void {
     this.buttons.push(button);
     if (this.buttons.length === 1) {
       this.buttons[0].highlighted = true;
     }
   }
 
-  render(display: Display) {
+  addText(text: Text): void {
+    this.text.push(text);
+  }
+
+  render(display: Display): void {
     drawFrameWithTitle(display, this.title, this.x, this.y, this.width, this.height);
 
     // now we can draw the buttons and text
@@ -56,10 +65,14 @@ export class Menu {
       b.render(display);
     }
 
+    for (let t of this.text) {
+      t.render(display);
+    }
+
     this.shouldRender = false;
   }
 
-  update() {
+  update(): void {
     if (this.buttons.length > 0) {
       if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
         this.buttons[this.buttonIndex].highlighted = false;
@@ -72,6 +85,12 @@ export class Menu {
         this.buttons[this.buttonIndex].highlighted = true;
         this.shouldRender = true;
       }
+
+      this.buttons[this.buttonIndex].update();
+    }
+
+    if (this.exitOnEscape && InputManager.isKeyDown(Key.ESCAPE)) {
+      this.shouldExit = true;
     }
   }
 }
