@@ -6,7 +6,7 @@ let tileFactory: {[name: string]: Tile} = {};
 tileFactory.floor = new Tile(
   '.',
   true,
-  colors.lightGray,
+  colors.visible,
   colors.black,
   colors.darkGray,
   colors.black
@@ -15,7 +15,7 @@ tileFactory.floor = new Tile(
 tileFactory.wall = new Tile(
   '#',
   false,
-  colors.lightGray,
+  colors.visible,
   colors.black,
   colors.darkGray,
   colors.black
