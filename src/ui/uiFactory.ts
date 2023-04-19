@@ -23,8 +23,8 @@ export function helpMenu(width: number, height: number) : Menu {
     }
   ));
 
-  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move", colors.white, colors.black));
-
+  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colors.white, colors.black));
+  m.addText(new Text(x+3, y+4, "I to inspect.", colors.white, colors.black));
 
   return m;
 }

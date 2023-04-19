@@ -7,8 +7,6 @@ import tileFactory from "../tile/tileFactory";
 import { InputManager, Key } from "./inputManager";
 import actorFactory from "../entity/actorFactory";
 import { Menu } from "../ui/menu";
-import { Button } from "../ui/button";
-import colors from "../utility/colors";
 import { helpMenu } from "../ui/uiFactory";
 
 export class Game {
@@ -57,7 +55,19 @@ export class Game {
     // }
   }
 
+  private setUISize() {
+    const canvas = document.querySelector('canvas')?.getContext('2d')!.canvas!;
+    const log = document.getElementById('messages')!;
+    log.style.left = `${canvas.offsetLeft}px`;
+    log.style.width = `${canvas.width}px`;
+  }
+
   start() {
+    document.getElementById('game')!.appendChild(this.display.getContainer()!);
+    this.setUISize();
+
+    addEventListener('resize', this.setUISize);
+    
     InputManager.init();
     this.generateMap();
     this.map.render(this.display);
@@ -75,6 +85,7 @@ export class Game {
       fps = Math.round(1 / this.delta);
 
       if (menu !== null) {
+        // if there is a menu then it handles input
         menu.update();
 
         if (menu.shouldExit) {
@@ -87,11 +98,13 @@ export class Game {
           menu.render(this.display);
         }
       } else if (InputManager.isKeyDown(Key.H)) {
-        // create menu 
+        // Create the help menu
         menu = helpMenu(this.config.width, this.config.height);
       } else if (turnNumber % 3 == 0) {
+        // AI turn
         turnNumber = 1;
       } else {
+        // player turn
         const cost = this.player.act(this.map);
         if (cost > 0) {
           InputManager.clear();

@@ -15,14 +15,46 @@
   <canvas id="canvas"  width="720" height="480" style="border:1px solid"></canvas>
   </center> -->
 
+  <div id="game"></div>
+  <pre id="messages"></pre>
+  <!-- <figure>
+    <div id="game"></div>
+    <pre id="messages"></pre>
+  </figure> -->
+
   <br/>
+  <style>
+    body { 
+      background-color:  rgb(0, 0, 0);
+    }
+
+    #game {
+      margin-left: auto; 
+      margin-right: auto;
+    }
+
+    canvas {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #messages {
+      box-sizing: border-box;
+      font-size: 1.2em;
+      height: 6em; 
+      line-height: 1.0;
+      background: black;
+      color: white;
+      margin: 0;
+      padding: 0.5em 1em;
+      text-align: left;
+      position: relative;
+  }
+  </style>
 
   <script src="dist/bundle.js"></script>
 
-  <style>
-    body { background-color:  rgb(0, 0, 0);}
-    canvas {display: block; margin-left: auto; margin-right: auto;}
-  </style>
   
   <!-- Global Site Tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>

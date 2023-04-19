@@ -1,6 +1,6 @@
 import { Display } from "rot-js"
 import { Button } from "./button"
-import { drawFrameWithTitle, drawFrame } from "./util"
+import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
 
