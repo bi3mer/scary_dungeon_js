@@ -21,8 +21,8 @@ export class GameMap {
     this.height = height;
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height + this.width).fill(false);  // TODO: set to false
-    this.explored = Array(this.width*this.height + this.width).fill(false); // TODO: set to false
+    this.visible = Array(this.width*this.height + this.width).fill(false);  
+    this.explored = Array(this.width*this.height + this.width).fill(true); 
 
     this.entities = [];
     this.actors = [];
@@ -46,6 +46,7 @@ export class GameMap {
   }
 
   setTile(x: number, y: number, tile: Tile) {
+    console.log(x, y);
     const index = this.index(x, y);
     assert(index < this.tiles.length);
     this.tiles[index] = tile;

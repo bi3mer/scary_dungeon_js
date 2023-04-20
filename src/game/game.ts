@@ -8,6 +8,7 @@ import { InputManager, Key } from "./inputManager";
 import actorFactory from "../entity/actorFactory";
 import { Menu } from "../ui/menu";
 import { helpMenu, mainMenu } from "../ui/uiFactory";
+import { RoomGenerator } from "../generation/roomGenerator";
 
 
 export class Game {
@@ -32,22 +33,29 @@ export class Game {
   }
 
   private generateMap() {
-    let digger = new Map.Digger(this.config.width, this.config.height);
-    let freeCells: [number, number][] = new Array();
+    let temp = new RoomGenerator(this.config.width, this.config.height);
+    let res = temp.generate();
 
-    let callback = (x: number, y: number, value: number) => {
-      if (value) return; // do not store walls
+    this.map = res[0];
+    this.player.x = res[1];
+    this.player.y = res[2];
 
-      freeCells.push([x, y]);
-      this.map.setTile(x, y, tileFactory.floor);
-    }
+    // let digger = new Map.Digger(this.config.width, this.config.height);
+    // let freeCells: [number, number][] = new Array();
 
-    digger.create(callback);
-    console.log('here!');
+    // let callback = (x: number, y: number, value: number) => {
+    //   if (value) return; // do not store walls
 
-    let [x,y] = freeCells[0];
-    this.player.x = x;
-    this.player.y = y;
+    //   freeCells.push([x, y]);
+    //   this.map.setTile(x, y, tileFactory.floor);
+    // }
+
+    // digger.create(callback);
+    // console.log('here!');
+
+    // let [x,y] = freeCells[0];
+    // this.player.x = x;
+    // this.player.y = y;
 
     // console.warn('boxes not placed yet!');
     // for (var i = 0; i < 10; ++i) {
