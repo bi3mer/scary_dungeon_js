@@ -1,3 +1,5 @@
+import { MessageLog } from "../utility/messageLog";
+
 export enum Key {
   LEFT = 0,
   RIGHT,
@@ -30,8 +32,14 @@ export class InputManager {
     window.addEventListener("keyup", InputManager.onKeyUp);
   }
 
-  public static isKeyDown(k: Key): boolean {
-    return InputManager._keys[k];
+  public static isKeyDown(...keys: Key[]): boolean {
+    for(let k of keys) {
+      if (InputManager._keys[k]) {
+        return true;
+      }
+    }
+
+    return false;
   }
   
   private static keyStrToKey(key: string): Key {

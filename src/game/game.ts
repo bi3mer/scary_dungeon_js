@@ -7,7 +7,8 @@ import tileFactory from "../tile/tileFactory";
 import { InputManager, Key } from "./inputManager";
 import actorFactory from "../entity/actorFactory";
 import { Menu } from "../ui/menu";
-import { helpMenu } from "../ui/uiFactory";
+import { helpMenu, mainMenu } from "../ui/uiFactory";
+
 
 export class Game {
   private display: Display
@@ -42,6 +43,7 @@ export class Game {
     }
 
     digger.create(callback);
+    console.log('here!');
 
     let [x,y] = freeCells[0];
     this.player.x = x;
@@ -55,14 +57,14 @@ export class Game {
     // }
   }
 
-  private setUISize() {
+  private setUISize(): void {
     const canvas = document.querySelector('canvas')?.getContext('2d')!.canvas!;
     const log = document.getElementById('messages')!;
     log.style.left = `${canvas.offsetLeft}px`;
     log.style.width = `${canvas.width}px`;
   }
-
-  render(menu: Menu | null, computeFOV: boolean) {
+  
+  render(menu: Menu | null, computeFOV: boolean): void {
     this.display.clear();
     if (computeFOV) {
       this.map.computeFOV(this.player.x, this.player.y);
@@ -75,22 +77,27 @@ export class Game {
     }
   }
 
-  start() {
+  start(): void {
+    // GUI set up for the browser
     document.getElementById('game')!.appendChild(this.display.getContainer()!);
     this.setUISize();
-
     addEventListener('resize', this.setUISize);
-    
+
+    // initialize game engine details
     InputManager.init();
-    this.generateMap();
-    this.render(null, true);
 
     let oldTimeStamp : number;
     let fps : number;
 
     let turnNumber = 1;
-    let menu: Menu | null = null;
 
+    // we start at the main menu
+    let menu: Menu | null = mainMenu(this.config.width, this.config.height, () => {
+      this.generateMap();
+      this.render(null, true);
+    });
+
+    // the loop is a callback handled by window.requestAnimationFrame
     const gameLoop = (timeStamp : number) => {
       // Calculate the number of seconds passed since the last frame
       this.delta = (timeStamp - oldTimeStamp) / 1000;

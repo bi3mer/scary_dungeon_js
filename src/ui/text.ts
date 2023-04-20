@@ -15,7 +15,10 @@ export class Text {
     this.bg = bg;
   }
 
-  render(displaY: Display) {
-    displaY.drawText(this.x, this.y, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
+  render(display: Display) {
+    // for(let c of this.text) {
+    //   display.drawOver(this.x, this.y, c, this.fg, this.bg);
+    // }
+    display.drawText(this.x, this.y, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
   }
 }

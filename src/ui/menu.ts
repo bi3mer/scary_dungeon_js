@@ -4,6 +4,10 @@ import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
 
+interface updateCallback {
+  (): void
+}
+
 export class Menu {
   x: number
   y: number
@@ -12,12 +16,14 @@ export class Menu {
   title: string
   exitOnEscape: boolean
   drawOutline: boolean
-  backgroundColor: string
   buttons: Button[]
   buttonIndex: number
   text: Text[]
   shouldRender: boolean
   shouldExit: boolean
+  updateCallback: updateCallback
+
+  childMenu: Menu | null
 
   constructor(
     x: number, 
@@ -26,8 +32,8 @@ export class Menu {
     height: number, 
     title: string,
     drawOutline: boolean,
-    backgroundColor: string,
-    exitOnEscape: boolean) {
+    exitOnEscape: boolean,
+    updateCallback: updateCallback) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -36,7 +42,6 @@ export class Menu {
     this.title = title;
     
     this.drawOutline = drawOutline;
-    this.backgroundColor = backgroundColor;
     this.exitOnEscape = exitOnEscape;
     this.buttons = [];
     this.buttonIndex = 0;
@@ -44,6 +49,9 @@ export class Menu {
 
     this.shouldRender = true;
     this.shouldExit = false;
+
+    this.updateCallback = updateCallback;
+    this.childMenu = null;
   }
 
   addButton(button: Button): void {
@@ -60,19 +68,34 @@ export class Menu {
   render(display: Display): void {
     drawFrameWithTitle(display, this.title, this.x, this.y, this.width, this.height);
 
-    // now we can draw the buttons and text
-    for (let b of this.buttons) {
-      b.render(display);
-    }
+    if (this.childMenu) {
+      this.childMenu.render(display);
+    } else {
+      for (let b of this.buttons) {
+        b.render(display);
+      }
 
-    for (let t of this.text) {
-      t.render(display);
+      for (let t of this.text) {
+        t.render(display);
+      }
     }
 
     this.shouldRender = false;
   }
 
   update(): void {
+    if (this.childMenu) {
+      this.childMenu.update();
+
+      if (this.childMenu.shouldExit) {
+        this.childMenu = null;
+        this.shouldRender = true;
+        InputManager.clear();
+      } else {
+        return;
+      }
+    }
+
     if (this.buttons.length > 0) {
       if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
         this.buttons[this.buttonIndex].highlighted = false;
@@ -91,6 +114,9 @@ export class Menu {
 
     if (this.exitOnEscape && InputManager.isKeyDown(Key.ESCAPE)) {
       this.shouldExit = true;
+      InputManager.clear();
+    } else {
+      this.updateCallback();
     }
   }
 }

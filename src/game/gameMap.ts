@@ -38,11 +38,11 @@ export class GameMap {
 
   isWalkable(x: number, y: number): boolean {
     const index = this.index(x, y);
-    if (index >= this.tiles.length) {
+    if (index >= this.tiles.length || index < 0) {
       return false;
     }
-    
-    return this.tiles[y*this.width + x].walkable;
+
+    return this.tiles[index].walkable;
   }
 
   setTile(x: number, y: number, tile: Tile) {
