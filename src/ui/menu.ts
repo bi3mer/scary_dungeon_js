@@ -4,10 +4,6 @@ import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
 
-interface updateCallback {
-  (): void
-}
-
 export class Menu {
   x: number
   y: number
@@ -21,7 +17,7 @@ export class Menu {
   text: Text[]
   shouldRender: boolean
   shouldExit: boolean
-  updateCallback: updateCallback
+  updateCallback: ()=>void
 
   childMenu: Menu | null
 
@@ -33,7 +29,8 @@ export class Menu {
     title: string,
     drawOutline: boolean,
     exitOnEscape: boolean,
-    updateCallback: updateCallback) {
+    updateCallback: ()=>void
+  ) {
     this.x = x;
     this.y = y;
     this.width = width;

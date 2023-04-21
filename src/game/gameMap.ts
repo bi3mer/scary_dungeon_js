@@ -22,7 +22,7 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(true); 
+    this.explored = Array(this.width*this.height + this.width).fill(false); 
 
     this.entities = [];
     this.actors = [];
@@ -46,7 +46,6 @@ export class GameMap {
   }
 
   setTile(x: number, y: number, tile: Tile) {
-    console.log(x, y);
     const index = this.index(x, y);
     assert(index < this.tiles.length);
     this.tiles[index] = tile;
@@ -122,6 +121,7 @@ export class GameMap {
   }
 
   computeFOV(x: number, y: number): void {
+    const SIGHT_RADIUS = 10;
     const fov = new PreciseShadowcasting((x, y) => {
       const index = this.index(x, y);
       if (index < this.tiles.length && index >= 0) {
@@ -133,7 +133,7 @@ export class GameMap {
 
     this.visible.fill(false);
 
-    fov.compute(x, y, 10, (x: number, y: number, r: number, visibility: number) => {
+    fov.compute(x, y, SIGHT_RADIUS, (x: number, y: number, r: number, visibility: number) => {
       const index = this.index(x, y);
       if (visibility > 0.0) {
         this.explored[index] = true;

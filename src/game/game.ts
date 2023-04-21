@@ -39,7 +39,8 @@ export class Game {
     this.map = res[0];
     this.player.x = res[1];
     this.player.y = res[2];
-
+    this.map.addActor(this.player);
+    
     // let digger = new Map.Digger(this.config.width, this.config.height);
     // let freeCells: [number, number][] = new Array();
 
@@ -51,7 +52,6 @@ export class Game {
     // }
 
     // digger.create(callback);
-    // console.log('here!');
 
     // let [x,y] = freeCells[0];
     // this.player.x = x;

@@ -32,11 +32,7 @@ export function helpMenu(width: number, height: number) : Menu {
   return m;
 }
 
-interface mainMenuCallback {
-  (): void
-}
-
-export function mainMenu(width: number, height: number, callback: mainMenuCallback) : Menu {
+export function mainMenu(width: number, height: number, callback: ()=>void) : Menu {
   let m = new Menu(0, 0, width, height, "Main Menu", true, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       m.shouldExit = true;

@@ -2,10 +2,6 @@ import { Display } from "rot-js"
 import { drawFrame } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 
-interface ButtonCallback {
-  (): void
-}
-
 export class Button {
   x: number      
   y: number      
@@ -17,7 +13,7 @@ export class Button {
   frameColor: string
   frameHighlightedColor: string
   highlighted: boolean
-  callback: ButtonCallback
+  callback: () => void
 
   constructor(
     x: number, 
@@ -29,7 +25,7 @@ export class Button {
     textHighlightedColor: string, 
     frameColor: string,
     frameHighlightedColor: string,
-    callback: ButtonCallback
+    callback: () => void
   ) {
     this.x = x;
     this.y = y;
