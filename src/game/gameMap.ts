@@ -22,7 +22,7 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(false); 
+    this.explored = Array(this.width*this.height + this.width).fill(true); 
 
     this.entities = [];
     this.actors = [];

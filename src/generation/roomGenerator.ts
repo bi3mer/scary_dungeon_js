@@ -4,7 +4,7 @@ import { BaseLineGenerator } from "./baselineGenerator";
 
 import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
-import { bresenham } from "./generationUtility";
+import { bresenham, straightLineConnection } from "./generationUtility";
 
 class Rectangle {
   x1: number
@@ -91,9 +91,16 @@ export class RoomGenerator extends BaseLineGenerator {
       if (rooms.length > 1) {
         let [x1,y1] = rooms[rooms.length-2].center();
         let [x2,y2] = newRoom.center();
-        bresenham(x1, y1, x2, y2, (x, y) => {
-          map.setTile(x, y, tileFactory.floor);
-        });
+
+        if (RNG.getUniform() > 0.8) {
+          bresenham(x1, y1, x2, y2, (x, y) => {
+            map.setTile(x, y, tileFactory.floor);
+          });
+        } else {
+          straightLineConnection(x1, y1, x2, y2, (x, y) => {
+            map.setTile(x, y, tileFactory.floor);
+          });
+        }
       }
     }
     

@@ -1,3 +1,5 @@
+import { RNG } from "rot-js";
+
 // Based on: http://www.roguebasin.com/index.php/Bresenham%27s_Line_Algorithm
 export function bresenham(
   x1: number, 
@@ -64,6 +66,40 @@ export function bresenham(
       } else {
         callback(x, y);
       }
+    }
+  }
+}
+
+export function straightLineConnection(
+  x1: number, 
+  y1: number, 
+  x2: number, 
+  y2: number, 
+  callback: (x: number, y: number) => void)
+: void {
+  if (RNG.getUniform() >= 0.5) {
+    const xIncrement = x1 < x2 ? 1 : -1;
+    while (x1 != x2) {
+      x1 += xIncrement;
+      callback(x1, y1);
+    }
+    
+    const yIncrement = y1 < y2 ? 1 : -1;
+    while(y1 != y2) {
+      y1 += yIncrement;
+      callback(x1, y1);
+    }
+  } else {
+    const yIncrement = y1 < y2 ? 1 : -1;
+    while(y1 != y2) {
+      y1 += yIncrement;
+      callback(x1, y1);
+    }
+
+    const xIncrement = x1 < x2 ? 1 : -1;
+    while (x1 != x2) {
+      x1 += xIncrement;
+      callback(x1, y1);
     }
   }
 }
