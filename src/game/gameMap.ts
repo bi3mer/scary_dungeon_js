@@ -89,13 +89,17 @@ export class GameMap {
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let e of this.entities) {
-      e.render(display);
+      if (this.visible[this.index(e.x, e.y)]) {
+        e.render(display);
+      }
     }
 
     // render actors
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let a of this.actors) {
-      a.render(display);
+      if (this.visible[this.index(a.x, a.y)]) {
+        a.render(display);
+      }
     }
 
     // render the player
