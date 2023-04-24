@@ -5,17 +5,16 @@ import { Action } from "./action"
 export class DirectionAction implements Action {
   dx: number
   dy: number
-  cost: number;
 
   constructor(dx: number, dy: number) {
     this.dx = dx;
     this.dy = dy;
-    this.cost = 1;
   }
 
-  execute(actor: Actor, map: GameMap): void {
+  execute(actor: Actor, map: GameMap): boolean {
     console.error("DirectionAction.execute should not be possible!");
     console.trace();
+    return false;
   }
 
   destination(actor: Actor): [number, number] {

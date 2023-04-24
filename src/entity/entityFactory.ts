@@ -1,21 +1,13 @@
 import { Actor } from "./actor";
-import { PlayerBehavior } from "../behavior/playerBehavior";
 import { GameMap } from "../game/gameMap";
 import colors from "../utility/colors";
 import { AIBehavior } from "../behavior/aiBehavior";
 
 export function spawnPlayer(map: GameMap, x: number, y: number): Actor {
-  let player = new Actor();
-  player.char = '@';
-  player.x = x;
-  player.y = y;
-  player.fg = colors.white;
-  player.bg = colors.black;
-  player.behavior = new PlayerBehavior();
+  map.player().x = x;
+  map.player().y = y;
 
-  map.player = player;
-
-  return player;
+  return map.player();
 }
 
 export function spawnEnemy(map: GameMap, x: number, y: number): Actor {

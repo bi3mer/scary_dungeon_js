@@ -46,7 +46,7 @@ export class Game {
   render(menu: Menu | null, computeFOV: boolean): void {
     this.display.clear();
     if (computeFOV) {
-      this.map.computeFOV(this.map.player.x, this.map.player.y);
+      this.map.computeFOV(this.map.player().x, this.map.player().y);
     }
 
     this.map.render(this.display);
@@ -96,19 +96,24 @@ export class Game {
       } else if (InputManager.isKeyDown(Key.H)) {
         // Create the help menu
         menu = helpMenu(this.config.width, this.config.height);
-      } else if (turnNumber % 3 == 0) {
-        // AI turn
-        this.map.runActors();
-        turnNumber = 1;
       } else {
-        // player turn
-        const cost = this.map.player.act(this.map);
-        if (cost > 0) {
-          InputManager.clear();
-          this.render(menu, true);
-          ++turnNumber;
-        }
+        this.map.runActors();
       }
+        
+        
+      // if (turnNumber % 3 == 0) {
+      //   // AI turn
+
+      //   this.map.runActors();
+      // } else {
+      //   // player turn
+      //   const cost = this.map.player.act(this.map);
+      //   if (cost > 0) {
+      //     InputManager.clear();
+      //     this.render(menu, true);
+      //     ++turnNumber;
+      //   }
+      // }
 
       window.requestAnimationFrame(gameLoop);
     }

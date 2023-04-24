@@ -14,15 +14,15 @@ export class AIBehavior implements Behavior {
     this.startY = y;
   }
 
-  act(actor: Actor, map: GameMap): Action {
+  act(actor: Actor, map: GameMap): [Action, boolean] {
     // Get target based on distances
     let targetX: number, targetY: number;
     if (
       actor.euclideanDistance(this.startX, this.startY) <= 3 &&
-      actor.euclideanDistance(map.player.x, map.player.y) <= 3
+      actor.euclideanDistance(map.player().x, map.player().y) <= 3
     ) {
-      targetX = map.player.x;
-      targetY = map.player.y;
+      targetX = map.player().x;
+      targetY = map.player().y;
     } else {
       targetX = this.startX;
       targetY = this.startY;
@@ -33,7 +33,7 @@ export class AIBehavior implements Behavior {
 
     // if their are no moves, do nothing
     if (moves.length == 0) {
-      return new PassAction();
+      return [new PassAction(), false];
     }
 
     // ... else, find the move that is closest to the target
@@ -50,7 +50,7 @@ export class AIBehavior implements Behavior {
       }
     }
 
-    return new MoveAction(moves[closestIndex][0], moves[closestIndex][1]);
+    return [new MoveAction(moves[closestIndex][0], moves[closestIndex][1]), false];
   }
 
   private getMoves(x1: number, y1: number, x2: number, y2: number): [number, number][] {

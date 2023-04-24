@@ -5,7 +5,7 @@ import { GameMap } from "../game/gameMap";
 import { Behavior } from "./behavior";
 
 export class EmptyBehavior implements Behavior {
-  act(actor: Actor, map: GameMap): Action  {
-    return new PassAction();
+  act(actor: Actor, map: GameMap): [Action, boolean]  {
+    return [new PassAction(), false];
   }
 }

@@ -4,8 +4,8 @@ import { Action } from "./action";
 
 
 export class PassAction implements Action {
-  cost: number = 0;
-  execute(actor: Actor, engine: GameMap): void {
+  execute(actor: Actor, engine: GameMap): boolean {
     // nothing to be done this turn
+    return false;
   }
 }

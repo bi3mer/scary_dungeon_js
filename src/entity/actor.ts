@@ -22,13 +22,13 @@ export class Actor extends Entity {
     this.behavior = behavior;
   }
 
-  public act(map: GameMap): number {
-    let action = this.behavior.act(this, map);
+  public act(map: GameMap): [boolean, boolean] {
+    let [action, requestAnotherTurn] = this.behavior.act(this, map);
+    let requiresRender = false;
     if (action !== undefined) {
-      action.execute(this, map);
-      return action.cost;
+      requiresRender = action.execute(this, map);
     }
 
-    return 0;
+    return [requestAnotherTurn, requiresRender];
   }
 }

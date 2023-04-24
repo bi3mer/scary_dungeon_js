@@ -3,7 +3,7 @@ import { GameMap } from "../game/gameMap";
 import { MessageLog } from "../utility/messageLog";
 import { DirectionAction } from "./directionAction"
 
-export class MoveAction extends DirectionAction {
+export class BumpAction extends DirectionAction {
   constructor(dx: number, dy: number) {
     super(dx, dy);
   }

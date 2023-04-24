@@ -7,23 +7,30 @@ import { InputManager, Key } from "../game/inputManager";
 import { Behavior } from "./behavior";
 
 export class PlayerBehavior implements Behavior {
-  act(actor: Actor, map: GameMap): Action {
+  turn: number = 1
+  
+  act(actor: Actor, map: GameMap): [Action, boolean] {
+    let requestAnotherTurn = this.turn % 2 == 0;
     if (InputManager.isKeyDown(Key.DOWN) || InputManager.isKeyDown(Key.S)) {
-      return new MoveAction(0,1);
+      ++this.turn;
+      return [new MoveAction(0,1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.UP) || InputManager.isKeyDown(Key.W)) {
-      return new MoveAction(0,-1);
+      ++this.turn;
+      return [new MoveAction(0,-1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
-      return new MoveAction(-1,0);
+      ++this.turn;
+      return [new MoveAction(-1,0), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
-      return new MoveAction(1,0);
+      ++this.turn;
+      return [new MoveAction(1,0), requestAnotherTurn];
     }
 
-    return new PassAction();
+    return [new PassAction(), true];
   }
 }

@@ -7,7 +7,7 @@ import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 import colors from "../utility/colors";
 import { RenderOrder } from "../utility/renderOrder";
-import { EmptyBehavior } from "../behavior/emptyBehavior";
+import { PlayerBehavior } from "../behavior/playerBehavior";
 
 
 export class GameMap {
@@ -18,9 +18,9 @@ export class GameMap {
   private explored: boolean[]
   private entities: Entity[]
   private actors: Actor[]
-  
-  player: Actor
 
+  private actorIndex: number = 0;
+  
   constructor(width: number, height:number) {
     this.width = width;
     this.height = height;
@@ -32,15 +32,20 @@ export class GameMap {
     this.entities = [];
     this.actors = [];
 
-    this.player = new Actor(
+    this.actors.push(new Actor(
       0,
       0,
       true,
-      '?', 
-      colors.error, 
+      '@', 
       colors.white, 
+      colors.black, 
       RenderOrder.Actor, 
-      new EmptyBehavior());
+      new PlayerBehavior()));
+  }
+
+  player() {
+    // player is always at the first index of actors
+    return this.actors[0];
   }
 
   private index(x: number, y: number): number {
@@ -101,9 +106,6 @@ export class GameMap {
         a.render(display);
       }
     }
-
-    // render the player
-    this.player.render(display);
   }
 
   addEntity(entity: Entity) {
@@ -165,10 +167,22 @@ export class GameMap {
       }
     });
   }
-
-  runActors(): void {
-    for(let a of this.actors) {
-      a.act(this);
+  
+  // returns if there should be a render 
+  runActors(): boolean {
+    let shouldRender = false;
+    for(; this.actorIndex < this.actors.length; ++this.actorIndex) {
+      const [requestAnotherTurn, requiresRender] = this.actors[this.actorIndex].act(this);
+      console.log(requestAnotherTurn, requiresRender);
+      shouldRender ||= requiresRender;
+      if(requestAnotherTurn) {
+        // if true, then the act is telling us that the behavior wants another 
+        // turn and the loop should end here before other actors can act.
+        return shouldRender;
+      }
     }
+
+    this.actorIndex = 0;
+    return shouldRender;
   }
 }
