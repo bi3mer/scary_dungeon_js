@@ -1,21 +1,18 @@
 import { Display, Map, RNG } from "rot-js";
 import { Actor } from "../entity/actor";
 
-import entityFactory from "../entity/entityFactory";
 import { GameMap } from "./gameMap";
-import tileFactory from "../tile/tileFactory";
 import { InputManager, Key } from "./inputManager";
-import actorFactory from "../entity/actorFactory";
 import { Menu } from "../ui/menu";
 import { helpMenu, mainMenu } from "../ui/uiFactory";
 import { RoomGenerator } from "../generation/roomGenerator";
+import { spawnPlayer } from "../entity/entityFactory";
 
 
 export class Game {
   private display: Display
   private map: GameMap
   private config: { width: number, height: number }
-  private player: Actor
   private delta: number;
 
   constructor() {
@@ -28,7 +25,6 @@ export class Game {
     this.map = new GameMap(this.config.width, this.config.height);
     document.body.appendChild(this.display.getContainer()!);
 
-    this.player = actorFactory.player.spawn(0, 0, this.map);
     this.delta = 0;
   }
 
@@ -37,32 +33,7 @@ export class Game {
     let res = temp.generate();
 
     this.map = res[0];
-    this.player.x = res[1];
-    this.player.y = res[2];
-    this.map.addActor(this.player);
-    
-    // let digger = new Map.Digger(this.config.width, this.config.height);
-    // let freeCells: [number, number][] = new Array();
-
-    // let callback = (x: number, y: number, value: number) => {
-    //   if (value) return; // do not store walls
-
-    //   freeCells.push([x, y]);
-    //   this.map.setTile(x, y, tileFactory.floor);
-    // }
-
-    // digger.create(callback);
-
-    // let [x,y] = freeCells[0];
-    // this.player.x = x;
-    // this.player.y = y;
-
-    // console.warn('boxes not placed yet!');
-    // for (var i = 0; i < 10; ++i) {
-    //   const index = Math.floor(RNG.getUniform() * freeCells.length);
-    //   const key = freeCells.splice(index, 1)[0]; // get key and remove it 
-    //   this.map[key] = "*";
-    // }
+    spawnPlayer(this.map, res[1], res[2]);
   }
 
   private setUISize(): void {
@@ -75,7 +46,7 @@ export class Game {
   render(menu: Menu | null, computeFOV: boolean): void {
     this.display.clear();
     if (computeFOV) {
-      this.map.computeFOV(this.player.x, this.player.y);
+      this.map.computeFOV(this.map.player.x, this.map.player.y);
     }
 
     this.map.render(this.display);
@@ -127,13 +98,15 @@ export class Game {
         menu = helpMenu(this.config.width, this.config.height);
       } else if (turnNumber % 3 == 0) {
         // AI turn
+        this.map.runActors();
         turnNumber = 1;
       } else {
         // player turn
-        const cost = this.player.act(this.map);
+        const cost = this.map.player.act(this.map);
         if (cost > 0) {
           InputManager.clear();
           this.render(menu, true);
+          ++turnNumber;
         }
       }
 

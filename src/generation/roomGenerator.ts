@@ -6,6 +6,7 @@ import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
 import { bresenham, straightLineConnection } from "./generationUtility";
 import { BASE_ROOM } from "./baseRoom";
+import { spawnEnemy } from "../entity/entityFactory";
 
 class Rectangle {
   x1: number
@@ -45,6 +46,11 @@ function drawTile(map: GameMap, x: number, y: number, tile: string): void {
       // default is wall.
       break;
     }
+    case '#': {
+      map.setTile(x, y, tileFactory.floor);
+      spawnEnemy(map, x, y);
+      break;
+    }
     case '-': {
       map.setTile(x, y, tileFactory.floor);
       break;
@@ -70,12 +76,12 @@ export class RoomGenerator extends BaseLineGenerator {
     let rooms: Rectangle[] = [];
 
     // The first room is the base room for the player, so we add it to the list
-    // to check for collisions
+    // to check for collisions...
     const baseRoomX = Math.round((this.width - BASE_ROOM[0].length)/2);
     const baseRoomY = Math.round((this.height - BASE_ROOM.length)/2);
     rooms.push(new Rectangle(baseRoomX, baseRoomY, BASE_ROOM[0].length,BASE_ROOM.length));
 
-    // and then draw it
+    // ... and then draw the base room
     for (let y = 0; y < BASE_ROOM.length; ++y) {
       for (let x = 0; x < BASE_ROOM[0].length; ++x) {
         drawTile(map, baseRoomX + x, baseRoomY + y, BASE_ROOM[y][x]);
@@ -127,7 +133,8 @@ export class RoomGenerator extends BaseLineGenerator {
       }
     }
     
+    // Altar is at the center, so the player position is offset by 1
     const center = rooms[0].center();
-    return [map, center[0], center[1]];
+    return [map, center[0] + 1, center[1]];
   }
 }

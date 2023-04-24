@@ -1,8 +1,9 @@
-import { Color, toRGB } from "rot-js/lib/color";
 import { assert } from "../utility/error";
 import { RenderOrder } from "../utility/renderOrder";
 import { Display } from "rot-js";
 import { GameMap } from "../game/gameMap";
+import colors from "../utility/colors";
+import { euclideanDistance } from "../utility/distance";
 
 export class Entity {
   x: number
@@ -18,39 +19,19 @@ export class Entity {
     y: number = 0, 
     blocksMovement: boolean = false,
     char: string = "?", 
-    fg: Color = [255, 255, 255],
-    bg: Color = [0, 0, 0],
+    fg: string = colors.white,
+    bg: string = colors.black,
     renderOrder: RenderOrder = RenderOrder.Corpse
   ) {
     this.x = x;
     this.y = y;
     this.blocksMovement = blocksMovement;
     this.char = char;
-    this.fg = toRGB(fg);
-    this.bg = toRGB(bg);
+    this.fg = fg;
+    this.bg = bg;
     this.renderOrder = renderOrder;
 
     assert(this.char.length === 1);
-  }
-
-  // => Entity
-  spawn(x: number, y: number, map: GameMap): Entity  {
-    let clone = new Entity(
-      x,
-      y,
-      this.blocksMovement,
-      this.char,
-      undefined, // fg set after the fact
-      undefined, // bg set after the fact
-      this.renderOrder
-    );
-
-    clone.fg = this.fg;
-    clone.bg = this.bg;
-
-    map.addEntity(clone);
-
-    return clone;
   }
 
   move(dx: number, dy: number) {
@@ -60,5 +41,9 @@ export class Entity {
 
   render(display: Display) {
     display.draw(this.x, this.y, this.char, this.fg, this.bg);
+  }
+
+  euclideanDistance(x: number, y: number): number {
+    return euclideanDistance(this.x, this.y, x, y);
   }
 }

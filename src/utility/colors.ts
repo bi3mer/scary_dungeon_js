@@ -6,4 +6,5 @@ export default {
   lightGray: "rgba(169,169,169,1)",
   yellow: "rgba(253,164,15,1)",
   visible: "rgba(250,250,250,1)",
+  enemy: "rgba(204,0,0,1)"
 };

@@ -5,6 +5,9 @@ import { assert } from "../utility/error";
 import { Entity } from "../entity/entity";
 import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
+import colors from "../utility/colors";
+import { RenderOrder } from "../utility/renderOrder";
+import { EmptyBehavior } from "../behavior/emptyBehavior";
 
 
 export class GameMap {
@@ -15,6 +18,8 @@ export class GameMap {
   private explored: boolean[]
   private entities: Entity[]
   private actors: Actor[]
+  
+  player: Actor
 
   constructor(width: number, height:number) {
     this.width = width;
@@ -22,10 +27,20 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(true); 
+    this.explored = Array(this.width*this.height + this.width).fill(false); 
 
     this.entities = [];
     this.actors = [];
+
+    this.player = new Actor(
+      0,
+      0,
+      true,
+      '?', 
+      colors.error, 
+      colors.white, 
+      RenderOrder.Actor, 
+      new EmptyBehavior());
   }
 
   private index(x: number, y: number): number {
@@ -72,16 +87,19 @@ export class GameMap {
     }
 
     // render entities
-    this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
+    // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let e of this.entities) {
       e.render(display);
     }
 
     // render actors
-    this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
+    // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let a of this.actors) {
       a.render(display);
     }
+
+    // render the player
+    this.player.render(display);
   }
 
   addEntity(entity: Entity) {
@@ -142,5 +160,11 @@ export class GameMap {
         this.visible[index] = false;
       }
     });
+  }
+
+  runActors(): void {
+    for(let a of this.actors) {
+      a.act(this);
+    }
   }
 }

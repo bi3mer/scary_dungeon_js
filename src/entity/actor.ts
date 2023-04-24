@@ -2,7 +2,8 @@ import { Entity } from "./entity";
 import { RenderOrder } from "../utility/renderOrder";
 import { Behavior } from "../behavior/behavior";
 import { GameMap } from "../game/gameMap";
-import { AIBehavior } from "../behavior/aiBehavior";
+import colors from "../utility/colors";
+import { EmptyBehavior } from "../behavior/emptyBehavior";
 
 export class Actor extends Entity {
   behavior: Behavior
@@ -12,10 +13,10 @@ export class Actor extends Entity {
     y: number = 0, 
     blocksMovement: boolean = false,
     char: string = "?", 
-    fg: [number, number, number] = [255, 255, 255],
-    bg: [number, number, number] = [0, 0, 0],
+    fg: string = colors.white,
+    bg: string = colors.black,
     renderOrder: RenderOrder = RenderOrder.Corpse,
-    behavior: Behavior = new AIBehavior()
+    behavior: Behavior = new EmptyBehavior()
   ) {
     super(x, y, blocksMovement, char, fg, bg, renderOrder);
     this.behavior = behavior;
@@ -29,25 +30,5 @@ export class Actor extends Entity {
     }
 
     return 0;
-  }
-
-  public override spawn(x: number, y: number, map: GameMap): Actor {
-    let clone = new Actor(
-      x,
-      y,
-      this.blocksMovement,
-      this.char,
-      undefined, // fg set after the fact
-      undefined, // bg set after the fact
-      this.renderOrder,
-      this.behavior
-    );
-
-    clone.fg = this.fg;
-    clone.bg = this.bg;
-
-    map.addEntity(clone);
-
-    return clone;
   }
 }

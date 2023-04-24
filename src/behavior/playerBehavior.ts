@@ -1,12 +1,13 @@
 import { Action } from "../action/action";
 import { MoveAction } from "../action/moveAction";
+import { PassAction } from "../action/passAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
 import { Behavior } from "./behavior";
 
 export class PlayerBehavior implements Behavior {
-  act(actor: Actor, map: GameMap): Action | undefined {
+  act(actor: Actor, map: GameMap): Action {
     if (InputManager.isKeyDown(Key.DOWN) || InputManager.isKeyDown(Key.S)) {
       return new MoveAction(0,1);
     }
@@ -23,6 +24,6 @@ export class PlayerBehavior implements Behavior {
       return new MoveAction(1,0);
     }
 
-    return undefined;
+    return new PassAction();
   }
 }
