@@ -173,8 +173,8 @@ export class GameMap {
     let shouldRender = false;
     for(; this.actorIndex < this.actors.length; ++this.actorIndex) {
       const [requestAnotherTurn, requiresRender] = this.actors[this.actorIndex].act(this);
-      console.log(requestAnotherTurn, requiresRender);
       shouldRender ||= requiresRender;
+
       if(requestAnotherTurn) {
         // if true, then the act is telling us that the behavior wants another 
         // turn and the loop should end here before other actors can act.

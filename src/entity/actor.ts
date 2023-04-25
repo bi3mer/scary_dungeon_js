@@ -24,11 +24,11 @@ export class Actor extends Entity {
 
   public act(map: GameMap): [boolean, boolean] {
     let [action, requestAnotherTurn] = this.behavior.act(this, map);
-    let requiresRender = false;
+    let requestRender = false;
     if (action !== undefined) {
-      requiresRender = action.execute(this, map);
+      requestRender = action.execute(this, map);
     }
 
-    return [requestAnotherTurn, requiresRender];
+    return [requestAnotherTurn, requestRender];
   }
 }

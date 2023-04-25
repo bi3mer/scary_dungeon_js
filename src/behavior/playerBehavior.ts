@@ -12,22 +12,30 @@ export class PlayerBehavior implements Behavior {
   act(actor: Actor, map: GameMap): [Action, boolean] {
     let requestAnotherTurn = this.turn % 2 == 0;
     if (InputManager.isKeyDown(Key.DOWN) || InputManager.isKeyDown(Key.S)) {
+      InputManager.clear();
       ++this.turn;
+      
       return [new MoveAction(0,1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.UP) || InputManager.isKeyDown(Key.W)) {
+      InputManager.clear();
       ++this.turn;
+      
       return [new MoveAction(0,-1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
+      InputManager.clear();
       ++this.turn;
+      
       return [new MoveAction(-1,0), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
+      InputManager.clear();
       ++this.turn;
+
       return [new MoveAction(1,0), requestAnotherTurn];
     }
 

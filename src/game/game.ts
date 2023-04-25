@@ -97,23 +97,11 @@ export class Game {
         // Create the help menu
         menu = helpMenu(this.config.width, this.config.height);
       } else {
-        this.map.runActors();
+        // run game and render if requested by the map
+        if (this.map.runActors()) {
+          this.render(null, true);
+        }
       }
-        
-        
-      // if (turnNumber % 3 == 0) {
-      //   // AI turn
-
-      //   this.map.runActors();
-      // } else {
-      //   // player turn
-      //   const cost = this.map.player.act(this.map);
-      //   if (cost > 0) {
-      //     InputManager.clear();
-      //     this.render(menu, true);
-      //     ++turnNumber;
-      //   }
-      // }
 
       window.requestAnimationFrame(gameLoop);
     }
