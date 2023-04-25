@@ -68,8 +68,6 @@ export class Game {
     let oldTimeStamp : number;
     let fps : number;
 
-    let turnNumber = 1;
-
     // we start at the main menu
     let menu: Menu | null = mainMenu(this.config.width, this.config.height, () => {
       this.generateMap();

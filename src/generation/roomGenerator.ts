@@ -38,6 +38,40 @@ class Rectangle {
     }
     return false;
   }
+
+  getConnectionPoint(other: Rectangle): [x: number, y: number] {
+    let x: number = 0;
+    let y: number = 0;
+    
+    /**
+     *     1
+     *   ┌---┐ 
+     * 2 │   │ 3
+     *   └---┘
+     *     4
+     * 
+     * There are 4 possible connection points and each if statement goes through
+     * them one at a time for simplicity / clarity. This isn't the best way as
+     * it naturally favors the ordering, but that can always be improved later.
+     */
+
+
+    if (this.y2 < other.y1) {
+      x = Math.round((this.x1 + this.x2)/2);
+      y = this.y1;
+    } else if (this.x1 < other.x2) {
+      x = this.x1;
+      y = Math.round((this.y1 + this.y2)/2);
+    } else if (this.x2 < other.x1) {
+      x = this.x2;
+      y =  Math.round((this.y1 + this.y2)/2);
+    } else {
+      x = Math.round((this.x1 + this.x2)/2);
+      y = this.y2;
+    }
+
+    return [x, y];
+  }
 }
 
 function drawTile(map: GameMap, x: number, y: number, tile: string): void {
@@ -116,9 +150,11 @@ export class RoomGenerator extends BaseLineGenerator {
 
       // draw a path between the two rooms
       if (rooms.length > 1) {
-        let [x1,y1] = rooms[rooms.length-2].center();
-        let [x2,y2] = newRoom.center();
+        // get the two points in each room to use to connect to each other
+        let [x1, y1] = rooms[rooms.length-2].getConnectionPoint(newRoom);
+        let [x2, y2] = newRoom.getConnectionPoint(rooms[rooms.length-2]);
 
+        // randomly decide how to dig a path to the next room
         if (RNG.getUniform() > 0.8) {
           // unlikely to draw a jagged line
           bresenham(x1, y1, x2, y2, (x, y) => {
