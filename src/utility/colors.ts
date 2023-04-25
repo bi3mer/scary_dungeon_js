@@ -10,3 +10,6 @@ export const colorEnemy = "rgba(204,0,0,1)";
 // `/` and `\` tiles
 export const colorViolet = "rgba(238,130,238,1)";
 export const colorIndigo = "rgba(75,0,130,1)";
+
+// `*` gem item
+export const colorGem = 'rgba(143,255,146,1)';

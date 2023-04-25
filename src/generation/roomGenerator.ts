@@ -6,7 +6,7 @@ import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
 import { bresenham, straightLineConnection } from "./generationUtility";
 import { BASE_ROOM } from "./baseRoom";
-import { spawnEnemy } from "../entity/entityFactory";
+import { spawnEnemy, spawnGem } from "../entity/entityFactory";
 
 class Rectangle {
   x1: number
@@ -58,12 +58,12 @@ class Rectangle {
 
     if (this.y2 < other.y1) {
       x = Math.round((this.x1 + this.x2)/2);
-      y = this.y1;
+      y = this.y1-1;
     } else if (this.x1 < other.x2) {
-      x = this.x1;
+      x = this.x1-1;
       y = Math.round((this.y1 + this.y2)/2);
     } else if (this.x2 < other.x1) {
-      x = this.x2;
+      x = this.x2 + 1;
       y =  Math.round((this.y1 + this.y2)/2);
     } else {
       x = Math.round((this.x1 + this.x2)/2);
@@ -95,6 +95,11 @@ function drawTile(map: GameMap, x: number, y: number, tile: string): void {
     }
     case '\\': {
       map.setTile(x, y, tileFactory.backwardSlash);
+      break;
+    }
+    case '*': {
+      map.setTile(x, y, tileFactory.floor);
+      spawnGem(map, x, y);
       break;
     }
     default: {

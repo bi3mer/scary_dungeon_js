@@ -6,12 +6,14 @@ export class Item extends Entity {
   constructor(
     x: number = 0, 
     y: number = 0, 
+    name: string = "Unknown Item",
     blocksMovement: boolean = false,
     char: string = "?", 
     fg: string = colorWhite,
     bg: string = colorBlack,
-    renderOrder: RenderOrder = RenderOrder.Corpse
+    renderOrder: RenderOrder = RenderOrder.Corpse,
+    consumable: null
   ) {
-    super(x, y, blocksMovement, char, fg, bg, renderOrder);
+    super(x, y, name, blocksMovement, char, fg, bg, renderOrder);
   }
 }

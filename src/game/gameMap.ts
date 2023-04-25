@@ -16,8 +16,11 @@ export class GameMap {
   private tiles: Tile[]
   private visible: boolean[]
   private explored: boolean[]
-  private entities: Entity[]
-  private actors: Actor[]
+
+  private entities: Entity[] = []
+  private actors: Actor[] = []
+  private freeEntityIndices: number[] = []
+  private freeActorIndices: number[] = []
 
   private actorIndex: number = 0;
   
@@ -27,14 +30,12 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(false); 
-
-    this.entities = [];
-    this.actors = [];
+    this.explored = Array(this.width*this.height + this.width).fill(true); 
 
     this.actors.push(new Actor(
       0,
       0,
+      "Player",
       true,
       '@', 
       colorWhite, 
@@ -111,7 +112,19 @@ export class GameMap {
   addEntity(entity: Entity) {
     assert(this.entityAtLocation(entity.x, entity.y) == null);
     assert(this.actorAtLocation(entity.x, entity.y) == null);
-    this.entities.push(entity);
+
+    if (this.freeEntityIndices.length > 0) {
+      const id = this.freeEntityIndices.pop()!;
+      entity.id = id;
+      this.entities[id] = entity;
+    } else {
+      this.entities.push(entity);
+    }
+  }
+
+  removeEntity(entity: Entity) {
+    this.entities.splice(entity.id, 1);
+    this.freeEntityIndices.push(entity.id);
   }
 
   entityAtLocation(x: number, y: number): Entity | null {
@@ -127,7 +140,20 @@ export class GameMap {
   addActor(actor: Actor) {
     assert(this.entityAtLocation(actor.x, actor.y) == null);
     assert(this.actorAtLocation(actor.x, actor.y) == null);
-    this.actors.push(actor);
+
+    if (this.freeActorIndices.length > 0) {
+      const id = this.freeActorIndices.pop()!;
+      actor.id = id;
+      this.actors[id] = actor;
+    } else {
+      actor.id = this.actors.length;
+      this.actors.push(actor);
+    }
+  }
+
+  removeActor(actor: Actor) {
+    this.actors.splice(actor.id, 1);
+    this.freeActorIndices.push(actor.id);
   }
 
   actorAtLocation(x: number, y: number): Actor | null {

@@ -11,6 +11,7 @@ export class Actor extends Entity {
   constructor(
     x: number = 0, 
     y: number = 0, 
+    name: string = "Unknown Actor",
     blocksMovement: boolean = false,
     char: string = "?", 
     fg: string = colorWhite,
@@ -18,7 +19,7 @@ export class Actor extends Entity {
     renderOrder: RenderOrder = RenderOrder.Corpse,
     behavior: Behavior = new EmptyBehavior()
   ) {
-    super(x, y, blocksMovement, char, fg, bg, renderOrder);
+    super(x, y, name, blocksMovement, char, fg, bg, renderOrder);
     this.behavior = behavior;
   }
 

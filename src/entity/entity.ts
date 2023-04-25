@@ -5,8 +5,10 @@ import { euclideanDistance } from "../utility/distance";
 import { colorBlack, colorWhite } from "../utility/colors";
 
 export class Entity {
+  id: number
   x: number
   y: number
+  name: string
   blocksMovement: boolean
   char: string
   fg: string // foreground
@@ -16,14 +18,18 @@ export class Entity {
   constructor(
     x: number = 0, 
     y: number = 0, 
+    name: string = "Unknown", 
     blocksMovement: boolean = false,
     char: string = "?", 
     fg: string = colorWhite,
     bg: string = colorBlack,
     renderOrder: RenderOrder = RenderOrder.Corpse
   ) {
+    this.id = -1;
+
     this.x = x;
     this.y = y;
+    this.name = name;
     this.blocksMovement = blocksMovement;
     this.char = char;
     this.fg = fg;
