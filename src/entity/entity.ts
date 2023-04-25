@@ -1,9 +1,8 @@
 import { assert } from "../utility/error";
 import { RenderOrder } from "../utility/renderOrder";
 import { Display } from "rot-js";
-import { GameMap } from "../game/gameMap";
-import colors from "../utility/colors";
 import { euclideanDistance } from "../utility/distance";
+import { colorBlack, colorWhite } from "../utility/colors";
 
 export class Entity {
   x: number
@@ -19,8 +18,8 @@ export class Entity {
     y: number = 0, 
     blocksMovement: boolean = false,
     char: string = "?", 
-    fg: string = colors.white,
-    bg: string = colors.black,
+    fg: string = colorWhite,
+    bg: string = colorBlack,
     renderOrder: RenderOrder = RenderOrder.Corpse
   ) {
     this.x = x;

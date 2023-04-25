@@ -1,4 +1,4 @@
-import colors from "./colors";
+import { colorError } from "./colors";
 
 class Message {
   private text: string
@@ -41,7 +41,7 @@ export class MessageLog {
   }
 
   static addErrorMessage(text: string, stack: boolean): void {
-    MessageLog.addMessage(text, colors.error, stack);
+    MessageLog.addMessage(text, colorError, stack);
   }
 
   private static print(): void {

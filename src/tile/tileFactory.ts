@@ -1,4 +1,4 @@
-import colors from "../utility/colors";
+import { colorBlack, colorDarkGray, colorIndigo, colorLightGray, colorViolet, colorVisible } from "../utility/colors";
 import { Tile } from "./tile";
 
 let tileFactory: {[name: string]: Tile} = {};
@@ -6,28 +6,47 @@ let tileFactory: {[name: string]: Tile} = {};
 tileFactory.floor = new Tile(
   '.',
   true,
-  colors.visible,
-  colors.black,
-  colors.darkGray,
-  colors.black
+  colorVisible,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
 )
 
 tileFactory.wall = new Tile(
   '#',
   false,
-  colors.visible,
-  colors.black,
-  colors.darkGray,
-  colors.black
+  colorVisible,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
 )
 
 tileFactory.downStairs = new Tile(
   '>',
   false,
-  colors.lightGray,
-  colors.black,
-  colors.darkGray,
-  colors.black
+  colorLightGray,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
+)
+
+tileFactory.forwardSlash = new Tile(
+  '/',
+  false,
+  colorViolet,
+  colorBlack,
+  colorIndigo,
+  colorBlack
+)
+
+
+tileFactory.backwardSlash = new Tile(
+  '\\',
+  false,
+  colorViolet,
+  colorBlack,
+  colorIndigo,
+  colorBlack
 )
 
 

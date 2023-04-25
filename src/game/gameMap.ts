@@ -5,9 +5,9 @@ import { assert } from "../utility/error";
 import { Entity } from "../entity/entity";
 import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
-import colors from "../utility/colors";
 import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
+import { colorBlack, colorWhite } from "../utility/colors";
 
 
 export class GameMap {
@@ -27,7 +27,7 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(true); 
+    this.explored = Array(this.width*this.height + this.width).fill(false); 
 
     this.entities = [];
     this.actors = [];
@@ -37,8 +37,8 @@ export class GameMap {
       0,
       true,
       '@', 
-      colors.white, 
-      colors.black, 
+      colorWhite, 
+      colorBlack, 
       RenderOrder.Actor, 
       new PlayerBehavior()));
   }

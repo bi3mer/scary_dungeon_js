@@ -89,6 +89,14 @@ function drawTile(map: GameMap, x: number, y: number, tile: string): void {
       map.setTile(x, y, tileFactory.floor);
       break;
     }
+    case '/': {
+      map.setTile(x, y, tileFactory.forwardSlash);
+      break;
+    }
+    case '\\': {
+      map.setTile(x, y, tileFactory.backwardSlash);
+      break;
+    }
     default: {
       map.setTile(x, y, tileFactory.floor);
       console.warn(`Unhandled tile type: ${tile}`);

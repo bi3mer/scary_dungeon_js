@@ -1,5 +1,5 @@
 import { InputManager, Key } from "../game/inputManager";
-import colors from "../utility/colors";
+import { colorBlack, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
@@ -19,15 +19,15 @@ export function helpMenu(width: number, height: number) : Menu {
     8, 
     3, 
     "Ok", 
-    colors.lightGray, 
-    colors.white, 
-    colors.lightGray, 
-    colors.white,
+    colorLightGray, 
+    colorWhite, 
+    colorLightGray, 
+    colorWhite,
     () => { }
   ));
 
-  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colors.white, colors.black));
-  m.addText(new Text(x+3, y+4, "I to inspect.", colors.white, colors.black));
+  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+4, "I to inspect.", colorWhite, colorBlack));
 
   return m;
 }
@@ -45,13 +45,13 @@ export function mainMenu(width: number, height: number, callback: ()=>void) : Me
   });
 
   const title = "Scary Dungeon";
-  m.addText(new Text(width/2-title.length/2, height/2 - 10, title, colors.yellow, colors.black));
+  m.addText(new Text(width/2-title.length/2, height/2 - 10, title, colorYellow, colorBlack));
 
   const attribution = "by Colan F. Biemer"
-  m.addText(new Text(width/2-attribution.length/2, height/2 - 8, attribution, colors.lightGray, colors.black));
+  m.addText(new Text(width/2-attribution.length/2, height/2 - 8, attribution, colorLightGray, colorBlack));
 
   const instructions = "Press space to start or h for instructions."
-  m.addText(new Text(width/2-instructions.length/2, height/2, instructions, colors.white, colors.black));
+  m.addText(new Text(width/2-instructions.length/2, height/2, instructions, colorWhite, colorBlack));
 
   return m;
 }
