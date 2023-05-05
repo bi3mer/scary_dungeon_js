@@ -1,6 +1,7 @@
 import { Action } from "../action/action";
 import { MoveAction } from "../action/moveAction";
 import { PassAction } from "../action/passAction";
+import { PickUpItemAction } from "../action/pickUpItemAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
@@ -37,6 +38,12 @@ export class PlayerBehavior implements Behavior {
       ++this.turn;
 
       return [new MoveAction(1,0), requestAnotherTurn];
+    }
+
+    if (InputManager.isKeyDown(Key.G)) {
+      InputManager.clear();
+      ++this.turn;
+      return [new PickUpItemAction(), requestAnotherTurn];
     }
 
     return [new PassAction(), true];

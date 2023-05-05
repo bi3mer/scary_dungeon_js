@@ -1,8 +1,9 @@
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
-import { ItemAction } from "./itemAction";
+import { MessageLog } from "../utility/messageLog";
+import { Action } from "./action";
 
-export class DropItemAction extends ItemAction {
+export class DropItemAction extends Action {
   
   /**
    * Drop item back onto the map.
@@ -11,7 +12,9 @@ export class DropItemAction extends ItemAction {
    * @returns whether to render.
    */
   execute(actor: Actor, map: GameMap): boolean {
-    actor.inventory.drop(this.item, actor, map);
-    return true;
+    // actor.inventory.drop(item, actor, map);
+    MessageLog.addErrorMessage('Drop Item not implemented.', true);
+    
+    return false;
   }
 }

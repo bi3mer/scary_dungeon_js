@@ -11,6 +11,7 @@ export enum Key {
   D,
   Q,
   R,
+  G,
   H,
   SPACE,
   ESCAPE,
@@ -73,6 +74,8 @@ export class InputManager {
         return Key.R;
       case 'q': 
         return Key.Q;
+      case 'g': 
+        return Key.G;
       case 'h': 
         return Key.H;
       case 'Enter':

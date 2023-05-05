@@ -41,7 +41,7 @@ export function spawnGem(map: GameMap, x: number, y: number): Item {
     null
   )
 
-  map.addEntity(gem);
+  map.addItem(gem);
 
   return gem;
 }
