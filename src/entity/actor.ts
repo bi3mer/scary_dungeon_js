@@ -4,9 +4,11 @@ import { Behavior } from "../behavior/behavior";
 import { GameMap } from "../game/gameMap";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { colorBlack, colorWhite } from "../utility/colors";
+import { InventoryComponent } from "../component/inventoryComponent";
 
 export class Actor extends Entity {
   behavior: Behavior
+  inventory: InventoryComponent
 
   constructor(
     x: number = 0, 
@@ -17,10 +19,13 @@ export class Actor extends Entity {
     fg: string = colorWhite,
     bg: string = colorBlack,
     renderOrder: RenderOrder = RenderOrder.Corpse,
-    behavior: Behavior = new EmptyBehavior()
+    behavior: Behavior = new EmptyBehavior(),
+    inventorySize: number = 20,
   ) {
     super(x, y, name, blocksMovement, char, fg, bg, renderOrder);
     this.behavior = behavior;
+
+    this.inventory = new InventoryComponent(this, inventorySize);
   }
 
   public act(map: GameMap): [boolean, boolean] {
