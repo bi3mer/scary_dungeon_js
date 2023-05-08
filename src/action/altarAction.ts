@@ -1,5 +1,7 @@
 import { Actor } from "../entity/actor";
+import { nameGem, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
+import { colorGreen, colorLightGray } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
 import { Action } from "./action";
 
@@ -11,8 +13,47 @@ export class AltarAction extends Action {
     this.altar = altar;
   }
   
-  execute(actor: Actor, map: GameMap): boolean {
-    MessageLog.addErrorMessage('Altar Action not implemented', true);
+  private unlockAltar(actor: Actor, map: GameMap): boolean {
+    const requiredGemCount = map.requiredGems();
+    const playerGemCount = actor.inventory.getCount(nameGem);
+
+    const shouldRender = playerGemCount == requiredGemCount;
+    if (shouldRender) {
+      MessageLog.addMessage(
+        'The altar has opened. Step through it... if you dare!',
+        colorGreen,
+        false
+      );
+      
+      this.altar.fg = colorGreen;
+      this.altar.bg = colorLightGray;
+
+      actor.inventory.destroyItemsWithName(nameGem);
+    } else {
+      MessageLog.addMessage(
+        `The altar needs ${requiredGemCount - actor.inventory.getCount(nameGem)} more gems to unlock.`, 
+        colorLightGray, 
+        true
+      );
+    }
+
+    return shouldRender;
+  }
+
+  private stepThroughAltar(actor: Actor, map: GameMap): boolean {
+    MessageLog.addErrorMessage('altarAction.stepThroughAltar not implemented!', true);
     return false;
+  }
+
+  execute(actor: Actor, map: GameMap): boolean {
+    if (actor.name != namePlayer) {
+      return false;
+    }
+    
+    if (this.altar.fg == colorGreen) {
+      return this.stepThroughAltar(actor, map);
+    } else {
+      return this.unlockAltar(actor, map);
+    }
   }
 }

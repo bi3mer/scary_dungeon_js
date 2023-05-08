@@ -17,7 +17,7 @@ export class BumpAction extends DirectionAction {
     
     if (actorAtLocation != null) {
       if (actorAtLocation.name == nameAltar) {
-      return (new AltarAction(actor)).execute(actor, map);
+      return (new AltarAction(actorAtLocation)).execute(actor, map);
       } else {
       return (new AttackAction(actorAtLocation).execute(actor, map));
       }

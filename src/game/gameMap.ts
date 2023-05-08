@@ -9,7 +9,7 @@ import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
 import { colorBlack, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
-import { namePlayer } from "../entity/names";
+import { nameGem, namePlayer } from "../entity/names";
 
 
 export class GameMap {
@@ -18,6 +18,8 @@ export class GameMap {
   private tiles: Tile[]
   private visible: boolean[]
   private explored: boolean[]
+
+  private gemCount: number = 0
 
   private entities: (Entity|null)[] = []
   private items: (Item|null)[] = []
@@ -55,6 +57,8 @@ export class GameMap {
     this.visible = Array(this.width*this.height + this.width).fill(false);  
     this.explored = Array(this.width*this.height + this.width).fill(false); 
 
+    this.gemCount = 0;
+
     this.player().char = '@';
     this.player().fg = colorWhite;
     this.player().bg = colorBlack;
@@ -85,6 +89,14 @@ export class GameMap {
    */
   playerIsAlive(): boolean {  
     return this.player().char != '%';
+  }
+
+  /**
+   * Get the number of gems in the map for the altar to unlock.
+   * @returns number
+   */
+  requiredGems(): number {
+    return this.gemCount;
   }
 
   private index(x: number, y: number): number {
@@ -195,6 +207,10 @@ export class GameMap {
 
   addItem(item: Item): void {
     assert(this.locationOccupied(item.x, item.y) == false);
+
+    if (item.name == nameGem) {
+      ++this.gemCount;
+    }
 
     if (this.itemIds.length > 0) {
       const id = this.itemIds.pop()!;

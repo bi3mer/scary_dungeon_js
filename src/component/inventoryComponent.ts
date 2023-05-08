@@ -51,9 +51,33 @@ export class InventoryComponent extends BaseComponent {
       item.x = actor.x;
       item.y = actor.y;
 
-      map.addEntity(item);
+      map.addItem(item);
     } else {
       MessageLog.addErrorMessage(`${item.name} had invalid id of -1. Contact admin.`, true);
     }
+  }
+
+  /**
+   * Get the number of items with a given name  are in the inventory.
+   * 
+   * @remarks
+   * I don't see this being used outside of the altar for checking how many gem
+   * that the player has collected.
+   * 
+   * @param name - name of the item
+   * @returns number
+   * @beta
+   */
+  getCount(name: string): number {
+    let count = 0;
+    for (let item of this.items) {
+      count += Number(item.name == name); // avoid branching
+    }
+
+    return count;
+  }
+
+  destroyItemsWithName(name: string): void {
+    
   }
 }

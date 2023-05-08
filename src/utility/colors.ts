@@ -7,6 +7,7 @@ export const colorDarkGray = "rgba(70,70,70,1)";
 export const colorLightGray = "rgba(169,169,169,1)";
 export const colorYellow = "rgba(253,164,15,1)";
 export const colorRed = "rgba(255,0,0,1)";
+export const colorGreen = "rgba(0,255,0,1)";
 
 export const colorVisible = "rgba(250,250,250,1)";
 export const colorEnemy = "rgba(204,0,0,1)";
