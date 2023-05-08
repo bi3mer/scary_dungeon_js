@@ -28,6 +28,12 @@ class Message {
 export class MessageLog {
   private static messages: Message[] = [];
 
+  static clear(): void {
+    this.messages = [];
+    let messages = document.querySelector("#messages")!;
+    messages.innerHTML = '';
+  }
+
   static addMessage(text: string, color: string, stack: boolean): void {
     const len = MessageLog.messages.length;
     

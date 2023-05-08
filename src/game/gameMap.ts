@@ -9,6 +9,7 @@ import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
 import { colorBlack, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
+import { namePlayer } from "../entity/names";
 
 
 export class GameMap {
@@ -34,23 +35,56 @@ export class GameMap {
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
     this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(true); 
+    this.explored = Array(this.width*this.height + this.width).fill(false); 
 
     this.actors.push(new Actor(
       0,
       0,
-      "Player",
+      namePlayer,
       true,
       '@', 
       colorWhite, 
       colorBlack, 
       RenderOrder.Actor, 
-      new PlayerBehavior()));
+      new PlayerBehavior())
+    );
   }
 
+  reset(): void {
+    this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
+    this.visible = Array(this.width*this.height + this.width).fill(false);  
+    this.explored = Array(this.width*this.height + this.width).fill(false); 
+
+    this.player().char = '@';
+    this.player().fg = colorWhite;
+    this.player().bg = colorBlack;
+    this.player().behavior = new PlayerBehavior();
+  }
+
+  /**
+   * Get the player
+   * @remarks
+   * Player is always at the first index of the actors
+   * 
+   * @returns - Actor for the player
+   * @beta
+   */
   player() {
-    // player is always at the first index of actors
     return this.actors[0]!;
+  }
+
+  /**
+   * Player is alive
+   * 
+   * @remarks
+   * The death character is always '%' so that's waht we check for since the game
+   * doesn't include something like health.
+   * 
+   * @returns true if the player is alive else false
+   * @beta
+   */
+  playerIsAlive(): boolean {  
+    return this.player().char != '%';
   }
 
   private index(x: number, y: number): number {
@@ -279,6 +313,9 @@ export class GameMap {
         // if true, then the act is telling us that the behavior wants another 
         // turn and the loop should end here before other actors can act.
         return shouldRender;
+      } else if (!this.playerIsAlive()) {
+        // if the player is dead, end the loop.
+        break;
       }
     }
 

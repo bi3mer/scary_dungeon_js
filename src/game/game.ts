@@ -3,9 +3,10 @@ import { Display, Map, RNG } from "rot-js";
 import { GameMap } from "./gameMap";
 import { InputManager, Key } from "./inputManager";
 import { Menu } from "../ui/menu";
-import { helpMenu, mainMenu } from "../ui/uiFactory";
+import { gameOverMenu, helpMenu, mainMenu } from "../ui/uiFactory";
 import { RoomGenerator } from "../generation/roomGenerator";
 import { spawnPlayer } from "../entity/entityFactory";
+import { MessageLog } from "../utility/messageLog";
 
 
 export class Game {
@@ -97,6 +98,18 @@ export class Game {
         // run game and render if requested by the map
         if (this.map.runActors()) {
           this.render(null, true);
+
+          if (!this.map.playerIsAlive()) {
+            menu = gameOverMenu(this.config.width, this.config.height, () => {
+              this.map.reset();
+              MessageLog.clear();
+              
+              menu = mainMenu(this.config.width, this.config.height, () => {
+                this.generateMap();
+                this.render(null, true);
+              });
+            });
+          }
         }
       }
 

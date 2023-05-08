@@ -1,7 +1,7 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorVisible } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorRed, colorVisible } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
@@ -9,7 +9,22 @@ import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { nameAltar, nameEnemy, nameGem } from "./names";
 
 // ------------ Entities ------------
+export function spawnCorpse(map: GameMap, x: number, y: number): Entity {
+  const corpse = new Entity(
+    x, 
+    y,
+    'Corpse',
+    false,
+    '%',
+    colorRed,
+    colorBlack,
+    RenderOrder.Corpse
+  );
 
+  map.addEntity(corpse);
+
+  return corpse;
+}
 
 // ------------ Actors ------------
 export function spawnPlayer(map: GameMap, x: number, y: number): Actor {

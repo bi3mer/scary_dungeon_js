@@ -55,3 +55,32 @@ export function mainMenu(width: number, height: number, callback: ()=>void) : Me
 
   return m;
 }
+
+export function gameOverMenu(width: number, height: number, callback: ()=>void): Menu {
+  const x = width/4;
+  const y = height/4;
+  let m = new Menu(x, y, width/2, height/2, "GAME OVER", true, true, () => {
+    if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
+      InputManager.clear();
+      callback();
+    }
+  });
+
+  m.addButton(new Button(
+    width/2-4, 
+    height - height/4 - 4, 
+    8, 
+    3, 
+    "Ok", 
+    colorLightGray, 
+    colorWhite, 
+    colorLightGray, 
+    colorWhite,
+    callback
+  ));
+  
+  const text = 'You failed.'
+  m.addText(new Text(width/2 - text.length/2, height/2, text, colorWhite, colorBlack));
+
+  return m;
+}

@@ -1,5 +1,5 @@
 import { Action } from "../action/action";
-import { MoveAction } from "../action/moveAction";
+import { BumpAction } from "../action/bumpAction";
 import { PassAction } from "../action/passAction";
 import { PickUpItemAction } from "../action/pickUpItemAction";
 import { Actor } from "../entity/actor";
@@ -16,28 +16,28 @@ export class PlayerBehavior implements Behavior {
       InputManager.clear();
       ++this.turn;
       
-      return [new MoveAction(0,1), requestAnotherTurn];
+      return [new BumpAction(0,1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.UP) || InputManager.isKeyDown(Key.W)) {
       InputManager.clear();
       ++this.turn;
       
-      return [new MoveAction(0,-1), requestAnotherTurn];
+      return [new BumpAction(0,-1), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
       InputManager.clear();
       ++this.turn;
       
-      return [new MoveAction(-1,0), requestAnotherTurn];
+      return [new BumpAction(-1,0), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
       InputManager.clear();
       ++this.turn;
 
-      return [new MoveAction(1,0), requestAnotherTurn];
+      return [new BumpAction(1,0), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.G)) {

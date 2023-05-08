@@ -1,5 +1,5 @@
 import { Action } from "../action/action";
-import { MoveAction } from "../action/moveAction";
+import { BumpAction } from "../action/bumpAction";
 import { PassAction } from "../action/passAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
@@ -9,6 +9,7 @@ import { Behavior } from "./behavior";
 export class AIBehavior implements Behavior {
   startX: number
   startY: number
+  
   constructor(x: number, y: number) {
     this.startX = x;
     this.startY = y;
@@ -50,7 +51,7 @@ export class AIBehavior implements Behavior {
       }
     }
 
-    return [new MoveAction(moves[closestIndex][0], moves[closestIndex][1]), false];
+    return [new BumpAction(moves[closestIndex][0], moves[closestIndex][1]), false];
   }
 
   private getMoves(x1: number, y1: number, x2: number, y2: number): [number, number][] {
