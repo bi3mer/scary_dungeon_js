@@ -58,8 +58,8 @@ export function mainMenu(width: number, height: number, callback: ()=>void) : Me
 
 export function gameOverMenu(width: number, height: number, callback: ()=>void): Menu {
   const x = width/4;
-  const y = height/4;
-  let m = new Menu(x, y, width/2, height/2, "GAME OVER", true, true, () => {
+  const y = 5;
+  let m = new Menu(x, y, width/2, height/5, "GAME OVER", true, true, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       InputManager.clear();
       callback();
@@ -68,7 +68,7 @@ export function gameOverMenu(width: number, height: number, callback: ()=>void):
 
   m.addButton(new Button(
     width/2-4, 
-    height - height/4 - 4, 
+    y + height/5 - 4, 
     8, 
     3, 
     "Ok", 
@@ -80,7 +80,7 @@ export function gameOverMenu(width: number, height: number, callback: ()=>void):
   ));
   
   const text = 'You failed.'
-  m.addText(new Text(width/2 - text.length/2, height/2, text, colorWhite, colorBlack));
+  m.addText(new Text(width/2 - text.length/2, y + 2, text, colorWhite, colorBlack));
 
   return m;
 }
