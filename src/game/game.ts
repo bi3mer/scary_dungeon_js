@@ -1,5 +1,4 @@
 import { Display, Map, RNG } from "rot-js";
-import { Actor } from "../entity/actor";
 
 import { GameMap } from "./gameMap";
 import { InputManager, Key } from "./inputManager";

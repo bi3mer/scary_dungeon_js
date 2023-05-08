@@ -6,7 +6,7 @@ import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
 import { bresenham, straightLineConnection } from "./generationUtility";
 import { BASE_ROOM } from "./baseRoom";
-import { spawnEnemy, spawnGem } from "../entity/entityFactory";
+import { spawnAltar, spawnEnemy, spawnGem } from "../entity/entityFactory";
 
 class Rectangle {
   x1: number
@@ -101,6 +101,10 @@ function drawTile(map: GameMap, x: number, y: number, tile: string): void {
       map.setTile(x, y, tileFactory.floor);
       spawnGem(map, x, y);
       break;
+    }
+    case 'A': {
+      map.setTile(x, y, tileFactory.floor);
+      spawnAltar(map, x, y);
     }
     default: {
       map.setTile(x, y, tileFactory.floor);

@@ -261,7 +261,10 @@ export class GameMap {
     });
   }
   
-  // returns if there should be a render 
+  /**
+   * Run actors in the game.
+   * @returns whether a render is required
+   */
   runActors(): boolean {
     let shouldRender = false;
     for(; this.actorIndex < this.actors.length; ++this.actorIndex) {
