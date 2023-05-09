@@ -34,7 +34,6 @@ export class AttackAction extends Action {
     } else if (this.otherActor.name == namePlayer) {
       this.playerDeath(this.otherActor);
     } else {
-      console.log('---->', actor.x, actor.y, this.otherActor.x, this.otherActor.y);
       map.removeActor(actor);
       spawnCorpse(map, actor.x, actor.y);
       MessageLog.addMessage('A scary enemy killed its comrade!', colorLightGray, false);

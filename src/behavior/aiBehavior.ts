@@ -27,6 +27,7 @@ export class AIBehavior implements Behavior {
     } else {
       targetX = this.startX;
       targetY = this.startY;
+      // use A*
     }
     
     // get moves towards the target

@@ -105,6 +105,7 @@ function drawTile(map: GameMap, x: number, y: number, tile: string): void {
     case 'A': {
       map.setTile(x, y, tileFactory.floor);
       spawnAltar(map, x, y);
+      break;
     }
     default: {
       map.setTile(x, y, tileFactory.floor);
