@@ -1,7 +1,7 @@
 export const LP = `
 %%%%%%%%%%%%%% Problem Definition %%%%%%%%%%%%%%
-#const width=10.
-#const gems=4.
+% #const width=10.
+% #const gems=4.
 
 param("width",width).
 dim(1..width).
