@@ -4,9 +4,9 @@ import { GameMap } from "./gameMap";
 import { InputManager, Key } from "./inputManager";
 import { Menu } from "../ui/menu";
 import { gameOverMenu, helpMenu, mainMenu } from "../ui/uiFactory";
-import { RoomGenerator } from "../generation/roomGenerator";
 import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
+import { NoLayoutGenerator } from "../generation/noLayoutGenerator";
 
 
 export class Game {
@@ -14,6 +14,7 @@ export class Game {
   private map: GameMap
   private config: { width: number, height: number }
   private delta: number;
+  private mapGenerating: boolean;
 
   constructor() {
     this.config = { width: 80, height: 40};
@@ -26,14 +27,17 @@ export class Game {
     document.body.appendChild(this.display.getContainer()!);
 
     this.delta = 0;
+    this.mapGenerating = false;
   }
 
   private generateMap() {
-    let temp = new RoomGenerator(this.config.width, this.config.height);
-    let res = temp.generate();
-
-    this.map = res[0];
-    spawnPlayer(this.map, res[1], res[2]);
+    this.mapGenerating = true;
+    let generator = new NoLayoutGenerator(this.config.width, this.config.height);
+    generator.generate((map, playerX, playerY) => {
+      this.map = map;
+      spawnPlayer(this.map, playerX, playerY);
+      this.mapGenerating = false;
+    });
   }
 
   private setUISize(): void {
@@ -81,7 +85,9 @@ export class Game {
       oldTimeStamp = timeStamp;
       fps = Math.round(1 / this.delta);
 
-      if (menu !== null) {
+      if (this.mapGenerating) {
+        // Nothing to do while this is happening
+      } else if (menu !== null) {
         // if there is a menu then it handles input
         menu.update();
 
