@@ -1,10 +1,11 @@
+import { height, width } from "../config";
 import { InputManager, Key } from "../game/inputManager";
 import { colorBlack, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
 
-export function helpMenu(width: number, height: number) : Menu {
+export function helpMenu() : Menu {
   const x = width/4;
   const y = height/4;
   let m = new Menu(x, y, width/2, height/2, "Help", true, true, () => {
@@ -32,13 +33,13 @@ export function helpMenu(width: number, height: number) : Menu {
   return m;
 }
 
-export function mainMenu(width: number, height: number, callback: ()=>void) : Menu {
+export function mainMenu(callback: ()=>void) : Menu {
   let m = new Menu(0, 0, width, height, "Main Menu", true, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       m.shouldExit = true;
       callback();
     } else if (InputManager.isKeyDown(Key.H)) {
-      m.childMenu = helpMenu(width, height);
+      m.childMenu = helpMenu();
       m.shouldRender = true;
       InputManager.clear();
     }
@@ -56,7 +57,7 @@ export function mainMenu(width: number, height: number, callback: ()=>void) : Me
   return m;
 }
 
-export function gameOverMenu(width: number, height: number, callback: ()=>void): Menu {
+export function gameOverMenu(callback: ()=>void): Menu {
   const x = width/4;
   const y = 5;
   let m = new Menu(x, y, width/2, height/5, "GAME OVER", true, true, () => {

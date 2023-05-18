@@ -38,7 +38,7 @@ export abstract class LevelGenerator {
     this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
   }
 
-  drawTile(x: number, y: number, tile: string): void {
+  setTile(x: number, y: number, tile: string): void {
     switch(tile) {
       case 'X': { 
         // default is wall.
@@ -79,10 +79,10 @@ export abstract class LevelGenerator {
     }
   }
 
-  drawRoom(room: string[], startX: number, startY: number): void {
+  setRoom(room: string[], startX: number, startY: number): void {
     for (let y = 0; y < room.length; ++y) {
       for (let x = 0; x < room[0].length; ++x) {
-        this.drawTile(startX + x, startY + y, room[y][x]);
+        this.setTile(startX + x, startY + y, room[y][x]);
       }
     }
   }

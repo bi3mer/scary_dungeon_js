@@ -8,23 +8,24 @@ import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
 import { NoLayoutGenerator } from "../generation/noLayoutGenerator";
 import { MainGenerator } from "../generation/mainGenerator";
+import { height, width } from "../config";
 
 
 export class Game {
   private display: Display
   private map: GameMap
-  private config: { width: number, height: number, roomCols: number, roomRows: number }
+  private config: { roomCols: number, roomRows: number }
   private delta: number;
   private mapGenerating: boolean;
 
   constructor() {
-    this.config = { width: 80, height: 40, roomCols: 5, roomRows: 5};
+    this.config = { roomCols: 5, roomRows: 5};
     this.display = new Display({
-      width: this.config.width,
-      height: this.config.height,
+      width: width,
+      height: height,
     });
 
-    this.map = new GameMap(this.config.width, this.config.height);
+    this.map = new GameMap(width, height);
     document.body.appendChild(this.display.getContainer()!);
 
     this.delta = 0;
@@ -39,8 +40,7 @@ export class Game {
       this.map = map;
       spawnPlayer(this.map, playerX, playerY);
       this.mapGenerating = false;
-      console.warn('remove render');
-      this.render(null, false);
+      this.render(null, true);
     });
   }
 
@@ -77,9 +77,8 @@ export class Game {
     let fps : number;
 
     // we start at the main menu
-    let menu: Menu | null = mainMenu(this.config.width, this.config.height, () => {
+    let menu: Menu | null = mainMenu(() => {
       this.generateMap();
-      this.render(null, true);
     });
 
     // the loop is a callback handled by window.requestAnimationFrame
@@ -103,18 +102,18 @@ export class Game {
         }
       } else if (InputManager.isKeyDown(Key.H)) {
         // Create the help menu
-        menu = helpMenu(this.config.width, this.config.height);
+        menu = helpMenu();
       } else {
         // run game and render if requested by the map
         if (this.map.runActors()) {
           this.render(null, true);
 
           if (!this.map.playerIsAlive()) {
-            menu = gameOverMenu(this.config.width, this.config.height, () => {
+            menu = gameOverMenu(() => {
               this.map.reset();
               MessageLog.clear();
               
-              menu = mainMenu(this.config.width, this.config.height, () => {
+              menu = mainMenu(() => {
                 this.generateMap();
                 this.render(null, true);
               });

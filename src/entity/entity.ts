@@ -44,8 +44,11 @@ export class Entity {
     this.y += dy;
   }
 
-  render(display: Display) {
-    display.draw(this.x, this.y, this.char, this.fg, this.bg);
+  render(display: Display, playerX: number, playerY: number, midX: number, midY: number): void {
+    const x = midX + playerX-this.x;
+    const y = midY + playerY-this.y;
+    console.log(playerX-this.x, playerY - this.y);
+    display.draw(x, y, this.char, this.fg, this.bg);
   }
 
   euclideanDistance(x: number, y: number): number {

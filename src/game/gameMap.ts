@@ -7,14 +7,20 @@ import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
-import { colorBlack, colorWhite } from "../utility/colors";
+import { colorBlack, colorLightGray, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
 import { nameGem, namePlayer } from "../entity/names";
+import { START_ROOM } from "../generation/rooms";
+import { height, padding, width } from "../config";
 
 
 export class GameMap {
-  private width: number
-  private height: number
+  private rows: number
+  private cols: number
+
+  private roomRows: number
+  private roomCols: number
+
   private tiles: Tile[]
   private visible: boolean[]
   private explored: boolean[]
@@ -31,13 +37,16 @@ export class GameMap {
 
   private actorIndex: number = 0;
   
-  constructor(width: number, height:number) {
-    this.width = width;
-    this.height = height;
+  constructor(rows: number, cols: number) {
+    this.rows = rows;
+    this.cols = cols;
 
-    this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height + this.width).fill(true);  
-    this.explored = Array(this.width*this.height + this.width).fill(true); 
+    this.roomRows = START_ROOM.length + padding;
+    this.roomCols = START_ROOM[0].length + padding;
+
+    this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
+    this.visible = Array(this.tiles.length).fill(false);  
+    this.explored = Array(this.tiles.length).fill(false); 
 
     this.actors.push(new Actor(
       0,
@@ -53,9 +62,9 @@ export class GameMap {
   }
 
   reset(): void {
-    this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(false); 
+    this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
+    this.visible = Array(this.tiles.length).fill(false);  
+    this.explored = Array(this.tiles.length).fill(false); 
 
     this.gemCount = 0;
 
@@ -100,11 +109,11 @@ export class GameMap {
   }
 
   private index(x: number, y: number): number {
-    return y*this.width + x;
+    return y*(this.cols*this.roomCols) + x;
   }
 
   inBounds(x: number, y: number): boolean {
-    return y * this.width + x < this.tiles.length;
+    return y * (this.cols*this.roomCols) + x < this.tiles.length;
   }
 
   isWalkable(x: number, y: number): boolean {
@@ -116,42 +125,48 @@ export class GameMap {
     return this.tiles[index].walkable;
   }
 
-  setTile(x: number, y: number, tile: Tile) {
+  setTile(x: number, y: number, tile: Tile): void {
     const index = this.index(x, y);
     assert(index < this.tiles.length);
     this.tiles[index] = tile;
   }
 
-  render(display: Display) {
+  render(display: Display): void {
     let y: number;
     let x: number;
 
     const playerX = this.player().x;
     const playerY = this.player().y;
 
+    const startX = Math.max(0, Math.round(playerX - width/2));
+    const startY = Math.max(0,Math.round(playerY - height/2));
+
+    const midX = Math.round(width/2);
+    const midY = Math.round(height/2);
+
     // render the map
-    for (y = Math.max(0, playerY-this.height/2); y < playerY+this.height/2; ++y) {
-      for(x = Math.max(0, playerX-this.width/2); y < playerX+this.width/2; ++x) {
-        let index = this.index(x, y);
+    for (y = 0; y < height; ++y) {
+      for(x = 0; x < width; ++x) {
+        const worldX = startX + x;
+        const worldY = startY + y;
+        let index = this.index(worldX, worldY);
+        const drawX = midX + playerX-worldX;
+        const drawY = midY + playerY-worldY;
+
+        if (index >= this.visible.length) {
+          continue;
+        }
+
+        // draw tiles in relative position 
         const tile = this.tiles[index];
+
         if(this.visible[index]) {
-          display.draw(x, y, tile.char, tile.inViewFG, tile.inViewBG);
+          display.draw(drawX, drawY, tile.char, tile.inViewFG, tile.inViewBG);
         } else if (this.explored[index]) {
-          display.draw(x, y, tile.char, tile.outOfViewFG, tile.outOfViewBG);
+          display.draw(drawX, drawY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
         }
       }
     }
-
-    // for (y = 0; y < this.height; ++y) {
-    //   for (x = 0; x < this.width; ++x) {
-    //     const tile = this.tiles[index];
-    //     if (this.visible[index]) {
-    //       display.draw(x, y, tile.char, tile.inViewFG, tile.inViewBG);
-    //     } else if (this.explored[index]) {
-    //       display.draw(x, y, tile.char, tile.outOfViewFG, tile.outOfViewBG);
-    //     }
-    //   }
-    // }
 
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
@@ -161,7 +176,7 @@ export class GameMap {
       }
 
       if (this.visible[this.index(e.x, e.y)]) {
-        e.render(display);
+        e.render(display, playerX, playerY, midX, midY);
       }
     }
 
@@ -172,7 +187,7 @@ export class GameMap {
       }
 
       if (this.visible[this.index(e.x, e.y)]) {
-        e.render(display);
+        e.render(display, playerX, playerY, midX, midY);
       }
     }
 
@@ -184,9 +199,11 @@ export class GameMap {
       }
 
       if (this.visible[this.index(a.x, a.y)]) {
-        a.render(display);
+        a.render(display, playerX, playerY, midX, midY);
       }
     }
+
+
   }
 
   // ---------- Add
@@ -348,5 +365,9 @@ export class GameMap {
 
     this.actorIndex = 0;
     return shouldRender;
+  }
+
+  size(): number {
+    return this.visible.length;
   }
 }

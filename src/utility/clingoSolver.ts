@@ -33,8 +33,10 @@ export class ClingoSolver {
         solution = solution.substring(8);
         solution = solution.substring(0, solution.length-1);
         let split = solution.split(',');
-        const x = parseInt(split[0]);
-        const y = parseInt(split[1].substring(0, split[1].length-1));
+
+        // the output is 1 indexed
+        const x = parseInt(split[0])-1;
+        const y = parseInt(split[1].substring(0, split[1].length-1))-1;
         
         sprites.push([x, y, split[2]]);
       }

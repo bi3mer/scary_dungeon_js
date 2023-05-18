@@ -28,7 +28,7 @@ export class NoLayoutGenerator extends LevelGenerator {
     rooms.push(new Room(baseRoomX, baseRoomY, START_ROOM[0].length,START_ROOM.length));
 
     // ... and then draw the base room
-    this.drawRoom(START_ROOM, baseRoomX, baseRoomY);
+    this.setRoom(START_ROOM, baseRoomX, baseRoomY);
 
     // generate Rooms to fill in
     for(let i = 0; i < 30; ++i) {
@@ -50,7 +50,7 @@ export class NoLayoutGenerator extends LevelGenerator {
       // the room itself may be blocking
       const roomIndex = Math.floor(RNG.getUniform()*levelNames.length);
       const room = LEVELS[levelNames[roomIndex]];
-      this.drawRoom(room, xPos, yPos);
+      this.setRoom(room, xPos, yPos);
 
       // draw a path between the two rooms
       if (rooms.length > 1) {

@@ -30,8 +30,8 @@ export class MainGenerator extends LevelGenerator {
           break;
         }
         case 'altar': {
-          playerX = x*this.widthMultiplier + this.roomWidth/2 + 1;
-          playerY = y*this.heightMultiplier + this.roomHeight/2;
+          playerX = Math.round(x*this.widthMultiplier + this.roomWidth/2 + 1);
+          playerY = Math.round(y*this.heightMultiplier + this.roomHeight/2);
           room = START_ROOM;
           break;
         }
@@ -49,13 +49,13 @@ export class MainGenerator extends LevelGenerator {
       }
 
       // put it into the world
-      this.drawRoom(
+      this.setRoom(
         room, 
         x*this.widthMultiplier+RNG.getUniformInt(0, this.padding-1), 
         y*this.heightMultiplier+RNG.getUniformInt(0, this.padding-1)
       );
     }
-
+      
     callback(this.map, playerX, playerY);
   }
 
