@@ -7,17 +7,18 @@ import { gameOverMenu, helpMenu, mainMenu } from "../ui/uiFactory";
 import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
 import { NoLayoutGenerator } from "../generation/noLayoutGenerator";
+import { MainGenerator } from "../generation/mainGenerator";
 
 
 export class Game {
   private display: Display
   private map: GameMap
-  private config: { width: number, height: number }
+  private config: { width: number, height: number, roomCols: number, roomRows: number }
   private delta: number;
   private mapGenerating: boolean;
 
   constructor() {
-    this.config = { width: 80, height: 40};
+    this.config = { width: 80, height: 40, roomCols: 5, roomRows: 5};
     this.display = new Display({
       width: this.config.width,
       height: this.config.height,
@@ -32,7 +33,8 @@ export class Game {
 
   private generateMap() {
     this.mapGenerating = true;
-    let generator = new NoLayoutGenerator(this.config.width, this.config.height);
+    // let generator = new NoLayoutGenerator(this.config.width, this.config.height);
+    let generator = new MainGenerator(this.config.roomRows, this.config.roomRows);
     generator.generate((map, playerX, playerY) => {
       this.map = map;
       spawnPlayer(this.map, playerX, playerY);

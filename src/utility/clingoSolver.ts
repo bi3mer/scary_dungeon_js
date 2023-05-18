@@ -10,8 +10,9 @@ export class ClingoSolver {
     // I don't love it, but I don't see a way around it for now.
   }
 
-  static async get(width: number, gems: number): Promise<[boolean, [number, number, string][]]> {
-    const asp = `#const width=${width}.\n#const gems=${gems}.\n${LP}`;
+  static async get(width: number, height: number, gems: number): Promise<[boolean, [number, number, string][]]> {
+    const asp = `#const width=${width}.\n#const height=${height}.\n#const gems=${gems}.\n${LP}`;
+    console.log(asp);
     let result = await run(asp);
     const satisfiable = result.Result == "SATISFIABLE";
 
