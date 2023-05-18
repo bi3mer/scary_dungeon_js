@@ -24,9 +24,10 @@ adj((X1,Y1),(X2,Y2)) :- tile((X1,Y1)), tile((X2,Y2)), |X1-X2|+|Y1-Y2| == 1.
 type(wall).
 type(gem).
 type(altar).
+type(room).
 
 % tiles have at most one named sprite
-0 { sprite(T,P) : type(P) } 1 :- tile(T).
+1 { sprite(T,P) : type(P) } 1 :- tile(T).
 
 % there is exactly one altar and two gems in the whole level
 :- not 1 { sprite(T,altar) } 1.

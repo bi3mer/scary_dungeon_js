@@ -4,7 +4,7 @@ import { GameMap } from "../game/gameMap";
 import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
 import { bresenham, straightLineConnection } from "./generationUtility";
-import { BASE_ROOM } from "./baseRoom";
+import { START_ROOM } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 
@@ -23,16 +23,12 @@ export class NoLayoutGenerator extends LevelGenerator {
 
     // The first room is the base room for the player, so we add it to the list
     // to check for collisions...
-    const baseRoomX = Math.round((this.width - BASE_ROOM[0].length)/2);
-    const baseRoomY = Math.round((this.height - BASE_ROOM.length)/2);
-    rooms.push(new Room(baseRoomX, baseRoomY, BASE_ROOM[0].length,BASE_ROOM.length));
+    const baseRoomX = Math.round((this.width - START_ROOM[0].length)/2);
+    const baseRoomY = Math.round((this.height - START_ROOM.length)/2);
+    rooms.push(new Room(baseRoomX, baseRoomY, START_ROOM[0].length,START_ROOM.length));
 
     // ... and then draw the base room
-    for (let y = 0; y < BASE_ROOM.length; ++y) {
-      for (let x = 0; x < BASE_ROOM[0].length; ++x) {
-        this.drawTile(map, baseRoomX + x, baseRoomY + y, BASE_ROOM[y][x]);
-      }
-    }
+    this.drawRoom(START_ROOM, baseRoomX, baseRoomY);
 
     // generate Rooms to fill in
     for(let i = 0; i < 30; ++i) {
@@ -54,11 +50,7 @@ export class NoLayoutGenerator extends LevelGenerator {
       // the room itself may be blocking
       const roomIndex = Math.floor(RNG.getUniform()*levelNames.length);
       const room = LEVELS[levelNames[roomIndex]];
-      for (let y = 0; y < h; ++y) {
-        for (let x = 0; x < w; ++x) {
-          this.drawTile(map, x + xPos, y + yPos, room[y][x]);
-        }
-      } 
+      this.drawRoom(room, xPos, yPos);
 
       // draw a path between the two rooms
       if (rooms.length > 1) {

@@ -36,8 +36,8 @@ export class GameMap {
     this.height = height;
 
     this.tiles = Array(this.width*this.height + this.width).fill(tileFactory.wall);
-    this.visible = Array(this.width*this.height + this.width).fill(false);  
-    this.explored = Array(this.width*this.height + this.width).fill(false); 
+    this.visible = Array(this.width*this.height + this.width).fill(true);  
+    this.explored = Array(this.width*this.height + this.width).fill(true); 
 
     this.actors.push(new Actor(
       0,
@@ -125,22 +125,33 @@ export class GameMap {
   render(display: Display) {
     let y: number;
     let x: number;
-    let index: number = 0;
+
+    const playerX = this.player().x;
+    const playerY = this.player().y;
 
     // render the map
-    for (y = 0; y < this.height; ++y) {
-      for (x = 0; x < this.width; ++x) {
+    for (y = Math.max(0, playerY-this.height/2); y < playerY+this.height/2; ++y) {
+      for(x = Math.max(0, playerX-this.width/2); y < playerX+this.width/2; ++x) {
+        let index = this.index(x, y);
         const tile = this.tiles[index];
-        if (this.visible[index]) {
+        if(this.visible[index]) {
           display.draw(x, y, tile.char, tile.inViewFG, tile.inViewBG);
         } else if (this.explored[index]) {
           display.draw(x, y, tile.char, tile.outOfViewFG, tile.outOfViewBG);
         }
-        // else draw nothing
-
-        index++;
       }
     }
+
+    // for (y = 0; y < this.height; ++y) {
+    //   for (x = 0; x < this.width; ++x) {
+    //     const tile = this.tiles[index];
+    //     if (this.visible[index]) {
+    //       display.draw(x, y, tile.char, tile.inViewFG, tile.inViewBG);
+    //     } else if (this.explored[index]) {
+    //       display.draw(x, y, tile.char, tile.outOfViewFG, tile.outOfViewBG);
+    //     }
+    //   }
+    // }
 
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});

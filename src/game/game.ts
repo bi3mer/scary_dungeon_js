@@ -39,6 +39,8 @@ export class Game {
       this.map = map;
       spawnPlayer(this.map, playerX, playerY);
       this.mapGenerating = false;
+      console.warn('remove render');
+      this.render(null, false);
     });
   }
 

@@ -3,6 +3,9 @@ import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { LEVELS } from "./levels";
 
+import { START_ROOM } from "./rooms";
+
+
 export abstract class LevelGenerator {
   map: GameMap
 
@@ -13,7 +16,9 @@ export abstract class LevelGenerator {
   roomHeight: number
   levelNames: string[]
 
-  padding: number = 4
+  padding: number = 5
+  widthMultiplier: number
+  heightMultiplier: number
 
   constructor(width: number, height: number) {
     this.width = width;
@@ -23,51 +28,61 @@ export abstract class LevelGenerator {
     this.roomWidth  = LEVELS['0_0_0'][0].length; // room width
     this.roomHeight = LEVELS['0_0_0'].length;    // room height
     this.levelNames = Object.keys(LEVELS);
+
+    this.roomWidth = START_ROOM[0].length;
+    this.roomHeight = START_ROOM.length;
     
     // create the map with the correct number of tiles
-    this.map = new GameMap(
-      width*(this.roomWidth + this.padding), 
-      height*(this.roomHeight + this.padding)
-    );
+    this.widthMultiplier = this.roomWidth+this.padding;
+    this.heightMultiplier = this.roomHeight+this.padding;
+    this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
   }
 
-  drawTile(map: GameMap, x: number, y: number, tile: string): void {
+  drawTile(x: number, y: number, tile: string): void {
     switch(tile) {
       case 'X': { 
         // default is wall.
         break;
       }
       case '#': {
-        map.setTile(x, y, tileFactory.floor);
-        spawnEnemy(map, x, y);
+        this.map.setTile(x, y, tileFactory.floor);
+        spawnEnemy(this.map, x, y);
         break;
       }
       case '-': {
-        map.setTile(x, y, tileFactory.floor);
+        this.map.setTile(x, y, tileFactory.floor);
         break;
       }
       case '/': {
-        map.setTile(x, y, tileFactory.forwardSlash);
+        this.map.setTile(x, y, tileFactory.forwardSlash);
         break;
       }
       case '\\': {
-        map.setTile(x, y, tileFactory.backwardSlash);
+        this.map.setTile(x, y, tileFactory.backwardSlash);
         break;
       }
       case '*': {
-        map.setTile(x, y, tileFactory.floor);
-        spawnGem(map, x, y);
+        this.map.setTile(x, y, tileFactory.floor);
+        spawnGem(this.map, x, y);
         break;
       }
       case 'A': {
-        map.setTile(x, y, tileFactory.floor);
-        spawnAltar(map, x, y);
+        this.map.setTile(x, y, tileFactory.floor);
+        spawnAltar(this.map, x, y);
         break;
       }
       default: {
-        map.setTile(x, y, tileFactory.floor);
+        this.map.setTile(x, y, tileFactory.floor);
         console.warn(`Unhandled tile type: ${tile}`);
         break;
+      }
+    }
+  }
+
+  drawRoom(room: string[], startX: number, startY: number): void {
+    for (let y = 0; y < room.length; ++y) {
+      for (let x = 0; x < room[0].length; ++x) {
+        this.drawTile(startX + x, startY + y, room[y][x]);
       }
     }
   }

@@ -4,18 +4,76 @@ import { GameMap } from "../game/gameMap";
 import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
 import { bresenham, straightLineConnection } from "./generationUtility";
-import { BASE_ROOM } from "./baseRoom";
+import { START_ROOM, ROOMS, GEM_ROOMS } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 import { ClingoSolver } from "../utility/clingoSolver";
+import { MessageLog } from "../utility/messageLog";
 
 
 export class MainGenerator extends LevelGenerator {
+  private fillInLayout(
+    layout: [number, number, string][], 
+    callback: (map: GameMap, x: number, y: number) => void): void
+  {
+    let playerX = 0;
+    let playerY = 0;
+
+    for(let i = 0; i < layout.length; ++i) {
+      let [x, y, type] = layout[i];
+
+      // get a room matching the defined type
+      let room: string[];
+      switch(type) {
+        case 'gem': {
+          room = GEM_ROOMS[RNG.getUniformInt(0, GEM_ROOMS.length-1)];
+          break;
+        }
+        case 'altar': {
+          playerX = x*this.widthMultiplier + this.roomWidth/2 + 1;
+          playerY = y*this.heightMultiplier + this.roomHeight/2;
+          room = START_ROOM;
+          break;
+        }
+        case 'room': {
+          room = ROOMS[RNG.getUniformInt(0, ROOMS.length-1)];
+          break;
+        }
+        case 'wall': {
+          continue;
+        }
+        default: {
+          MessageLog.addErrorMessage(`Unhandled room type for generation "${type}". Please contact admin.`, true);
+          continue;
+        }
+      }
+
+      // put it into the world
+      this.drawRoom(
+        room, 
+        x*this.widthMultiplier+RNG.getUniformInt(0, this.padding-1), 
+        y*this.heightMultiplier+RNG.getUniformInt(0, this.padding-1)
+      );
+    }
+
+    callback(this.map, playerX, playerY);
+  }
+
+
   generate(callback: (map: GameMap, x: number, y: number) => void): void {
     console.log('running the solver...');
     ClingoSolver.get(this.width, this.height, 1).then((result) => {
-      console.log(result[0]);
-      console.log(result[1]);
+      console.log('building result...')
+
+      if (result[0]) {
+        // Error, generation failed, increase the map size.
+        this.width++;
+        this.height++;
+        this.generate(callback);
+      } else {
+        // No error, use the layout to fill out the results.
+        this.fillInLayout(result[1], callback);
+      }
     });
 
     // // Where we store the rooms 
