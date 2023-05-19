@@ -12,6 +12,7 @@ import { Item } from "../entity/item";
 import { nameGem, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
 import { height, padding, width } from "../config";
+import { start } from "repl";
 
 
 export class GameMap {
@@ -145,28 +146,38 @@ export class GameMap {
     const midY = Math.round(height/2);
 
     // render the map
-    // for (y = 0; y < height; ++y) {
-    //   for(x = 0; x < width; ++x) {
-    //     const worldX = startX + x;
-    //     const worldY = startY + y;
-    //     let index = this.index(worldX, worldY);
-    //     const drawX = midX + playerX-worldX;
-    //     const drawY = midY + playerY-worldY;
+    for (y = -midY; y < midY; ++y) {
+      const worldY = playerY + y;
+      if (worldY < 0) {
+        continue;
+      }
 
-    //     if (index >= this.visible.length) {
-    //       continue;
-    //     }
+      for(x = -midX; x < midX; ++x) {
+        const worldX = playerX + x;
 
-    //     // draw tiles in relative position 
-    //     const tile = this.tiles[index];
+        if (worldX < 0) {
+          continue;
+        }
 
-    //     if(this.visible[index]) {
-    //       display.draw(drawX, drawY, tile.char, tile.inViewFG, tile.inViewBG);
-    //     } else if (this.explored[index]) {
-    //       display.draw(drawX, drawY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
-    //     }
-    //   }
-    // }
+        // const drawX = startX + worldX-playerX;
+        // const drawY = startY + worldY-playerY;
+        
+        let index = this.index(worldX, worldY);
+        // let index = this.index(drawX, drawY);
+        if (index >= this.visible.length) {
+          continue;
+        }
+          
+        // draw tiles in relative position 
+        const tile = this.tiles[index];
+
+        if(this.visible[index]) {
+          display.draw(x+midX, y+midY, tile.char, tile.inViewFG, tile.inViewBG);
+        } else if (this.explored[index]) {
+          display.draw(x+midX, y+midY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
+        }
+      }
+    }
 
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});

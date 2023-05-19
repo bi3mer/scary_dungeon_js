@@ -53,8 +53,11 @@ export class Game {
   
   render(menu: Menu | null, computeFOV: boolean): void {
     this.display.clear();
+    const playerX = this.map.player().x;
+    const playerY = this.map.player().y;
+
     if (computeFOV) {
-      this.map.computeFOV(this.map.player().x, this.map.player().y);
+      this.map.computeFOV(playerX, playerY);
     }
 
     this.map.render(this.display);

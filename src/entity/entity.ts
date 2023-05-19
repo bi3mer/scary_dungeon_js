@@ -45,8 +45,8 @@ export class Entity {
   }
 
   render(display: Display, playerX: number, playerY: number, midX: number, midY: number): void {
-    const x = midX + playerX-this.x;
-    const y = midY + playerY-this.y;
+    const x = midX + this.x-playerX;
+    const y = midY + this.y-playerY;
     display.draw(x, y, this.char, this.fg, this.bg);
   }
 

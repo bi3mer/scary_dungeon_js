@@ -1,3 +1,4 @@
+import { padding } from "../config";
 import { spawnAltar, spawnEnemy, spawnGem } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
@@ -16,7 +17,6 @@ export abstract class LevelGenerator {
   roomHeight: number
   levelNames: string[]
 
-  padding: number = 5
   widthMultiplier: number
   heightMultiplier: number
 
@@ -33,8 +33,8 @@ export abstract class LevelGenerator {
     this.roomHeight = START_ROOM.length;
     
     // create the map with the correct number of tiles
-    this.widthMultiplier = this.roomWidth+this.padding;
-    this.heightMultiplier = this.roomHeight+this.padding;
+    this.widthMultiplier = this.roomWidth+padding;
+    this.heightMultiplier = this.roomHeight+padding;
     this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
   }
 

@@ -9,6 +9,7 @@ import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 import { ClingoSolver } from "../utility/clingoSolver";
 import { MessageLog } from "../utility/messageLog";
+import { padding } from "../config";
 
 
 export class MainGenerator extends LevelGenerator {
@@ -51,8 +52,8 @@ export class MainGenerator extends LevelGenerator {
       // put it into the world
       this.setRoom(
         room, 
-        x*this.widthMultiplier+RNG.getUniformInt(0, this.padding-1), 
-        y*this.heightMultiplier+RNG.getUniformInt(0, this.padding-1)
+        x*this.widthMultiplier+RNG.getUniformInt(1, padding-1), 
+        y*this.heightMultiplier+RNG.getUniformInt(1, padding-1)
       );
     }
       
