@@ -13,6 +13,27 @@ import { padding } from "../config";
 
 
 export class MainGenerator extends LevelGenerator {
+  private getRoom(type: string): string[] | undefined {
+    switch(type) {
+      case 'gem': {
+        return GEM_ROOMS[RNG.getUniformInt(0, GEM_ROOMS.length-1)];
+      }
+      case 'altar': {
+        return START_ROOM;
+      }
+      case 'room': {
+        return ROOMS[RNG.getUniformInt(0, ROOMS.length-1)];
+      }
+      case 'wall': {
+        return undefined;
+      }
+      default: {
+        MessageLog.addErrorMessage(`Unhandled room type for generation "${type}". Please contact admin.`, true);
+        return undefined;
+      }
+    }
+  }  
+
   private fillInLayout(
     layout: [number, number, string][], 
     callback: (map: GameMap, x: number, y: number) => void): void
@@ -20,41 +41,50 @@ export class MainGenerator extends LevelGenerator {
     let playerX = 0;
     let playerY = 0;
 
+    let rooms: {[name: string]: Room } = {};
+
+    // build the rooms
     for(let i = 0; i < layout.length; ++i) {
       let [x, y, type] = layout[i];
 
       // get a room matching the defined type
-      let room: string[];
-      switch(type) {
-        case 'gem': {
-          room = GEM_ROOMS[RNG.getUniformInt(0, GEM_ROOMS.length-1)];
-          break;
-        }
-        case 'altar': {
-          playerX = Math.round(x*this.widthMultiplier + this.roomWidth/2 + 1);
-          playerY = Math.round(y*this.heightMultiplier + this.roomHeight/2);
-          room = START_ROOM;
-          break;
-        }
-        case 'room': {
-          room = ROOMS[RNG.getUniformInt(0, ROOMS.length-1)];
-          break;
-        }
-        case 'wall': {
-          continue;
-        }
-        default: {
-          MessageLog.addErrorMessage(`Unhandled room type for generation "${type}". Please contact admin.`, true);
-          continue;
-        }
+      let room = this.getRoom(type);
+      if (room === undefined) {
+        continue;
+      } else if (type === 'altar') {
+        playerX = Math.round(x*this.widthMultiplier + this.roomWidth/2 + 1);
+        playerY = Math.round(y*this.heightMultiplier + this.roomHeight/2);
       }
 
       // put it into the world
-      this.setRoom(
-        room, 
-        x*this.widthMultiplier+RNG.getUniformInt(1, padding-1), 
-        y*this.heightMultiplier+RNG.getUniformInt(1, padding-1)
-      );
+      const roomX = x*this.widthMultiplier+RNG.getUniformInt(1, padding-1);
+      const roomY = y*this.heightMultiplier+RNG.getUniformInt(1, padding-1)
+      this.setRoom(room, roomX, roomY); 
+
+      rooms[`${x},${y}`] = new Room(roomX, roomY, this.roomWidth, this.roomHeight)
+    }
+
+    // build the connections
+    for (let key in rooms) {
+      const center = rooms[key].center();
+
+      // get key
+      let [_x,_y] = key.split(',');
+      let x = parseInt(_x);
+      let y = parseInt(_y);
+
+      // get possible connections that are up and to the right, the other two 
+      // directions are handled implicitly
+      let newKeys = [`${x+1},${y}`, `${x},${y+1}`];
+      for (let k of newKeys) {
+        if (k in rooms) {
+          const c = rooms[k].center();
+          console.log('here!');
+          straightLineConnection(center[0], center[1], c[0], c[1], (drawX, drawY) => {
+            this.map.setTile(drawX, drawY, tileFactory.floor);
+          });
+        }
+      }
     }
       
     callback(this.map, playerX, playerY);
@@ -62,10 +92,7 @@ export class MainGenerator extends LevelGenerator {
 
 
   generate(callback: (map: GameMap, x: number, y: number) => void): void {
-    console.log('running the solver...');
     ClingoSolver.get(this.width, this.height, 1).then((result) => {
-      console.log('building result...')
-
       if (result[0]) {
         // Error, generation failed, increase the map size.
         this.width++;
