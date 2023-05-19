@@ -29,9 +29,9 @@ export class AttackAction extends Action {
   }
   
   execute(actor: Actor, map: GameMap): boolean {
-    if (actor.name == namePlayer) {
+    if (actor.name === namePlayer) {
       this.playerDeath(actor);
-    } else if (this.otherActor.name == namePlayer) {
+    } else if (this.otherActor.name === namePlayer) {
       this.playerDeath(this.otherActor);
     } else {
       map.removeActor(actor);

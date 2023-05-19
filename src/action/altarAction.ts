@@ -46,11 +46,11 @@ export class AltarAction extends Action {
   }
 
   execute(actor: Actor, map: GameMap): boolean {
-    if (actor.name != namePlayer) {
+    if (actor.name !== namePlayer) {
       return false;
     }
     
-    if (this.altar.fg == colorGreen) {
+    if (this.altar.fg === colorGreen) {
       return this.stepThroughAltar(actor, map);
     } else {
       return this.unlockAltar(actor, map);

@@ -145,28 +145,28 @@ export class GameMap {
     const midY = Math.round(height/2);
 
     // render the map
-    for (y = 0; y < height; ++y) {
-      for(x = 0; x < width; ++x) {
-        const worldX = startX + x;
-        const worldY = startY + y;
-        let index = this.index(worldX, worldY);
-        const drawX = midX + playerX-worldX;
-        const drawY = midY + playerY-worldY;
+    // for (y = 0; y < height; ++y) {
+    //   for(x = 0; x < width; ++x) {
+    //     const worldX = startX + x;
+    //     const worldY = startY + y;
+    //     let index = this.index(worldX, worldY);
+    //     const drawX = midX + playerX-worldX;
+    //     const drawY = midY + playerY-worldY;
 
-        if (index >= this.visible.length) {
-          continue;
-        }
+    //     if (index >= this.visible.length) {
+    //       continue;
+    //     }
 
-        // draw tiles in relative position 
-        const tile = this.tiles[index];
+    //     // draw tiles in relative position 
+    //     const tile = this.tiles[index];
 
-        if(this.visible[index]) {
-          display.draw(drawX, drawY, tile.char, tile.inViewFG, tile.inViewBG);
-        } else if (this.explored[index]) {
-          display.draw(drawX, drawY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
-        }
-      }
-    }
+    //     if(this.visible[index]) {
+    //       display.draw(drawX, drawY, tile.char, tile.inViewFG, tile.inViewBG);
+    //     } else if (this.explored[index]) {
+    //       display.draw(drawX, drawY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
+    //     }
+    //   }
+    // }
 
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
@@ -202,8 +202,6 @@ export class GameMap {
         a.render(display, playerX, playerY, midX, midY);
       }
     }
-
-
   }
 
   // ---------- Add

@@ -34,7 +34,7 @@ export class AIBehavior implements Behavior {
     const moves = this.getMoves(actor.x, actor.y, targetX, targetY);
 
     // if their are no moves, do nothing
-    if (moves.length == 0) {
+    if (moves.length === 0) {
       return [new PassAction(), false];
     }
 
@@ -60,7 +60,7 @@ export class AIBehavior implements Behavior {
     const diffX = x1 - x2;
     const diffY = y1 - y2;
 
-    if (diffX == 0 && diffY == 0) {
+    if (diffX === 0 && diffY === 0) {
       return moves;
     }
 

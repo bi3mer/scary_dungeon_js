@@ -16,7 +16,7 @@ export class BumpAction extends DirectionAction {
     const actorAtLocation = map.actorAtLocation(x, y);
     
     if (actorAtLocation != null) {
-      if (actorAtLocation.name == nameAltar) {
+      if (actorAtLocation.name === nameAltar) {
       return (new AltarAction(actorAtLocation)).execute(actor, map);
       } else {
       return (new AttackAction(actorAtLocation).execute(actor, map));

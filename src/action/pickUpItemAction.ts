@@ -17,7 +17,7 @@ export class PickUpItemAction extends Action {
    */
   execute(actor: Actor, map: GameMap): boolean {
     const item = map.itemAtLocation(actor.x, actor.y);
-    if (item == null) {
+    if (item === null) {
       MessageLog.addMessage('Nothing to pick up.', colorLightGray, true);
     } else if (actor.inventory.addItem(item)) {
       map.removeItem(item);
