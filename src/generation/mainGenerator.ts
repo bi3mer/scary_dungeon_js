@@ -79,7 +79,6 @@ export class MainGenerator extends LevelGenerator {
       for (let k of newKeys) {
         if (k in rooms) {
           const c = rooms[k].center();
-          console.log('here!');
           straightLineConnection(center[0], center[1], c[0], c[1], (drawX, drawY) => {
             this.map.setTile(drawX, drawY, tileFactory.floor);
           });
@@ -89,7 +88,6 @@ export class MainGenerator extends LevelGenerator {
       
     callback(this.map, playerX, playerY);
   }
-
 
   generate(callback: (map: GameMap, x: number, y: number) => void): void {
     ClingoSolver.get(this.width, this.height, 1).then((result) => {

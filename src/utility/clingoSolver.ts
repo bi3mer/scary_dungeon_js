@@ -1,4 +1,6 @@
 import {run, init } from "clingo-wasm";
+import { RNG } from "rot-js";
+
 import { LP } from "../generation/layoutLP";
 
 export class ClingoSolver {
@@ -23,7 +25,7 @@ export class ClingoSolver {
    */
   static async get(width: number, height: number, gems: number): Promise<[boolean, [number, number, string][]]> {
     const asp = `#const width=${width}.\n#const height=${height}.\n#const gems=${gems}.\n${LP}`;
-    let result = await run(asp);
+    let result = await run(asp, undefined, [`--seed=${RNG.getUniformInt(0,10000)}`, '--rand-freq=1']);
     const satisfiable = result.Result == "SATISFIABLE";
 
     if (satisfiable) {
