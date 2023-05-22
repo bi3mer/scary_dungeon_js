@@ -91,7 +91,7 @@ export class GameMap {
    * Player is alive
    * 
    * @remarks
-   * The death character is always '%' so that's waht we check for since the game
+   * The death character is always '%' so that's what we check for since the game
    * doesn't include something like health.
    * 
    * @returns true if the player is alive else false
@@ -139,9 +139,6 @@ export class GameMap {
     const playerX = this.player().x;
     const playerY = this.player().y;
 
-    const startX = Math.max(0, Math.round(playerX - width/2));
-    const startY = Math.max(0,Math.round(playerY - height/2));
-
     const midX = Math.round(width/2);
     const midY = Math.round(height/2);
 
@@ -158,9 +155,6 @@ export class GameMap {
         if (worldX < 0) {
           continue;
         }
-
-        // const drawX = startX + worldX-playerX;
-        // const drawY = startY + worldY-playerY;
         
         let index = this.index(worldX, worldY);
         // let index = this.index(drawX, drawY);
@@ -374,9 +368,5 @@ export class GameMap {
 
     this.actorIndex = 0;
     return shouldRender;
-  }
-
-  size(): number {
-    return this.visible.length;
   }
 }

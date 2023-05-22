@@ -2,7 +2,9 @@ import { padding } from "../config";
 import { spawnAltar, spawnEnemy, spawnGem } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
+import { straightLineConnection } from "./generationUtility";
 import { LEVELS } from "./levels";
+import { Room } from "./room";
 
 import { START_ROOM } from "./rooms";
 

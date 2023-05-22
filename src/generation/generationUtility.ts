@@ -1,4 +1,5 @@
 import { RNG } from "rot-js";
+import { Point } from "../utility/point";
 
 // Based on: http://www.roguebasin.com/index.php/Bresenham%27s_Line_Algorithm
 export function bresenham(
@@ -70,36 +71,30 @@ export function bresenham(
   }
 }
 
-export function straightLineConnection(
-  x1: number, 
-  y1: number, 
-  x2: number, 
-  y2: number, 
-  callback: (x: number, y: number) => void)
-: void {
+export function straightLineConnection(p1: Point, p2: Point, callback: (x: number, y: number) => void): void {
   if (RNG.getUniform() >= 0.5) {
-    const xIncrement = x1 < x2 ? 1 : -1;
-    while (x1 != x2) {
-      x1 += xIncrement;
-      callback(x1, y1);
+    const xIncrement = p1.x < p2.x ? 1 : -1;
+    while (p1.x != p2.x) {
+      p1.x += xIncrement;
+      callback(p1.x, p1.y);
     }
     
-    const yIncrement = y1 < y2 ? 1 : -1;
-    while(y1 != y2) {
-      y1 += yIncrement;
-      callback(x1, y1);
+    const yIncrement = p1.y < p2.y ? 1 : -1;
+    while(p1.y != p2.y) {
+      p1.y += yIncrement;
+      callback(p1.x, p1.y);
     }
   } else {
-    const yIncrement = y1 < y2 ? 1 : -1;
-    while(y1 != y2) {
-      y1 += yIncrement;
-      callback(x1, y1);
+    const yIncrement = p1.y < p2.y ? 1 : -1;
+    while(p1.y != p2.y) {
+      p1.y += yIncrement;
+      callback(p1.x, p1.y);
     }
 
-    const xIncrement = x1 < x2 ? 1 : -1;
-    while (x1 != x2) {
-      x1 += xIncrement;
-      callback(x1, y1);
+    const xIncrement = p1.x < p2.x ? 1 : -1;
+    while (p1.x != p2.x) {
+      p1.x += xIncrement;
+      callback(p1.x, p1.y);
     }
   }
 }

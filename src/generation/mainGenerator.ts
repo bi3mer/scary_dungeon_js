@@ -66,8 +66,6 @@ export class MainGenerator extends LevelGenerator {
 
     // build the connections
     for (let key in rooms) {
-      const center = rooms[key].center();
-
       // get key
       let [_x,_y] = key.split(',');
       let x = parseInt(_x);
@@ -75,14 +73,26 @@ export class MainGenerator extends LevelGenerator {
 
       // get possible connections that are up and to the right, the other two 
       // directions are handled implicitly
-      let newKeys = [`${x+1},${y}`, `${x},${y+1}`];
-      for (let k of newKeys) {
-        if (k in rooms) {
-          const c = rooms[k].center();
-          straightLineConnection(center[0], center[1], c[0], c[1], (drawX, drawY) => {
-            this.map.setTile(drawX, drawY, tileFactory.floor);
-          });
-        }
+      // up:
+      let newK = `${x},${y+1}`;
+      if (newK in rooms) {
+        let p1 = rooms[key].down();
+        let p2 = rooms[newK].up();
+
+        straightLineConnection(p1, p2, (drawX, drawY) => {
+          this.map.setTile(drawX, drawY, tileFactory.floor);
+        });
+      }
+
+      // right:
+      newK = `${x+1},${y}`;
+      if (newK in rooms) {
+        let p1 = rooms[key].right();
+        let p2 = rooms[newK].left();
+
+        straightLineConnection(p1, p2, (drawX, drawY) => {
+          this.map.setTile(drawX, drawY, tileFactory.floor);
+        });
       }
     }
       

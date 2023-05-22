@@ -1,3 +1,5 @@
+import { Point } from "../utility/point";
+
 export class Room {
   x1: number
   y1: number
@@ -29,37 +31,19 @@ export class Room {
     return false;
   }
 
-  getConnectionPoint(other: Room): [x: number, y: number] {
-    let x: number = 0;
-    let y: number = 0;
-    
-    /**
-     *     1
-     *   ┌---┐ 
-     * 2 │   │ 3
-     *   └---┘
-     *     4
-     * 
-     * There are 4 possible connection points and each if statement goes through
-     * them one at a time for simplicity / clarity. This isn't the best way as
-     * it naturally favors the ordering, but that can always be improved later.
-     */
+  left(): Point {
+    return new Point(this.x1-1, Math.floor((this.y1+this.y2)/2));
+  }
 
+  right(): Point {
+    return new Point(this.x2-1, Math.floor((this.y1+this.y2)/2));
+  }
 
-    if (this.y2 < other.y1) {
-      x = Math.round((this.x1 + this.x2)/2);
-      y = this.y1-1;
-    } else if (this.x1 < other.x2) {
-      x = this.x1-1;
-      y = Math.round((this.y1 + this.y2)/2);
-    } else if (this.x2 < other.x1) {
-      x = this.x2 + 1;
-      y =  Math.round((this.y1 + this.y2)/2);
-    } else {
-      x = Math.round((this.x1 + this.x2)/2);
-      y = this.y2;
-    }
+  up(): Point {
+    return new Point(Math.floor((this.x1 + this.x2)/2), this.y1-1)
+  }
 
-    return [x, y];
+  down(): Point {
+    return new Point(Math.floor((this.x1 + this.x2)/2), this.y2-1)
   }
 }
