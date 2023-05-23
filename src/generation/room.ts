@@ -13,8 +13,8 @@ export class Room {
     this.y2 = y + height;
   }
 
-  center(): [x: number, y: number] {
-    return [Math.round((this.x1 + this.x2)/2), Math.round((this.y1 + this.y2)/2)]
+  center(): Point {
+    return new Point(Math.round((this.x1 + this.x2)/2), Math.round((this.y1 + this.y2)/2));
   }
 
   intersects(others: Room[]): boolean {

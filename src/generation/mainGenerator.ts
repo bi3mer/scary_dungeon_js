@@ -51,17 +51,21 @@ export class MainGenerator extends LevelGenerator {
       let room = this.getRoom(type);
       if (room === undefined) {
         continue;
-      } else if (type === 'altar') {
-        playerX = Math.round(x*this.widthMultiplier + this.roomWidth/2 + 1);
-        playerY = Math.round(y*this.heightMultiplier + this.roomHeight/2);
-      }
-
+      }  
+      
       // put it into the world
-      const roomX = x*this.widthMultiplier+RNG.getUniformInt(1, padding-1);
-      const roomY = y*this.heightMultiplier+RNG.getUniformInt(1, padding-1)
+      const roomX = x*this.widthMultiplier+RNG.getUniformInt(2, padding-3);
+      const roomY = y*this.heightMultiplier+RNG.getUniformInt(2, padding-3)
       this.setRoom(room, roomX, roomY); 
-
+      
       rooms[`${x},${y}`] = new Room(roomX, roomY, this.roomWidth, this.roomHeight)
+
+      // set player position
+      if (type === 'altar') {
+        const center = rooms[`${x},${y}`].center()
+        playerX = center.x;
+        playerY = center.y-1;
+      }
     }
 
     // build the connections
