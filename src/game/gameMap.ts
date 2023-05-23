@@ -47,7 +47,7 @@ export class GameMap {
 
     this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
     this.visible = Array(this.tiles.length).fill(false);  
-    this.explored = Array(this.tiles.length).fill(true); 
+    this.explored = Array(this.tiles.length).fill(false); 
 
     this.actors.push(new Actor(
       0,
