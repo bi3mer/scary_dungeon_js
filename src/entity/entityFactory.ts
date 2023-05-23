@@ -1,12 +1,12 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorRed, colorVisible } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorLightningScroll, colorRed, colorVisible } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
-import { nameAltar, nameEnemy, nameGem } from "./names";
+import { nameAltar, nameEnemy, nameGem, nameLightningScroll } from "./names";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, x: number, y: number): Entity {
@@ -78,10 +78,26 @@ export function spawnGem(map: GameMap, x: number, y: number): Item {
     colorGem,
     colorBlack,
     RenderOrder.Item,
-    null
   );
 
   map.addItem(gem);
 
   return gem;
+}
+
+export function spawnLightningScroll(map: GameMap, x: number, y: number): Item {
+  let scroll = new Item(
+    x,
+    y,
+    nameLightningScroll,
+    false,
+    's',
+    colorLightningScroll,
+    colorBlack,
+    RenderOrder.Item,
+  );
+
+  map.addItem(scroll);
+
+  return scroll;
 }

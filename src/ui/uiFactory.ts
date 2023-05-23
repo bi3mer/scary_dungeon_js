@@ -1,6 +1,7 @@
 import { height, width } from "../config";
+import { Actor } from "../entity/actor";
 import { InputManager, Key } from "../game/inputManager";
-import { colorBlack, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
@@ -8,7 +9,7 @@ import { Text } from "./text";
 export function helpMenu() : Menu {
   const x = width/4;
   const y = height/4;
-  let m = new Menu(x, y, width/2, height/2, "Help", true, true, () => {
+  let m = new Menu(x, y, width/2, height/2, "Help", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       m.shouldExit = true;
     }
@@ -34,7 +35,7 @@ export function helpMenu() : Menu {
 }
 
 export function mainMenu(callback: ()=>void) : Menu {
-  let m = new Menu(0, 0, width, height, "Main Menu", true, false, () => {
+  let m = new Menu(0, 0, width, height, "Main Menu", true, false, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       m.shouldExit = true;
       callback();
@@ -60,7 +61,7 @@ export function mainMenu(callback: ()=>void) : Menu {
 export function gameOverMenu(callback: ()=>void): Menu {
   const x = width/4;
   const y = 5;
-  let m = new Menu(x, y, width/2, height/5, "GAME OVER", true, true, () => {
+  let m = new Menu(x, y, width/2, height/5, "GAME OVER", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       InputManager.clear();
       callback();
@@ -82,6 +83,57 @@ export function gameOverMenu(callback: ()=>void): Menu {
   
   const text = 'You failed.'
   m.addText(new Text(width/2 - text.length/2, y + 2, text, colorWhite, colorBlack));
+
+  return m;
+}
+
+export function inventoryMenu(player: Actor): Menu {
+  const inventory = player.inventory;
+  const size = inventory.items.length;
+  let m: Menu;
+
+  if (size === 0) {
+    const x = width/4;
+    const y = 5;
+    m = new Menu(x, y, width/2, y, "Inventory", true, true, true, () => {
+      if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
+        InputManager.clear();
+        m.shouldExit = true;
+      }
+    });
+
+    m.addText(new Text(x+12, y+y/2, 'Inventory empty.', colorWhite, colorBlack));
+  } else {
+    const x = width/4;
+    const y = 5;
+    
+    m = new Menu(x, y, width/2, 3+size*3, "Inventory", true, true, false, () => {
+      if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
+        InputManager.clear();
+        m.shouldExit = true;
+      }
+    });
+    
+    let curY = 2;
+    for (let item of inventory.items) {
+      m.addButton(new Button(
+        x+4,
+        y+curY,
+        width/2 - 8,
+        3,
+        item.name,
+        colorDarkGray,
+        colorWhite,
+        colorDarkGray,
+        colorWhite, 
+        () => {
+          console.log('selected!');
+        }
+      ));
+
+      curY += 3;
+    }
+  }
 
   return m;
 }

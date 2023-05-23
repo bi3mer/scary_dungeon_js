@@ -1,5 +1,5 @@
 import { padding } from "../config";
-import { spawnAltar, spawnEnemy, spawnGem } from "../entity/entityFactory";
+import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { straightLineConnection } from "./generationUtility";
@@ -71,6 +71,12 @@ export abstract class LevelGenerator {
       case 'A': {
         this.map.setTile(x, y, tileFactory.floor);
         spawnAltar(this.map, x, y);
+        break;
+      }
+      case '&': {
+        // TODO: support multiple items
+        this.map.setTile(x, y, tileFactory.floor);
+        spawnLightningScroll(this.map, x, y);
         break;
       }
       default: {

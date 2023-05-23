@@ -46,7 +46,7 @@ export class InventoryComponent extends BaseComponent {
    * @param map 
    */
   drop(item: Item, actor: Actor, map: GameMap): void {
-    if (item.id != -1) {
+    if (item.id !== -1) {
       this.items.splice(item.id, 1);
       item.x = actor.x;
       item.y = actor.y;

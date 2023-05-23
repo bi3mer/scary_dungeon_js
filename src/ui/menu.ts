@@ -17,6 +17,7 @@ export class Menu {
   text: Text[]
   shouldRender: boolean
   shouldExit: boolean
+  buttonsLeftToRight: boolean
   updateCallback: ()=>void
 
   childMenu: Menu | null
@@ -29,6 +30,7 @@ export class Menu {
     title: string,
     drawOutline: boolean,
     exitOnEscape: boolean,
+    buttonsLeftToRight: boolean,
     updateCallback: ()=>void
   ) {
     this.x = x;
@@ -43,6 +45,8 @@ export class Menu {
     this.buttons = [];
     this.buttonIndex = 0;
     this.text = [];
+
+    this.buttonsLeftToRight = buttonsLeftToRight;
 
     this.shouldRender = true;
     this.shouldExit = false;
@@ -94,16 +98,34 @@ export class Menu {
     }
 
     if (this.buttons.length > 0) {
-      if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
-        this.buttons[this.buttonIndex].highlighted = false;
-        this.buttonIndex = Math.min(this.buttons.length - 1, this.buttonIndex + 1);
-        this.buttons[this.buttonIndex].highlighted = true;
-        this.shouldRender = true;
-      } else if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
-        this.buttons[this.buttonIndex].highlighted = false;
-        this.buttonIndex = Math.max(0, this.buttonIndex - 1);
-        this.buttons[this.buttonIndex].highlighted = true;
-        this.shouldRender = true;
+      if (this.buttonsLeftToRight) {
+        if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
+          this.buttons[this.buttonIndex].highlighted = false;
+          this.buttonIndex = Math.min(this.buttons.length - 1, this.buttonIndex + 1);
+          this.buttons[this.buttonIndex].highlighted = true;
+          this.shouldRender = true;
+          InputManager.clear();
+        } else if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
+          this.buttons[this.buttonIndex].highlighted = false;
+          this.buttonIndex = Math.max(0, this.buttonIndex - 1);
+          this.buttons[this.buttonIndex].highlighted = true;
+          this.shouldRender = true;
+          InputManager.clear();
+        }
+      } else {
+        if (InputManager.isKeyDown(Key.DOWN) || InputManager.isKeyDown(Key.S)) {
+          this.buttons[this.buttonIndex].highlighted = false;
+          this.buttonIndex = Math.min(this.buttons.length - 1, this.buttonIndex + 1);
+          this.buttons[this.buttonIndex].highlighted = true;
+          this.shouldRender = true;
+          InputManager.clear();
+        } else if (InputManager.isKeyDown(Key.UP) || InputManager.isKeyDown(Key.W)) {
+          this.buttons[this.buttonIndex].highlighted = false;
+          this.buttonIndex = Math.max(0, this.buttonIndex - 1);
+          this.buttons[this.buttonIndex].highlighted = true;
+          this.shouldRender = true;
+          InputManager.clear();
+        }
       }
 
       this.buttons[this.buttonIndex].update();

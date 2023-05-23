@@ -53,8 +53,8 @@ export class MainGenerator extends LevelGenerator {
       }  
       
       // put it into the world
-      const roomX = x*this.widthMultiplier+RNG.getUniformInt(2, padding-3);
-      const roomY = y*this.heightMultiplier+RNG.getUniformInt(2, padding-3)
+      const roomX = x*this.widthMultiplier+RNG.getUniformInt(2, padding-2);
+      const roomY = y*this.heightMultiplier+RNG.getUniformInt(2, padding-2)
       this.setRoom(room, roomX, roomY); 
       
       rooms[`${x},${y}`] = new Room(roomX, roomY, this.roomWidth, this.roomHeight)

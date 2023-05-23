@@ -3,7 +3,7 @@ import { Display, Map, RNG } from "rot-js";
 import { GameMap } from "./gameMap";
 import { InputManager, Key } from "./inputManager";
 import { Menu } from "../ui/menu";
-import { gameOverMenu, helpMenu, mainMenu } from "../ui/uiFactory";
+import { gameOverMenu, helpMenu, inventoryMenu, mainMenu } from "../ui/uiFactory";
 import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
 import { NoLayoutGenerator } from "../generation/noLayoutGenerator";
@@ -34,13 +34,13 @@ export class Game {
 
   private generateMap() {
     this.mapGenerating = true;
-    // let generator = new NoLayoutGenerator(this.config.width, this.config.height);
     let generator = new MainGenerator(this.config.roomRows, this.config.roomRows);
+
     generator.generate((map, playerX, playerY) => {
       this.map = map;
       spawnPlayer(this.map, playerX, playerY);
-      this.mapGenerating = false;
       this.render(null, true);
+      this.mapGenerating = false;
     });
   }
 
@@ -92,7 +92,7 @@ export class Game {
       fps = Math.round(1 / this.delta);
 
       if (this.mapGenerating) {
-        // Nothing to do while this is happening
+        // Nothing to do while map is generating
       } else if (menu !== null) {
         // if there is a menu then it handles input
         menu.update();
@@ -100,12 +100,19 @@ export class Game {
         if (menu.shouldExit) {
           menu = null;
           this.render(menu, false);
+          InputManager.clear();
         } else if (menu.shouldRender) {
           this.render(menu, false);
         }
       } else if (InputManager.isKeyDown(Key.H)) {
         // Create the help menu
         menu = helpMenu();
+        this.render(menu, false);
+        InputManager.clear();
+      }  else if (InputManager.isKeyDown(Key.I)) {
+        menu = inventoryMenu(this.map.player());
+        this.render(menu, false);
+        InputManager.clear();
       } else {
         // run game and render if requested by the map
         if (this.map.runActors()) {
