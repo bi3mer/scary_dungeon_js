@@ -77,7 +77,13 @@ export class InventoryComponent extends BaseComponent {
     return count;
   }
 
+  /**
+   * Remove all items from inventory with a given name.
+   * @param name - name of item to destroy
+   */
   destroyItemsWithName(name: string): void {
-    
+    this.items = this.items.filter((i) => {
+      return i.name !== name;
+    });
   }
 }
