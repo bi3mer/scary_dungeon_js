@@ -4,7 +4,7 @@ import { PassAction } from "../action/passAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { euclideanDistance } from "../utility/distance";
-import { astar } from "../utility/pathfinding";
+import { bfs } from "../utility/pathfinding";
 import { Point } from "../utility/point";
 import { Behavior } from "./behavior";
 
@@ -42,8 +42,13 @@ export class AIBehavior implements Behavior {
   }
 
   moveBackToStart(actor: Actor, map: GameMap): [Action, boolean] {
-    // const path = astar(actor.)
-    return [new PassAction(), false];
+    // const path = astar(actor.pos, this.startPos, map);
+    const path = bfs(actor.pos, this.startPos, map);
+    if (path.length === 0) {
+      return [new PassAction(), false];
+    }
+
+    return [new BumpAction(path[0]), false];
   }
 
   act(actor: Actor, map: GameMap): [Action, boolean] {
@@ -53,9 +58,11 @@ export class AIBehavior implements Behavior {
       actor.euclideanDistance(map.player().pos) <= 3
     ) {
       return this.moveTowardsPlayer(map.player().pos.x, map.player().pos.y, actor);
+    } else if (!actor.pos.equals(this.startPos)) {
+      return this.moveBackToStart(actor, map);
     }
 
-    return this.moveBackToStart(actor, map);
+    return [new PassAction(), false];
   }
 
   private getMoves(x1: number, y1: number, x2: number, y2: number): [number, number][] {

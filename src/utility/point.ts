@@ -28,4 +28,8 @@ export class Point {
     this.x -= n;
     this.y -= n;
   }
+
+  equals(other: Point): boolean {
+    return this.x === other.x && this.y === other.y;
+  }
 }
