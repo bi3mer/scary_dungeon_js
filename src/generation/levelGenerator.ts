@@ -2,7 +2,6 @@ import { padding } from "../config";
 import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
-import { straightLineConnection } from "./generationUtility";
 import { LEVELS } from "./levels";
 import { Room } from "./room";
 
@@ -95,5 +94,5 @@ export abstract class LevelGenerator {
     }
   }
   
-  abstract generate(callback: (map: GameMap, x: number, y: number) => void): void;
+  abstract generate(level: number, callback: (map: GameMap, x: number, y: number) => void): void;
 }

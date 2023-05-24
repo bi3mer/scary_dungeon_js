@@ -3,14 +3,14 @@ import { GameMap } from "../game/gameMap";
 
 import { LEVELS } from "./levels";
 import tileFactory from "../tile/tileFactory";
-import { bresenham, straightLineConnection } from "./generationUtility";
+import { bresenham } from "./generationUtility";
 import { START_ROOM } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 
 
 export class NoLayoutGenerator extends LevelGenerator {
-  generate(callback: (map: GameMap, x: number, y: number) => void): void {
+  generate(level: number, callback: (map: GameMap, x: number, y: number) => void): void {
     throw Error('No layout generated not implemented!');
     // let map = new GameMap(this.width, this.height);
 

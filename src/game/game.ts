@@ -12,6 +12,7 @@ import { height, width } from "../config";
 
 
 export class Game {
+  private level: number
   private display: Display
   private map: GameMap
   private config: { roomCols: number, roomRows: number }
@@ -30,13 +31,14 @@ export class Game {
 
     this.delta = 0;
     this.mapGenerating = false;
+    this.level = 1;
   }
 
   private generateMap() {
     this.mapGenerating = true;
     let generator = new MainGenerator(this.config.roomRows, this.config.roomRows);
 
-    generator.generate((map, playerX, playerY) => {
+    generator.generate(this.level, (map, playerX, playerY) => {
       this.map = map;
       spawnPlayer(this.map, playerX, playerY);
       this.render(null, true);

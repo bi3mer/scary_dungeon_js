@@ -32,18 +32,18 @@ export class Room {
   }
 
   left(): Point {
-    return new Point(this.x1-1, Math.floor((this.y1+this.y2)/2));
+    return new Point(this.x1, Math.floor((this.y1+this.y2)/2));
   }
 
   right(): Point {
-    return new Point(this.x2-1, Math.floor((this.y1+this.y2)/2));
+    return new Point(this.x2, Math.floor((this.y1+this.y2)/2));
   }
 
   up(): Point {
-    return new Point(Math.floor((this.x1 + this.x2)/2), this.y1-1)
+    return new Point(Math.floor((this.x1 + this.x2)/2), this.y1)
   }
 
   down(): Point {
-    return new Point(Math.floor((this.x1 + this.x2)/2), this.y2-1)
+    return new Point(Math.floor((this.x1 + this.x2)/2), this.y2)
   }
 }

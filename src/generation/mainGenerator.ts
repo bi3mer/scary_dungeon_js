@@ -2,13 +2,14 @@ import { RNG } from "rot-js";
 import { GameMap } from "../game/gameMap";
 
 import tileFactory from "../tile/tileFactory";
-import { straightLineConnection } from "./generationUtility";
+import { bresenham } from "./generationUtility";
 import { START_ROOM, ROOMS, GEM_ROOMS } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 import { ClingoSolver } from "../utility/clingoSolver";
 import { MessageLog } from "../utility/messageLog";
 import { padding } from "../config";
+import { Progression } from "../game/progression";
 
 
 export class MainGenerator extends LevelGenerator {
@@ -82,7 +83,7 @@ export class MainGenerator extends LevelGenerator {
         let p1 = rooms[key].down();
         let p2 = rooms[newK].up();
 
-        straightLineConnection(p1, p2, (drawX, drawY) => {
+        bresenham(p1, p2, (drawX, drawY) => {
           this.map.setTile(drawX, drawY, tileFactory.floor);
         });
       }
@@ -93,7 +94,7 @@ export class MainGenerator extends LevelGenerator {
         let p1 = rooms[key].right();
         let p2 = rooms[newK].left();
 
-        straightLineConnection(p1, p2, (drawX, drawY) => {
+        bresenham(p1, p2, (drawX, drawY) => {
           this.map.setTile(drawX, drawY, tileFactory.floor);
         });
       }
@@ -102,17 +103,21 @@ export class MainGenerator extends LevelGenerator {
     callback(this.map, playerX, playerY);
   }
 
-  generate(callback: (map: GameMap, x: number, y: number) => void): void {
-    ClingoSolver.get(this.width, this.height, 1).then((result) => {
-      if (result[0]) {
-        // Error, generation failed, increase the map size.
-        this.width++;
-        this.height++;
-        this.generate(callback);
-      } else {
-        // No error, use the layout to fill out the results.
-        this.fillInLayout(result[1], callback);
-      }
+  generate(level: number, callback: (map: GameMap, x: number, y: number) => void): void {
+    Progression.getLayout(level, (layout) => {
+      this.fillInLayout(layout, callback);
     });
+    
+    // ClingoSolver.get(this.width, this.height, 1).then((result) => {
+    //   if (result[0]) {
+    //     // Error, generation failed, increase the map size.
+    //     this.width++;
+    //     this.height++;
+    //     this.generate(callback);
+    //   } else {
+    //     // No error, use the layout to fill out the results.
+    //     this.fillInLayout(result[1], callback);
+    //   }
+    // });
   }
 }

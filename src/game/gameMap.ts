@@ -7,12 +7,11 @@ import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
-import { colorBlack, colorLightGray, colorWhite } from "../utility/colors";
+import { colorBlack, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
 import { nameGem, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
 import { height, padding, width } from "../config";
-import { start } from "repl";
 
 
 export class GameMap {
@@ -176,7 +175,7 @@ export class GameMap {
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let e of this.entities) {
-      if (e == null) {
+      if (e === null) {
         continue;
       }
 
@@ -187,7 +186,7 @@ export class GameMap {
 
     // render items
     for (let e of this.items) {
-      if (e == null) {
+      if (e === null) {
         continue;
       }
 
@@ -199,7 +198,7 @@ export class GameMap {
     // render actors
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
     for (let a of this.actors) {
-      if ( a == null) {
+      if ( a === null) {
         continue;
       }
 
@@ -211,7 +210,7 @@ export class GameMap {
 
   // ---------- Add
   addEntity(entity: Entity): void {
-    assert(this.locationOccupied(entity.x, entity.y) == false);
+    assert(this.locationOccupied(entity.x, entity.y) === false);
     
     if (this.entityIds.length > 0) {
       const id = this.entityIds.pop()!;
@@ -224,7 +223,7 @@ export class GameMap {
   }
 
   addActor(actor: Actor): void {
-    assert(this.locationOccupied(actor.x, actor.y) == false);
+    assert(this.locationOccupied(actor.x, actor.y) === false);
 
     if(this.actorIds.length > 0) {
       const id = this.actorIds.pop()!;
@@ -237,9 +236,9 @@ export class GameMap {
   }
 
   addItem(item: Item): void {
-    assert(this.locationOccupied(item.x, item.y) == false);
+    assert(this.locationOccupied(item.x, item.y) === false);
 
-    if (item.name == nameGem) {
+    if (item.name === nameGem) {
       ++this.gemCount;
     }
 
@@ -272,10 +271,10 @@ export class GameMap {
   // ---------- At Location
   entityAtLocation(x: number, y: number): Entity | null {
     for(var entity of this.entities) {
-      if (entity == null) {
+      if (entity === null) {
         continue;
       }
-      if (entity.x == x && entity.y == y) {
+      if (entity.x === x && entity.y === y) {
         return entity;
       }
     }
@@ -285,11 +284,11 @@ export class GameMap {
 
   actorAtLocation(x: number, y: number): Actor | null {
     for(var actor of this.actors) {
-      if (actor == null) {
+      if (actor === null) {
         continue;
       }
 
-      if (actor.x == x && actor.y == y) {
+      if (actor.x === x && actor.y === y) {
         return actor;
       }
     }
@@ -299,11 +298,11 @@ export class GameMap {
 
   itemAtLocation(x: number, y: number): Item | null {
     for (var item of this.items) {
-      if (item == null) {
+      if (item === null) {
         continue;
       }
 
-      if (item.x == x && item.y == y) {
+      if (item.x === x && item.y === y) {
         return item;
       }
     }
@@ -349,7 +348,7 @@ export class GameMap {
   runActors(): boolean {
     let shouldRender = false;
     for(; this.actorIndex < this.actors.length; ++this.actorIndex) {
-      if (this.actors[this.actorIndex] == null) {
+      if (this.actors[this.actorIndex] === null) {
         continue;
         
       }
