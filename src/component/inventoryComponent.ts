@@ -48,8 +48,8 @@ export class InventoryComponent extends BaseComponent {
   drop(item: Item, actor: Actor, map: GameMap): void {
     if (item.id !== -1) {
       this.items.splice(item.id, 1);
-      item.x = actor.x;
-      item.y = actor.y;
+      item.pos.x = actor.pos.x;
+      item.pos.y = actor.pos.y;
 
       map.addItem(item);
     } else {

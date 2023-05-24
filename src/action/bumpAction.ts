@@ -1,19 +1,20 @@
 import { Actor } from "../entity/actor";
 import { nameAltar } from "../entity/names";
 import { GameMap } from "../game/gameMap";
+import { Point } from "../utility/point";
 import { AltarAction } from "./altarAction";
 import { AttackAction } from "./attackAction";
 import { DirectionAction } from "./directionAction"
 import { MoveAction } from "./moveAction";
 
 export class BumpAction extends DirectionAction {
-  constructor(dx: number, dy: number) {
-    super(dx, dy);
+  constructor(dPos: Point) {
+    super(dPos);
   }
   
   execute(actor: Actor, map: GameMap): boolean {
-    let [x, y] = this.destination(actor);
-    const actorAtLocation = map.actorAtLocation(x, y);
+    let pos= this.destination(actor);
+    const actorAtLocation = map.actorAtLocation(pos);
     
     if (actorAtLocation != null) {
       if (actorAtLocation.name === nameAltar) {
@@ -22,7 +23,7 @@ export class BumpAction extends DirectionAction {
       return (new AttackAction(actorAtLocation).execute(actor, map));
       }
     } else {
-      return (new MoveAction(this.dx, this.dy)).execute(actor, map);
+      return (new MoveAction(new Point(this.dPos.x, this.dPos.y))).execute(actor, map);
     }
   }
 }

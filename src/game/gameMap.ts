@@ -12,6 +12,7 @@ import { Item } from "../entity/item";
 import { nameGem, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
 import { height, padding, width } from "../config";
+import { Point } from "../utility/point";
 
 
 export class GameMap {
@@ -36,6 +37,7 @@ export class GameMap {
   private actorIds: number[] = []
 
   private actorIndex: number = 0;
+  private playerWon: boolean = false;
   
   constructor(rows: number, cols: number) {
     this.rows = rows;
@@ -49,8 +51,7 @@ export class GameMap {
     this.explored = Array(this.tiles.length).fill(false); 
 
     this.actors.push(new Actor(
-      0,
-      0,
+      new Point(0,0),
       namePlayer,
       true,
       '@', 
@@ -108,16 +109,16 @@ export class GameMap {
     return this.gemCount;
   }
 
-  private index(x: number, y: number): number {
-    return y*(this.cols*this.roomCols) + x;
+  private index(pos: Point): number {
+    return pos.y*(this.cols*this.roomCols) + pos.x;
   }
 
-  inBounds(x: number, y: number): boolean {
-    return y * (this.cols*this.roomCols) + x < this.tiles.length;
+  inBounds(pos: Point): boolean {
+    return pos.y * (this.cols*this.roomCols) + pos.x < this.tiles.length;
   }
 
-  isWalkable(x: number, y: number): boolean {
-    const index = this.index(x, y);
+  isWalkable(pos: Point): boolean {
+    const index = this.index(pos);
     if (index >= this.tiles.length || index < 0) {
       return false;
     }
@@ -125,8 +126,8 @@ export class GameMap {
     return this.tiles[index].walkable;
   }
 
-  setTile(x: number, y: number, tile: Tile): void {
-    const index = this.index(x, y);
+  setTile(pos: Point, tile: Tile): void {
+    const index = this.index(pos);
     assert(index < this.tiles.length);
     this.tiles[index] = tile;
   }
@@ -135,27 +136,31 @@ export class GameMap {
     let y: number;
     let x: number;
 
-    const playerX = this.player().x;
-    const playerY = this.player().y;
+    const playerPosition = this.player().pos;
 
     const midX = Math.round(width/2);
     const midY = Math.round(height/2);
+    let worldPosition = new Point(0,0);
 
     // render the map
     for (y = -midY; y < midY; ++y) {
-      const worldY = playerY + y;
+      const worldY = playerPosition.y + y;
       if (worldY < 0) {
         continue;
       }
 
+      worldPosition.y = worldY
+
       for(x = -midX; x < midX; ++x) {
-        const worldX = playerX + x;
+        const worldX = playerPosition.x + x;
 
         if (worldX < 0) {
           continue;
         }
+
+        worldPosition.x = worldX;
         
-        let index = this.index(worldX, worldY);
+        let index = this.index(worldPosition);
         // let index = this.index(drawX, drawY);
         if (index >= this.visible.length) {
           continue;
@@ -179,8 +184,8 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(e.x, e.y)]) {
-        e.render(display, playerX, playerY, midX, midY);
+      if (this.visible[this.index(e.pos)]) {
+        e.render(display, playerPosition, midX, midY);
       }
     }
 
@@ -190,8 +195,8 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(e.x, e.y)]) {
-        e.render(display, playerX, playerY, midX, midY);
+      if (this.visible[this.index(e.pos)]) {
+        e.render(display, playerPosition, midX, midY);
       }
     }
 
@@ -202,15 +207,15 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(a.x, a.y)]) {
-        a.render(display, playerX, playerY, midX, midY);
+      if (this.visible[this.index(a.pos)]) {
+        a.render(display, playerPosition, midX, midY);
       }
     }
   }
 
   // ---------- Add
   addEntity(entity: Entity): void {
-    assert(this.locationOccupied(entity.x, entity.y) === false);
+    assert(this.locationOccupied(entity.pos) === false);
     
     if (this.entityIds.length > 0) {
       const id = this.entityIds.pop()!;
@@ -223,7 +228,7 @@ export class GameMap {
   }
 
   addActor(actor: Actor): void {
-    assert(this.locationOccupied(actor.x, actor.y) === false);
+    assert(this.locationOccupied(actor.pos) === false);
 
     if(this.actorIds.length > 0) {
       const id = this.actorIds.pop()!;
@@ -236,7 +241,7 @@ export class GameMap {
   }
 
   addItem(item: Item): void {
-    assert(this.locationOccupied(item.x, item.y) === false);
+    assert(this.locationOccupied(item.pos) === false);
 
     if (item.name === nameGem) {
       ++this.gemCount;
@@ -269,12 +274,12 @@ export class GameMap {
   }
 
   // ---------- At Location
-  entityAtLocation(x: number, y: number): Entity | null {
+  entityAtLocation(pos: Point): Entity | null {
     for(var entity of this.entities) {
       if (entity === null) {
         continue;
       }
-      if (entity.x === x && entity.y === y) {
+      if (entity.pos.x === pos.x && entity.pos.y === pos.y) {
         return entity;
       }
     }
@@ -282,13 +287,13 @@ export class GameMap {
     return null;
   }
 
-  actorAtLocation(x: number, y: number): Actor | null {
+  actorAtLocation(pos: Point): Actor | null {
     for(var actor of this.actors) {
       if (actor === null) {
         continue;
       }
 
-      if (actor.x === x && actor.y === y) {
+      if (actor.pos.x === pos.x && actor.pos.y === pos.y) {
         return actor;
       }
     }
@@ -296,13 +301,13 @@ export class GameMap {
     return null;
   }
 
-  itemAtLocation(x: number, y: number): Item | null {
+  itemAtLocation(pos: Point): Item | null {
     for (var item of this.items) {
       if (item === null) {
         continue;
       }
 
-      if (item.x === x && item.y === y) {
+      if (item.pos.x === pos.x && item.pos.y === pos.y) {
         return item;
       }
     }
@@ -311,16 +316,16 @@ export class GameMap {
   }
 
 
-  locationOccupied(x: number, y: number): boolean {
-    return this.entityAtLocation(x, y) != null || 
-           this.actorAtLocation(x, y) != null ||
-           this.itemAtLocation(x,y) != null;
+  locationOccupied(pos: Point): boolean {
+    return this.entityAtLocation(pos) != null || 
+           this.actorAtLocation(pos) != null ||
+           this.itemAtLocation(pos) != null;
   }
   
-  computeFOV(x: number, y: number): void {
+  computeFOV(): void {
     const SIGHT_RADIUS = 10;
     const fov = new PreciseShadowcasting((x, y) => {
-      const index = this.index(x, y);
+      const index = this.index(new Point(x, y));
       if (index < this.tiles.length && index >= 0) {
         return this.tiles[index].walkable;
       }
@@ -330,15 +335,20 @@ export class GameMap {
 
     this.visible.fill(false);
 
-    fov.compute(x, y, SIGHT_RADIUS, (x: number, y: number, r: number, visibility: number) => {
-      const index = this.index(x, y);
-      if (visibility > 0.0) {
-        this.explored[index] = true;
-        this.visible[index] = true;
-      } else {
-        this.visible[index] = false;
+    fov.compute(
+      this.player().pos.x, 
+      this.player().pos.y, 
+      SIGHT_RADIUS, 
+      (x: number, y: number, r: number, visibility: number) => {
+        const index = this.index(new Point(x, y));
+        if (visibility > 0.0) {
+          this.explored[index] = true;
+          this.visible[index] = true;
+        } else {
+          this.visible[index] = false;
+        }
       }
-    });
+    );
   }
   
   /**
@@ -367,5 +377,13 @@ export class GameMap {
 
     this.actorIndex = 0;
     return shouldRender;
+  }
+
+  markLevelComplete(): void {
+    this.playerWon = true;
+  }
+
+  levelComplete(): boolean {
+    return this.playerWon;
   }
 }

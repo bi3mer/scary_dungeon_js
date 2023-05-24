@@ -3,11 +3,11 @@ import { RenderOrder } from "../utility/renderOrder";
 import { Display } from "rot-js";
 import { euclideanDistance } from "../utility/distance";
 import { colorBlack, colorWhite } from "../utility/colors";
+import { Point } from "../utility/point";
 
 export class Entity {
   id: number
-  x: number
-  y: number
+  pos: Point
   name: string
   blocksMovement: boolean
   char: string
@@ -16,8 +16,7 @@ export class Entity {
   renderOrder: RenderOrder
 
   constructor(
-    x: number = 0, 
-    y: number = 0, 
+    pos: Point, 
     name: string = "Unknown", 
     blocksMovement: boolean = false,
     char: string = "?", 
@@ -27,8 +26,7 @@ export class Entity {
   ) {
     this.id = -1;
 
-    this.x = x;
-    this.y = y;
+    this.pos = pos.copy();
     this.name = name;
     this.blocksMovement = blocksMovement;
     this.char = char;
@@ -39,18 +37,18 @@ export class Entity {
     assert(this.char.length === 1);
   }
 
-  move(dx: number, dy: number) {
-    this.x += dx;
-    this.y += dy;
+  move(dPos: Point) {
+    this.pos.x += dPos.x;
+    this.pos.y += dPos.y;
   }
 
-  render(display: Display, playerX: number, playerY: number, midX: number, midY: number): void {
-    const x = midX + this.x-playerX;
-    const y = midY + this.y-playerY;
+  render(display: Display, playerPos: Point, midX: number, midY: number): void {
+    const x = midX + this.pos.x-playerPos.x;
+    const y = midY + this.pos.y-playerPos.y;
     display.draw(x, y, this.char, this.fg, this.bg);
   }
 
-  euclideanDistance(x: number, y: number): number {
-    return euclideanDistance(this.x, this.y, x, y);
+  euclideanDistance(pos: Point): number {
+    return euclideanDistance(this.pos.x, this.pos.y, pos.x, pos.y);
   }
 }

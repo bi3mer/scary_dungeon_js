@@ -1,7 +1,7 @@
 import { Actor } from "../entity/actor";
 import { nameGem, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
-import { colorGreen, colorLightGray } from "../utility/colors";
+import { colorGreen, colorLightGray, colorWhite } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
 import { Action } from "./action";
 
@@ -41,8 +41,9 @@ export class AltarAction extends Action {
   }
 
   private stepThroughAltar(actor: Actor, map: GameMap): boolean {
-    MessageLog.addErrorMessage('altarAction.stepThroughAltar not implemented!', true);
-    return false;
+    MessageLog.addMessage('You step into the next level of the prison...', colorWhite, false);
+    map.markLevelComplete();
+    return true;
   }
 
   execute(actor: Actor, map: GameMap): boolean {

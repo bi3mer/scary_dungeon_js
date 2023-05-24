@@ -6,10 +6,10 @@ import { bresenham } from "./generationUtility";
 import { START_ROOM, ROOMS, GEM_ROOMS } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
-import { ClingoSolver } from "../utility/clingoSolver";
 import { MessageLog } from "../utility/messageLog";
 import { padding } from "../config";
 import { Progression } from "../game/progression";
+import { Point } from "../utility/point";
 
 
 export class MainGenerator extends LevelGenerator {
@@ -36,11 +36,9 @@ export class MainGenerator extends LevelGenerator {
 
   private fillInLayout(
     layout: [number, number, string][], 
-    callback: (map: GameMap, x: number, y: number) => void): void
+    callback: (map: GameMap, playerPos: Point) => void): void
   {
-    let playerX = 0;
-    let playerY = 0;
-
+    let playerPos = new Point(0,0);
     let rooms: {[name: string]: Room } = {};
 
     // build the rooms
@@ -63,8 +61,8 @@ export class MainGenerator extends LevelGenerator {
       // set player position
       if (type === 'altar') {
         const center = rooms[`${x},${y}`].center()
-        playerX = center.x;
-        playerY = center.y-1;
+        playerPos.x = center.x;
+        playerPos.y = center.y-1;
       }
     }
 
@@ -83,8 +81,8 @@ export class MainGenerator extends LevelGenerator {
         let p1 = rooms[key].down();
         let p2 = rooms[newK].up();
 
-        bresenham(p1, p2, (drawX, drawY) => {
-          this.map.setTile(drawX, drawY, tileFactory.floor);
+        bresenham(p1, p2, (drawPos) => {
+          this.map.setTile(drawPos, tileFactory.floor);
         });
       }
 
@@ -94,30 +92,18 @@ export class MainGenerator extends LevelGenerator {
         let p1 = rooms[key].right();
         let p2 = rooms[newK].left();
 
-        bresenham(p1, p2, (drawX, drawY) => {
-          this.map.setTile(drawX, drawY, tileFactory.floor);
+        bresenham(p1, p2, (drawPos) => {
+          this.map.setTile(drawPos, tileFactory.floor);
         });
       }
     }
       
-    callback(this.map, playerX, playerY);
+    callback(this.map, playerPos);
   }
 
-  generate(level: number, callback: (map: GameMap, x: number, y: number) => void): void {
+  generate(level: number, callback: (map: GameMap, playerPos: Point) => void): void {
     Progression.getLayout(level, (layout) => {
       this.fillInLayout(layout, callback);
     });
-    
-    // ClingoSolver.get(this.width, this.height, 1).then((result) => {
-    //   if (result[0]) {
-    //     // Error, generation failed, increase the map size.
-    //     this.width++;
-    //     this.height++;
-    //     this.generate(callback);
-    //   } else {
-    //     // No error, use the layout to fill out the results.
-    //     this.fillInLayout(result[1], callback);
-    //   }
-    // });
   }
 }

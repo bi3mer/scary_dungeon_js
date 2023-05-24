@@ -16,7 +16,7 @@ export class PickUpItemAction extends Action {
    * @returns whether re-render is required
    */
   execute(actor: Actor, map: GameMap): boolean {
-    const item = map.itemAtLocation(actor.x, actor.y);
+    const item = map.itemAtLocation(actor.pos);
     if (item === null) {
       MessageLog.addMessage('Nothing to pick up.', colorLightGray, true);
     } else if (actor.inventory.addItem(item)) {

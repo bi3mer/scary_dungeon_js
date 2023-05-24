@@ -7,12 +7,12 @@ import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { nameAltar, nameEnemy, nameGem, nameLightningScroll } from "./names";
+import { Point } from "../utility/point";
 
 // ------------ Entities ------------
-export function spawnCorpse(map: GameMap, x: number, y: number): Entity {
+export function spawnCorpse(map: GameMap, pos: Point): Entity {
   const corpse = new Entity(
-    x, 
-    y,
+    pos,
     'Corpse',
     false,
     '%',
@@ -27,31 +27,27 @@ export function spawnCorpse(map: GameMap, x: number, y: number): Entity {
 }
 
 // ------------ Actors ------------
-export function spawnPlayer(map: GameMap, x: number, y: number): Actor {
-  map.player().x = x;
-  map.player().y = y;
+export function spawnPlayer(map: GameMap, pos: Point): Actor {
+  map.player().pos = pos;
 
   return map.player();
 }
 
-export function spawnEnemy(map: GameMap, x: number, y: number): Actor {
-  let enemy = new Actor();
-  enemy.x = x;
-  enemy.y = y;
+export function spawnEnemy(map: GameMap, pos: Point): Actor {
+  let enemy = new Actor(pos);
   enemy.name = nameEnemy;
   enemy.char = 'E';
   enemy.fg = colorEnemy;
-  enemy.behavior = new AIBehavior(x, y);
+  enemy.behavior = new AIBehavior(pos);
 
   map.addActor(enemy);
 
   return enemy;
 }
 
-export function spawnAltar(map: GameMap, x: number, y: number): Entity {
+export function spawnAltar(map: GameMap, pos: Point): Entity {
   let altar = new Actor(
-    x, 
-    y,
+    pos,
     nameAltar,
     true,
     'A',
@@ -68,10 +64,9 @@ export function spawnAltar(map: GameMap, x: number, y: number): Entity {
 }
 
 // ------------ Items ------------
-export function spawnGem(map: GameMap, x: number, y: number): Item {
+export function spawnGem(map: GameMap, pos: Point): Item {
   let gem = new Item(
-    x,
-    y,
+    pos,
     nameGem,
     false,
     '*',
@@ -85,10 +80,9 @@ export function spawnGem(map: GameMap, x: number, y: number): Item {
   return gem;
 }
 
-export function spawnLightningScroll(map: GameMap, x: number, y: number): Item {
+export function spawnLightningScroll(map: GameMap, pos: Point): Item {
   let scroll = new Item(
-    x,
-    y,
+    pos,
     nameLightningScroll,
     false,
     's',

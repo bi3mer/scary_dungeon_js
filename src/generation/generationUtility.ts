@@ -1,8 +1,7 @@
-import { RNG } from "rot-js";
 import { Point } from "../utility/point";
 
 // Based on: http://www.roguebasin.com/index.php/Bresenham%27s_Line_Algorithm
-export function bresenham(p1: Point, p2: Point, callback: (x: number, y: number) => void)
+export function bresenham(p1: Point, p2: Point, callback: (pos: Point) => void)
 : void {
   let temp: number;
   let dx = p2.x-p1.x;
@@ -47,9 +46,9 @@ export function bresenham(p1: Point, p2: Point, callback: (x: number, y: number)
   let y = p1.y;
   for (let x = p1.x; x < p2.x; ++x) {
     if (isSteep) {
-      callback(y, x);
+      callback(new Point(y, x));
     } else {
-      callback(x, y);
+      callback(new Point(x, y));
     }
 
     error -= Math.abs(dy);
@@ -58,9 +57,9 @@ export function bresenham(p1: Point, p2: Point, callback: (x: number, y: number)
       error += dx;
       
       if (isSteep) {
-        callback(y, x);
+        callback(new Point(y, x));
       } else {
-        callback(x, y);
+        callback(new Point(x, y));
       }
     }
   }

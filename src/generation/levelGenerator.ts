@@ -2,6 +2,7 @@ import { padding } from "../config";
 import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
+import { Point } from "../utility/point";
 import { LEVELS } from "./levels";
 import { Room } from "./room";
 
@@ -39,47 +40,47 @@ export abstract class LevelGenerator {
     this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
   }
 
-  setTile(x: number, y: number, tile: string): void {
+  setTile(pos: Point, tile: string): void {
     switch(tile) {
       case 'X': { 
         // default is wall.
         break;
       }
       case '#': {
-        this.map.setTile(x, y, tileFactory.floor);
-        spawnEnemy(this.map, x, y);
+        this.map.setTile(pos, tileFactory.floor);
+        spawnEnemy(this.map, pos);
         break;
       }
       case '-': {
-        this.map.setTile(x, y, tileFactory.floor);
+        this.map.setTile(pos, tileFactory.floor);
         break;
       }
       case '/': {
-        this.map.setTile(x, y, tileFactory.forwardSlash);
+        this.map.setTile(pos, tileFactory.forwardSlash);
         break;
       }
       case '\\': {
-        this.map.setTile(x, y, tileFactory.backwardSlash);
+        this.map.setTile(pos, tileFactory.backwardSlash);
         break;
       }
       case '*': {
-        this.map.setTile(x, y, tileFactory.floor);
-        spawnGem(this.map, x, y);
+        this.map.setTile(pos, tileFactory.floor);
+        spawnGem(this.map, pos);
         break;
       }
       case 'A': {
-        this.map.setTile(x, y, tileFactory.floor);
-        spawnAltar(this.map, x, y);
+        this.map.setTile(pos, tileFactory.floor);
+        spawnAltar(this.map, pos);
         break;
       }
       case '&': {
         // TODO: support multiple items
-        this.map.setTile(x, y, tileFactory.floor);
-        spawnLightningScroll(this.map, x, y);
+        this.map.setTile(pos, tileFactory.floor);
+        spawnLightningScroll(this.map, pos);
         break;
       }
       default: {
-        this.map.setTile(x, y, tileFactory.floor);
+        this.map.setTile(pos, tileFactory.floor);
         console.warn(`Unhandled tile type: ${tile}`);
         break;
       }
@@ -89,10 +90,10 @@ export abstract class LevelGenerator {
   setRoom(room: string[], startX: number, startY: number): void {
     for (let y = 0; y < room.length; ++y) {
       for (let x = 0; x < room[0].length; ++x) {
-        this.setTile(startX + x, startY + y, room[y][x]);
+        this.setTile(new Point(startX + x, startY + y), room[y][x]);
       }
     }
   }
   
-  abstract generate(level: number, callback: (map: GameMap, x: number, y: number) => void): void;
+  abstract generate(level: number, callback: (map: GameMap, playerPos: Point) => void): void;
 }

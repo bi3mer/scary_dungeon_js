@@ -1,14 +1,13 @@
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
+import { Point } from "../utility/point";
 import { Action } from "./action"
 
 export class DirectionAction implements Action {
-  dx: number
-  dy: number
+  dPos: Point
 
-  constructor(dx: number, dy: number) {
-    this.dx = dx;
-    this.dy = dy;
+  constructor(dPos: Point) {
+    this.dPos = dPos;
   }
 
   execute(actor: Actor, map: GameMap): boolean {
@@ -17,7 +16,7 @@ export class DirectionAction implements Action {
     return false;
   }
 
-  destination(actor: Actor): [number, number] {
-    return [actor.x + this.dx, actor.y + this.dy];
+  destination(actor: Actor): Point {
+    return new Point(actor.pos.x + this.dPos.x, actor.pos.y + this.dPos.y);
   }
 }

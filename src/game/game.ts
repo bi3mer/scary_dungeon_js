@@ -6,7 +6,6 @@ import { Menu } from "../ui/menu";
 import { gameOverMenu, helpMenu, inventoryMenu, mainMenu } from "../ui/uiFactory";
 import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
-import { NoLayoutGenerator } from "../generation/noLayoutGenerator";
 import { MainGenerator } from "../generation/mainGenerator";
 import { height, width } from "../config";
 
@@ -38,9 +37,16 @@ export class Game {
     this.mapGenerating = true;
     let generator = new MainGenerator(this.config.roomRows, this.config.roomRows);
 
-    generator.generate(this.level, (map, playerX, playerY) => {
-      this.map = map;
-      spawnPlayer(this.map, playerX, playerY);
+    generator.generate(this.level, (map, playerPos) => {
+      if (this.level === 1) {
+        this.map = map;
+        spawnPlayer(this.map, playerPos);
+      } else {
+        map.player().pos = playerPos;
+        map.player().inventory = this.map.player().inventory;
+        this.map = map;
+      }
+      
       this.render(null, true);
       this.mapGenerating = false;
     });
@@ -55,11 +61,9 @@ export class Game {
   
   render(menu: Menu | null, computeFOV: boolean): void {
     this.display.clear();
-    const playerX = this.map.player().x;
-    const playerY = this.map.player().y;
 
     if (computeFOV) {
-      this.map.computeFOV(playerX, playerY);
+      this.map.computeFOV();
     }
 
     this.map.render(this.display);
@@ -115,12 +119,16 @@ export class Game {
         menu = inventoryMenu(this.map.player());
         this.render(menu, false);
         InputManager.clear();
+      } else if (this.map.levelComplete()) { 
+        ++this.level;
+        this.generateMap();
       } else {
         // run game and render if requested by the map
         if (this.map.runActors()) {
           this.render(null, true);
 
           if (!this.map.playerIsAlive()) {
+            this.level = 1;
             menu = gameOverMenu(() => {
               this.map.reset();
               MessageLog.clear();

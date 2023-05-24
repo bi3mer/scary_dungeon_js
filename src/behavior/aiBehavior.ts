@@ -4,34 +4,20 @@ import { PassAction } from "../action/passAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { euclideanDistance } from "../utility/distance";
+import { astar } from "../utility/pathfinding";
+import { Point } from "../utility/point";
 import { Behavior } from "./behavior";
 
 export class AIBehavior implements Behavior {
-  startX: number
-  startY: number
+  startPos: Point
   
-  constructor(x: number, y: number) {
-    this.startX = x;
-    this.startY = y;
+  constructor(startPos: Point) {
+    this.startPos = startPos.copy();
   }
 
-  act(actor: Actor, map: GameMap): [Action, boolean] {
-    // Get target based on distances
-    let targetX: number, targetY: number;
-    if (
-      actor.euclideanDistance(this.startX, this.startY) <= 3 &&
-      actor.euclideanDistance(map.player().x, map.player().y) <= 3
-    ) {
-      targetX = map.player().x;
-      targetY = map.player().y;
-    } else {
-      targetX = this.startX;
-      targetY = this.startY;
-      // use A*
-    }
-    
+  moveTowardsPlayer(targetX: number, targetY: number, actor: Actor): [Action, boolean] {
     // get moves towards the target
-    const moves = this.getMoves(actor.x, actor.y, targetX, targetY);
+    const moves = this.getMoves(actor.pos.x, actor.pos.y, targetX, targetY);
 
     // if their are no moves, do nothing
     if (moves.length === 0) {
@@ -42,8 +28,8 @@ export class AIBehavior implements Behavior {
     let closestVal = 10000;
     let closestIndex = -1;
     for (let i = 0; i < moves.length; ++i) {
-      const newX = actor.x + moves[i][0];
-      const newY = actor.y + moves[i][1];
+      const newX = actor.pos.x + moves[i][0];
+      const newY = actor.pos.y + moves[i][1];
       const dist = euclideanDistance(newX, newY, targetX, targetY);
 
       if (dist < closestVal) {
@@ -52,7 +38,24 @@ export class AIBehavior implements Behavior {
       }
     }
 
-    return [new BumpAction(moves[closestIndex][0], moves[closestIndex][1]), false];
+    return [new BumpAction(new Point(moves[closestIndex][0], moves[closestIndex][1])), false];
+  }
+
+  moveBackToStart(actor: Actor, map: GameMap): [Action, boolean] {
+    // const path = astar(actor.)
+    return [new PassAction(), false];
+  }
+
+  act(actor: Actor, map: GameMap): [Action, boolean] {
+    // Get target based on distances
+    if (
+      actor.euclideanDistance(this.startPos) <= 3 &&
+      actor.euclideanDistance(map.player().pos) <= 3
+    ) {
+      return this.moveTowardsPlayer(map.player().pos.x, map.player().pos.y, actor);
+    }
+
+    return this.moveBackToStart(actor, map);
   }
 
   private getMoves(x1: number, y1: number, x2: number, y2: number): [number, number][] {

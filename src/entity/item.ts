@@ -1,13 +1,13 @@
 import { Entity } from "./entity";
 import { RenderOrder } from "../utility/renderOrder";
 import { colorBlack, colorWhite } from "../utility/colors";
+import { Point } from "../utility/point";
 
 export class Item extends Entity {
   id: number
   
   constructor(
-    x: number = 0, 
-    y: number = 0, 
+    pos: Point, 
     name: string = "Unknown Item",
     blocksMovement: boolean = false,
     char: string = "?", 
@@ -17,7 +17,7 @@ export class Item extends Entity {
     consumable: null = null,
     id: number=-1,
   ) {
-    super(x, y, name, blocksMovement, char, fg, bg, renderOrder);
+    super(pos, name, blocksMovement, char, fg, bg, renderOrder);
 
     this.id = id;
   }

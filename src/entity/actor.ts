@@ -5,14 +5,14 @@ import { GameMap } from "../game/gameMap";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { colorBlack, colorWhite } from "../utility/colors";
 import { InventoryComponent } from "../component/inventoryComponent";
+import { Point } from "../utility/point";
 
 export class Actor extends Entity {
   behavior: Behavior
   inventory: InventoryComponent
 
   constructor(
-    x: number = 0, 
-    y: number = 0, 
+    pos: Point,
     name: string = "Unknown Actor",
     blocksMovement: boolean = false,
     char: string = "?", 
@@ -22,7 +22,7 @@ export class Actor extends Entity {
     behavior: Behavior = new EmptyBehavior(),
     inventorySize: number = 20,
   ) {
-    super(x, y, name, blocksMovement, char, fg, bg, renderOrder);
+    super(pos, name, blocksMovement, char, fg, bg, renderOrder);
     this.behavior = behavior;
 
     this.inventory = new InventoryComponent(this, inventorySize);

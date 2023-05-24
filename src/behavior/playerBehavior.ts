@@ -5,6 +5,7 @@ import { PickUpItemAction } from "../action/pickUpItemAction";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
+import { Point } from "../utility/point";
 import { Behavior } from "./behavior";
 
 export class PlayerBehavior implements Behavior {
@@ -16,28 +17,28 @@ export class PlayerBehavior implements Behavior {
       InputManager.clear();
       ++this.turn;
       
-      return [new BumpAction(0,1), requestAnotherTurn];
+      return [new BumpAction(new Point(0,1)), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.UP) || InputManager.isKeyDown(Key.W)) {
       InputManager.clear();
       ++this.turn;
       
-      return [new BumpAction(0,-1), requestAnotherTurn];
+      return [new BumpAction(new Point(0,-1)), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.LEFT) || InputManager.isKeyDown(Key.A)) {
       InputManager.clear();
       ++this.turn;
       
-      return [new BumpAction(-1,0), requestAnotherTurn];
+      return [new BumpAction(new Point(-1,0)), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.RIGHT) || InputManager.isKeyDown(Key.D)) {
       InputManager.clear();
       ++this.turn;
 
-      return [new BumpAction(1,0), requestAnotherTurn];
+      return [new BumpAction(new Point(1,0)), requestAnotherTurn];
     }
 
     if (InputManager.isKeyDown(Key.G)) {
