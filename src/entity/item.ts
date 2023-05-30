@@ -2,9 +2,12 @@ import { Entity } from "./entity";
 import { RenderOrder } from "../utility/renderOrder";
 import { colorBlack, colorWhite } from "../utility/colors";
 import { Point } from "../utility/point";
+import { GameMap } from "../game/gameMap";
+import { Actor } from "./actor";
 
 export class Item extends Entity {
   id: number
+  onConsume: (map: GameMap, actor: Actor) => boolean
   
   constructor(
     pos: Point, 
@@ -14,11 +17,12 @@ export class Item extends Entity {
     fg: string = colorWhite,
     bg: string = colorBlack,
     renderOrder: RenderOrder = RenderOrder.Corpse,
-    consumable: null = null,
+    onConsume: (map: GameMap, actor: Actor) => boolean,
     id: number=-1,
   ) {
     super(pos, name, blocksMovement, char, fg, bg, renderOrder);
 
     this.id = id;
+    this.onConsume = onConsume;
   }
 }

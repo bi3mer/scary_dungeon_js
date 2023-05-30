@@ -1,5 +1,6 @@
 import { height, width } from "../config";
 import { Actor } from "../entity/actor";
+import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
 import { colorBlack, colorDarkGray, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
 import { Button } from "./button";
@@ -87,7 +88,7 @@ export function gameOverMenu(callback: ()=>void): Menu {
   return m;
 }
 
-export function inventoryMenu(player: Actor): Menu {
+export function inventoryMenu(map: GameMap, player: Actor): Menu {
   const inventory = player.inventory;
   const size = inventory.items.length;
   let m: Menu;
@@ -127,7 +128,14 @@ export function inventoryMenu(player: Actor): Menu {
         colorDarkGray,
         colorWhite, 
         () => {
-          console.log('selected!');
+          // on consume returns a bool for whether or not the item should be
+          // destroyed or not
+          if (item.onConsume(map, map.player())) {
+            inventory.destroyItemWithID(item.id);
+          }
+
+          // close the inventory after use
+          m.shouldExit = true;
         }
       ));
 

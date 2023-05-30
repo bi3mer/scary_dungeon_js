@@ -86,4 +86,10 @@ export class InventoryComponent extends BaseComponent {
       return i.name !== name;
     });
   }
+
+  destroyItemWithID(id: number): void {
+    this.items = this.items.filter((item) => {
+      return item.id !== id;
+    })
+  }
 }

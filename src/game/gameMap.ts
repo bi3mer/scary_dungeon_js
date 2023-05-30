@@ -109,14 +109,29 @@ export class GameMap {
     return this.gemCount;
   }
 
+  /**
+   * Converts (x,y) coordinates to an index into the 1d array of the game map.
+   * @param pos - x y coordinates 
+   * @returns corresponding index of xy coordinate to 1 d
+   */
   private index(pos: Point): number {
     return pos.y*(this.cols*this.roomCols) + pos.x;
   }
 
+  /**
+   * Test if a point is within the bounds of the game map
+   * @param pos - position to test
+   * @returns true if in bounds else false
+   */
   inBounds(pos: Point): boolean {
     return pos.y * (this.cols*this.roomCols) + pos.x < this.tiles.length;
   }
 
+  /**
+   * Tests if a position can be walked on by an entity
+   * @param pos - position to test
+   * @returns true if the (x,y) coordinate is not blocked by a tile (e.g. wall)
+   */
   isWalkable(pos: Point): boolean {
     const index = this.index(pos);
     if (index >= this.tiles.length || index < 0) {
@@ -126,6 +141,11 @@ export class GameMap {
     return this.tiles[index].walkable;
   }
 
+  /**
+   * Set a position in the game map to a specific position
+   * @param pos - position to test
+   * @param tile - tile to set hte position to
+   */
   setTile(pos: Point, tile: Tile): void {
     const index = this.index(pos);
     assert(index < this.tiles.length);
@@ -273,7 +293,7 @@ export class GameMap {
     this.itemIds.push(item.id);
   }
 
-  // ---------- At Location
+  // ---------- Location
   entityAtLocation(pos: Point): Entity | null {
     for(var entity of this.entities) {
       if (entity === null) {
@@ -315,13 +335,58 @@ export class GameMap {
     return null;
   }
 
-
   locationOccupied(pos: Point): boolean {
     return this.entityAtLocation(pos) != null || 
            this.actorAtLocation(pos) != null ||
            this.itemAtLocation(pos) != null;
   }
+
+  /**
+   * Find the nearest actor.
+   * 
+   * @remarks 
+   * This search excludes any actor found at that exact position.
+   * 
+   * @param pos - position to find nearest actor. 
+   * @returns the closest actor or null if none was found
+   */
+  nearestActor(pos: Point): Actor | null {
+    let closestActor = null;
+    let closestDistance = 1000000;
+    for (let a of this.actors) {
+      if (a === null) {
+        continue;
+      }
+
+      if (a.pos.equals(pos)) {
+        continue;
+      }
+
+      let dist = pos.euclideanDistance(a.pos);
+      if (dist < closestDistance) {
+        closestActor = a;
+        closestDistance = dist;
+      }
+    }
+
+    return closestActor;
+  }
   
+  /**
+   * Test if a position is visible to the player.
+   * @param pos - position
+   * @returns true if the position is visible to the player else false
+   */
+  positionVisible(pos: Point): boolean {
+    const index = this.index(pos);
+    if (index < 0 || index >= this.visible.length) {
+      return false;
+    }
+
+    return this.visible[index];
+  }
+
+  // ---------- 
   computeFOV(): void {
     const SIGHT_RADIUS = 10;
     const fov = new PreciseShadowcasting((x, y) => {
