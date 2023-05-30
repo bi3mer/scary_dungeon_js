@@ -18,7 +18,14 @@ export class PickUpItemAction extends Action {
   execute(actor: Actor, map: GameMap): boolean {
     const item = map.itemAtLocation(actor.pos);
     if (item === null) {
-      MessageLog.addMessage('Nothing to pick up.', colorLightGray, true);
+      let entity = map.entityAtLocation(actor.pos);
+      if (entity === null) {
+        MessageLog.addMessage('Nothing to pick up.', colorLightGray, true);
+      } else if (entity.name.includes('Corpse')) {
+        MessageLog.addMessage(`You are on top of a ${entity.name}.`, colorLightGray, true);
+      } else {
+        MessageLog.addMessage('Nothing to pick up.', colorLightGray, true);
+      }
     } else if (actor.inventory.addItem(item)) {
       map.removeItem(item);
       MessageLog.addMessage(`Picked up ${item.name}.`, colorLightGray, true);

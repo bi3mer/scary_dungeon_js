@@ -1,7 +1,7 @@
 import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { Actor } from "../entity/actor";
 import { spawnCorpse } from "../entity/entityFactory";
-import { namePlayer } from "../entity/names";
+import { nameMauledCorpse, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
 import { colorBlack, colorLightGray, colorRed } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
@@ -35,8 +35,8 @@ export class AttackAction extends Action {
       this.playerDeath(this.otherActor);
     } else {
       map.removeActor(actor);
-      spawnCorpse(map, actor.pos);
-      MessageLog.addMessage('A scary enemy killed its comrade!', colorLightGray, false);
+      spawnCorpse(map, actor.pos, nameMauledCorpse);
+      MessageLog.addMessage(`A ${actor.name} was killed its comrade!`, colorLightGray, false);
     }
 
     return true;

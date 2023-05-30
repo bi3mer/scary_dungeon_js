@@ -6,15 +6,15 @@ import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
-import { nameAltar, nameEnemy, nameGem, nameLightningScroll } from "./names";
+import { nameAltar, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll } from "./names";
 import { Point } from "../utility/point";
 import { MessageLog } from "../utility/messageLog";
 
 // ------------ Entities ------------
-export function spawnCorpse(map: GameMap, pos: Point): Entity {
+export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
   const corpse = new Entity(
     pos,
-    'Corpse',
+    name,
     false,
     '%',
     colorRed,
@@ -101,9 +101,18 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
         return false;
       }
 
+      if (a.name === nameAltar) {
+        MessageLog.addMessage(
+          `The lightning struck the altar! But, it didn't do anything. Maybe find the gems.`,
+          colorLightGray,
+          true);
+        return true; // Consume the item
+      }
+
       if (map.positionVisible(a.pos)){
-        MessageLog.addMessage(`The ${a.name} was slain by lightning!`, colorLightningScroll, false);
+        MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);
         map.removeActor(a);
+        spawnCorpse(map, a.pos, nameLightningCorpse);
         return true; // consume the item
       } 
 
