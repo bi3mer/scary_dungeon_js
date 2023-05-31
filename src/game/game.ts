@@ -8,15 +8,18 @@ import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
 import { MainGenerator } from "../generation/mainGenerator";
 import { height, width } from "../config";
-
+import { AnimationManager } from "../animation/animationManager";
 
 export class Game {
   private level: number
   private display: Display
   private map: GameMap
   private config: { roomCols: number, roomRows: number }
-  private delta: number;
-  private mapGenerating: boolean;
+  private delta: number
+  private mapGenerating: boolean
+
+  static tileWidth: number = 0
+  static tileHeight: number = 0
 
   constructor() {
     this.config = { roomCols: 5, roomRows: 5};
@@ -57,6 +60,9 @@ export class Game {
     const log = document.getElementById('messages')!;
     log.style.left = `${canvas.offsetLeft}px`;
     log.style.width = `${canvas.width}px`;
+
+    Game.tileHeight = canvas.height / height;
+    Game.tileWidth = canvas.width / width;
   }
   
   render(menu: Menu | null, computeFOV: boolean): void {
@@ -84,6 +90,7 @@ export class Game {
 
     let oldTimeStamp : number;
     let fps : number;
+    let handlingAnimation = true;
 
     // we start at the main menu
     let menu: Menu | null = mainMenu(() => {
@@ -97,8 +104,18 @@ export class Game {
       oldTimeStamp = timeStamp;
       fps = Math.round(1 / this.delta);
 
+      if (handlingAnimation === true && !AnimationManager.animationIsRunning()) {
+        // NOTE: I don't love this solution, but I'm starting to not like this
+        // game loop, so it may end up being time to refactor it pretty soon.
+        this.render(null, false);
+        handlingAnimation = false;
+      }
+
       if (this.mapGenerating) {
         // Nothing to do while map is generating
+      } else if (AnimationManager.animationIsRunning()) {
+        AnimationManager.update(this.delta);
+        handlingAnimation = true;
       } else if (menu !== null) {
         // if there is a menu then it handles input
         menu.update();

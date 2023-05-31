@@ -9,6 +9,8 @@ import { EmptyBehavior } from "../behavior/emptyBehavior";
 import { nameAltar, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll } from "./names";
 import { Point } from "../utility/point";
 import { MessageLog } from "../utility/messageLog";
+import { LightningAnimation } from "../animation/lightningAnimation";
+import { AnimationManager } from "../animation/animationManager";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
@@ -30,6 +32,7 @@ export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
 // ------------ Actors ------------
 export function spawnPlayer(map: GameMap, pos: Point): Actor {
   map.player().pos = pos;
+  map.player().id = 0;
 
   return map.player();
 }
@@ -98,26 +101,34 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
       const a = map.nearestActor(actor.pos);
       if (a === null) {
         MessageLog.addMessage(`You don't see anything to strike with your ${nameLightningScroll}.`, colorLightGray, true);
-        return false;
+        return false; // do not consume the item
       }
 
       if (a.name === nameAltar) {
-        MessageLog.addMessage(
-          `The lightning struck the altar! But, it didn't do anything. Maybe find the gems.`,
-          colorLightGray,
-          true);
+        let l = new LightningAnimation(a.pos, map.player().pos, () => {
+          MessageLog.addMessage(
+            `The lightning struck the altar! But, it didn't do anything. Maybe find the gems.`,
+            colorLightGray,
+            true);
+        });
+        console.log(a);
+        AnimationManager.setAnimation(l);
         return true; // Consume the item
       }
 
       if (map.positionVisible(a.pos)){
-        MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);
-        map.removeActor(a);
-        spawnCorpse(map, a.pos, nameLightningCorpse);
+        let l = new LightningAnimation(a.pos, map.player().pos, () => {
+          MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);
+          map.removeActor(a);
+          spawnCorpse(map, a.pos, nameLightningCorpse);
+        });
+  
+        AnimationManager.setAnimation(l);
         return true; // consume the item
       } 
 
       MessageLog.addMessage(`You don't see anything to strike with your ${nameLightningScroll}.`, colorLightGray, true);
-      return false;
+      return false; // do not consume the item
     }
   );
 
