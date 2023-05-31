@@ -2,6 +2,7 @@ import { height, width } from "../config";
 import { Game } from "../game/game";
 import { colorLightningScroll } from "../utility/colors";
 import { Point } from "../utility/point";
+import { Sound } from "../utility/sound";
 import { Animation } from "./animation";
 
 export class LightningAnimation extends Animation {
@@ -9,6 +10,7 @@ export class LightningAnimation extends Animation {
   private lightningAnimationTime: number = 0.2;
   private flashAnimationTime: number = 0.6;
   private lightningPath: Point[] = [];
+  private playedSound = false;
 
   constructor(target: Point, playerPosition: Point, onCompleteCallback: () => void) {
     super(onCompleteCallback);
@@ -65,6 +67,11 @@ export class LightningAnimation extends Animation {
     this.ctx.beginPath();
     this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     
+    if (!this.playedSound) {
+      Sound.playThunder();
+      this.playedSound = true;
+    }
+    
     if (this.animationTime < this.lightningAnimationTime) {
       let targetIndex = Math.round(this.lightningPath.length * (this.animationTime / this.lightningAnimationTime));
       this.ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
@@ -74,6 +81,7 @@ export class LightningAnimation extends Animation {
       this.ctx.stroke();
       return false;
     } 
+
     
     if (this.animationTime < this.lightningAnimationTime + this.flashAnimationTime) {
       this.ctx.strokeStyle = `rgba(255, 255, 255, ${1 - this.animationTime / (this.lightningAnimationTime + this.flashAnimationTime)})`;

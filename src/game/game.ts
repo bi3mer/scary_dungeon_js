@@ -9,6 +9,7 @@ import { MessageLog } from "../utility/messageLog";
 import { MainGenerator } from "../generation/mainGenerator";
 import { height, width } from "../config";
 import { AnimationManager } from "../animation/animationManager";
+import { Sound } from "../utility/sound";
 
 export class Game {
   private level: number
@@ -87,6 +88,7 @@ export class Game {
 
     // initialize game engine details
     InputManager.init();
+    Sound.init();
 
     let oldTimeStamp : number;
     let fps : number;
