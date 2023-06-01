@@ -8,7 +8,7 @@ import { Animation } from "./animation";
 export class LightningAnimation extends Animation {
   private animationTime: number = 0;
   private lightningAnimationTime: number = 0.2;
-  private flashAnimationTime: number = 0.6;
+  private flashAnimationTime: number = 0.7;
   private lightningPath: Point[] = [];
   private playedSound = false;
 
@@ -65,7 +65,7 @@ export class LightningAnimation extends Animation {
     this.ctx.strokeStyle = colorLightningScroll;
     this.ctx.lineWidth = 2;
     this.ctx.beginPath();
-    // this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
+    this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     
     if (!this.playedSound) {
       Sound.playThunder();
@@ -73,22 +73,26 @@ export class LightningAnimation extends Animation {
     }
 
     if (this.animationTime < this.lightningAnimationTime) {
-      let targetIndex = Math.round(this.lightningPath.length * (this.animationTime / this.lightningAnimationTime));
       this.ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
-      for(let i = 0; i < targetIndex; ++i) {
+      for(let i = 1; i < this.lightningPath.length; ++i) {
         this.ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
       }
+
       this.ctx.stroke();
+      this.ctx.closePath();
+
       return false;
     } 
 
-    
     if (this.animationTime < this.lightningAnimationTime + this.flashAnimationTime) {
       this.ctx.strokeStyle = `rgba(255, 255, 255, ${1 - this.animationTime / (this.lightningAnimationTime + this.flashAnimationTime)})`;
-      for(let i = 0; i < this.lightningPath.length; ++i) {
+      for(let i = 1; i < this.lightningPath.length; ++i) {
         this.ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
       }
+
       this.ctx.stroke();
+      this.ctx.closePath();
+      
       return false;
     }
 

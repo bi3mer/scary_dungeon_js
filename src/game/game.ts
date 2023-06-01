@@ -116,6 +116,7 @@ export class Game {
       if (this.mapGenerating) {
         // Nothing to do while map is generating
       } else if (AnimationManager.animationIsRunning()) {
+        this.render(null, false);
         AnimationManager.update(this.delta);
         handlingAnimation = true;
       } else if (menu !== null) {
