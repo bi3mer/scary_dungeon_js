@@ -16,8 +16,8 @@ export class LightningAnimation extends Animation {
     super(onCompleteCallback);
 
     target = target.copy();
-    target.x += (Math.round(width/2) + target.x - playerPosition.x) * Game.tileWidth - Game.tileWidth/2;
-    target.y += (Math.round(height/2) + target.y - playerPosition.y) * Game.tileHeight - Game.tileHeight/2;
+    target.x = (Math.round(width/2) + target.x - playerPosition.x) * Game.tileWidth + Game.tileWidth/2;
+    target.y = (Math.round(height/2) + target.y - playerPosition.y) * Game.tileHeight + Game.tileHeight/2;
 
     const SIZE = 4
     this.lightningPath.push(target);
@@ -65,13 +65,13 @@ export class LightningAnimation extends Animation {
     this.ctx.strokeStyle = colorLightningScroll;
     this.ctx.lineWidth = 2;
     this.ctx.beginPath();
-    this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
+    // this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     
     if (!this.playedSound) {
       Sound.playThunder();
       this.playedSound = true;
     }
-    
+
     if (this.animationTime < this.lightningAnimationTime) {
       let targetIndex = Math.round(this.lightningPath.length * (this.animationTime / this.lightningAnimationTime));
       this.ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
