@@ -8,3 +8,4 @@ export const nameLightningCorpse = 'Charred Corpse';
 // items
 export const nameGem = "Gem";
 export const nameLightningScroll = "Lightning Scroll";
+export const nameReturnToAltarScroll = "Return to Altar";

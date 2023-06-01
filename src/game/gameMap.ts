@@ -7,12 +7,13 @@ import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
-import { colorBlack, colorWhite } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
-import { nameGem, namePlayer } from "../entity/names";
+import { nameAltar, nameGem, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
-import { height, padding, width } from "../config";
+import { Config } from "../config";
 import { Point } from "../utility/point";
+import { EmptyBehavior } from "../behavior/emptyBehavior";
 
 
 export class GameMap {
@@ -43,8 +44,8 @@ export class GameMap {
     this.rows = rows;
     this.cols = cols;
 
-    this.roomRows = START_ROOM.length + padding;
-    this.roomCols = START_ROOM[0].length + padding;
+    this.roomRows = START_ROOM.length + Config.padding;
+    this.roomCols = START_ROOM[0].length + Config.padding;
 
     this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
     this.visible = Array(this.tiles.length).fill(false);  
@@ -60,6 +61,17 @@ export class GameMap {
       RenderOrder.Actor, 
       new PlayerBehavior())
     );
+
+    this.actors.push(new Actor(
+      new Point(0,0),
+      nameAltar,
+      true,
+      'A',
+      colorDarkGray,
+      colorBlack,
+      RenderOrder.Actor,
+      new EmptyBehavior()
+    ));
   }
 
   reset(): void {
@@ -73,6 +85,10 @@ export class GameMap {
     this.player().fg = colorWhite;
     this.player().bg = colorBlack;
     this.player().behavior = new PlayerBehavior();
+
+    this.altar().fg = colorDarkGray;
+    this.altar().bg = colorBlack;
+    this.altar().behavior = new EmptyBehavior();
   }
 
   /**
@@ -81,10 +97,21 @@ export class GameMap {
    * Player is always at the first index of the actors
    * 
    * @returns - Actor for the player
-   * @beta
    */
-  player() {
+  player(): Actor {
     return this.actors[0]!;
+  }
+
+  /**
+   * Get the player
+   * 
+   * @remarks
+   * Altar is always the second index of the actors.
+   * 
+   * @returns - altar 
+   */
+  altar(): Actor {
+    return this.actors[1]!;
   }
 
   /**
@@ -158,8 +185,8 @@ export class GameMap {
 
     const playerPosition = this.player().pos;
 
-    const midX = Math.round(width/2);
-    const midY = Math.round(height/2);
+    const midX = Math.round(Config.width/2);
+    const midY = Math.round(Config.height/2);
     let worldPosition = new Point(0,0);
 
     // render the map

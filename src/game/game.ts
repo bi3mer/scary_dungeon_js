@@ -7,7 +7,7 @@ import { gameOverMenu, helpMenu, inventoryMenu, mainMenu } from "../ui/uiFactory
 import { spawnPlayer } from "../entity/entityFactory";
 import { MessageLog } from "../utility/messageLog";
 import { MainGenerator } from "../generation/mainGenerator";
-import { height, width } from "../config";
+import { Config } from "../config";
 import { AnimationManager } from "../animation/animationManager";
 import { Sound } from "../utility/sound";
 
@@ -19,17 +19,15 @@ export class Game {
   private delta: number
   private mapGenerating: boolean
 
-  static tileWidth: number = 0
-  static tileHeight: number = 0
 
   constructor() {
     this.config = { roomCols: 5, roomRows: 5};
     this.display = new Display({
-      width: width,
-      height: height,
+      width: Config.width,
+      height: Config.height,
     });
 
-    this.map = new GameMap(width, height);
+    this.map = new GameMap(Config.width, Config.height);
     document.body.appendChild(this.display.getContainer()!);
 
     this.delta = 0;
@@ -62,8 +60,10 @@ export class Game {
     log.style.left = `${canvas.offsetLeft}px`;
     log.style.width = `${canvas.width}px`;
 
-    Game.tileHeight = canvas.height / height;
-    Game.tileWidth = canvas.width / width;
+    Config.screenHeight = canvas.height;
+    Config.screenWidth = canvas.width;
+    Config.tileHeight = canvas.height / Config.height;
+    Config.tileWidth = canvas.width / Config.width;
   }
   
   render(menu: Menu | null, computeFOV: boolean): void {
@@ -109,14 +109,13 @@ export class Game {
       if (handlingAnimation === true && !AnimationManager.animationIsRunning()) {
         // NOTE: I don't love this solution, but I'm starting to not like this
         // game loop, so it may end up being time to refactor it pretty soon.
-        this.render(null, false);
         handlingAnimation = false;
       }
 
       if (this.mapGenerating) {
         // Nothing to do while map is generating
       } else if (AnimationManager.animationIsRunning()) {
-        this.render(null, false);
+        this.render(null, AnimationManager.shouldComputeFOV);
         AnimationManager.update(this.delta);
         handlingAnimation = true;
       } else if (menu !== null) {

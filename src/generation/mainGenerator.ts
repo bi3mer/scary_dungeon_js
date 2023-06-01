@@ -7,7 +7,7 @@ import { START_ROOM, ROOMS, GEM_ROOMS } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 import { MessageLog } from "../utility/messageLog";
-import { padding } from "../config";
+import { Config } from "../config";
 import { Progression } from "../game/progression";
 import { Point } from "../utility/point";
 
@@ -52,8 +52,8 @@ export class MainGenerator extends LevelGenerator {
       }  
       
       // put it into the world
-      const roomX = x*this.widthMultiplier+RNG.getUniformInt(2, padding-2);
-      const roomY = y*this.heightMultiplier+RNG.getUniformInt(2, padding-2)
+      const roomX = x*this.widthMultiplier+RNG.getUniformInt(2, Config.padding-2);
+      const roomY = y*this.heightMultiplier+RNG.getUniformInt(2, Config.padding-2)
       this.setRoom(room, roomX, roomY); 
       
       rooms[`${x},${y}`] = new Room(roomX, roomY, this.roomWidth, this.roomHeight)

@@ -1,4 +1,4 @@
-import { height, width } from "../config";
+import { Config } from "../config";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
@@ -8,17 +8,17 @@ import { Menu } from "./menu";
 import { Text } from "./text";
 
 export function helpMenu() : Menu {
-  const x = width/4;
-  const y = height/4;
-  let m = new Menu(x, y, width/2, height/2, "Help", true, true, false, () => {
+  const x = Config.width/4;
+  const y = Config.height/4;
+  let m = new Menu(x, y, Config.width/2, Config.height/2, "Help", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       m.shouldExit = true;
     }
   });
 
   m.addButton(new Button(
-    width/2-4, 
-    height - height/4 - 4, 
+    Config.width/2-4, 
+    Config.height - Config.height/4 - 4, 
     8, 
     3, 
     "Ok", 
@@ -41,7 +41,7 @@ export function helpMenu() : Menu {
 }
 
 export function mainMenu(callback: ()=>void) : Menu {
-  let m = new Menu(0, 0, width, height, "Main Menu", true, false, false, () => {
+  let m = new Menu(0, 0, Config.width, Config.height, "Main Menu", true, false, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       m.shouldExit = true;
       callback();
@@ -53,21 +53,21 @@ export function mainMenu(callback: ()=>void) : Menu {
   });
 
   const title = "Scary Dungeon";
-  m.addText(new Text(width/2-title.length/2, height/2 - 10, title, colorYellow, colorBlack));
+  m.addText(new Text(Config.width/2-title.length/2, Config.height/2 - 10, title, colorYellow, colorBlack));
 
   const attribution = "by Colan F. Biemer"
-  m.addText(new Text(width/2-attribution.length/2, height/2 - 8, attribution, colorLightGray, colorBlack));
+  m.addText(new Text(Config.width/2-attribution.length/2, Config.height/2 - 8, attribution, colorLightGray, colorBlack));
 
   const instructions = "Press enter to start or h for instructions."
-  m.addText(new Text(width/2-instructions.length/2, height/2, instructions, colorWhite, colorBlack));
+  m.addText(new Text(Config.width/2-instructions.length/2, Config.height/2, instructions, colorWhite, colorBlack));
 
   return m;
 }
 
 export function gameOverMenu(callback: ()=>void): Menu {
-  const x = width/4;
+  const x = Config.width/4;
   const y = 5;
-  let m = new Menu(x, y, width/2, height/5, "GAME OVER", true, true, false, () => {
+  let m = new Menu(x, y, Config.width/2, Config.height/5, "GAME OVER", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       InputManager.clear();
       callback();
@@ -75,8 +75,8 @@ export function gameOverMenu(callback: ()=>void): Menu {
   });
 
   m.addButton(new Button(
-    width/2-4, 
-    y + height/5 - 4, 
+    Config.width/2-4, 
+    y + Config.height/5 - 4, 
     8, 
     3, 
     "Ok", 
@@ -88,7 +88,7 @@ export function gameOverMenu(callback: ()=>void): Menu {
   ));
   
   const text = 'You failed.'
-  m.addText(new Text(width/2 - text.length/2, y + 2, text, colorWhite, colorBlack));
+  m.addText(new Text(Config.width/2 - text.length/2, y + 2, text, colorWhite, colorBlack));
 
   return m;
 }
@@ -99,9 +99,9 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
   let m: Menu;
 
   if (size === 0) {
-    const x = width/4;
+    const x = Config.width/4;
     const y = 5;
-    m = new Menu(x, y, width/2, y, "Inventory", true, true, true, () => {
+    m = new Menu(x, y, Config.width/2, y, "Inventory", true, true, true, () => {
       if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
@@ -110,10 +110,10 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
 
     m.addText(new Text(x+12, y+y/2, 'Inventory empty.', colorWhite, colorBlack));
   } else {
-    const x = width/4;
+    const x = Config.width/4;
     const y = 5;
     
-    m = new Menu(x, y, width/2, 3+size*3, "Inventory", true, true, false, () => {
+    m = new Menu(x, y, Config.width/2, 3+size*3, "Inventory", true, true, false, () => {
       if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
@@ -125,7 +125,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
       m.addButton(new Button(
         x+4,
         y+curY,
-        width/2 - 8,
+        Config.width/2 - 8,
         3,
         item.name,
         colorDarkGray,

@@ -9,6 +9,8 @@ import { Animation } from "./animation";
 export class AnimationManager {
   private static animation: Animation | null = null
 
+  static shouldComputeFOV: boolean = false;
+
   static setAnimation(animation: Animation): void {  
     this.animation = animation
   }
@@ -18,6 +20,7 @@ export class AnimationManager {
   }
 
   static update(dt: number): void {
+    AnimationManager.shouldComputeFOV = false;
     if(this.animation !== null &&this.animation.update(dt)) {
       this.animation = null;
       InputManager.clear();

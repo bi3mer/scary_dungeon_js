@@ -1,5 +1,4 @@
-import { height, width } from "../config";
-import { Game } from "../game/game";
+import { Config } from "../config";
 import { colorLightningScroll } from "../utility/colors";
 import { Point } from "../utility/point";
 import { Sound } from "../utility/sound";
@@ -7,8 +6,8 @@ import { Animation } from "./animation";
 
 export class LightningAnimation extends Animation {
   private animationTime: number = 0;
-  private lightningAnimationTime: number = 0.2;
-  private flashAnimationTime: number = 0.7;
+  private lightningAnimationTime: number = 0.25;
+  private flashAnimationTime: number = 0.55;
   private lightningPath: Point[] = [];
   private playedSound = false;
 
@@ -16,8 +15,8 @@ export class LightningAnimation extends Animation {
     super(onCompleteCallback);
 
     target = target.copy();
-    target.x = (Math.round(width/2) + target.x - playerPosition.x) * Game.tileWidth + Game.tileWidth/2;
-    target.y = (Math.round(height/2) + target.y - playerPosition.y) * Game.tileHeight + Game.tileHeight/2;
+    target.x = (Math.round(Config.width/2) + target.x - playerPosition.x) * Config.tileWidth + Config.tileWidth/2;
+    target.y = (Math.round(Config.height/2) + target.y - playerPosition.y) * Config.tileHeight + Config.tileHeight/2;
 
     const SIZE = 4
     this.lightningPath.push(target);

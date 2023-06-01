@@ -1,16 +1,17 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorLightGray, colorLightningScroll, colorRed, colorVisible } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorLightGray, colorLightningScroll, colorRed, colorViolet,  colorWhite } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
-import { nameAltar, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll } from "./names";
+import { nameAltar, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll, nameReturnToAltarScroll } from "./names";
 import { Point } from "../utility/point";
 import { MessageLog } from "../utility/messageLog";
 import { LightningAnimation } from "../animation/lightningAnimation";
 import { AnimationManager } from "../animation/animationManager";
+import { ReturnToAltarAnimation } from "../animation/returnToAltarAnimation";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
@@ -50,21 +51,12 @@ export function spawnEnemy(map: GameMap, pos: Point): Actor {
 }
 
 export function spawnAltar(map: GameMap, pos: Point): Actor {
-  let altar = new Actor(
-    pos,
-    nameAltar,
-    true,
-    'A',
-    colorDarkGray,
-    colorVisible,
-    RenderOrder.Item,
-    new EmptyBehavior(),
-    0
-  );
+  map.altar().pos = pos;
+  map.altar().fg = colorDarkGray;
+  map.altar().bg = colorWhite;
+  map.altar().behavior = new EmptyBehavior();
 
-  map.addActor(altar);
-
-  return altar;
+  return map.altar();
 }
 
 // ------------ Items ------------
@@ -134,5 +126,32 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
 
   map.addItem(scroll);
 
+  return scroll;
+}
+
+export function spawnReturnToAltarScroll(map: GameMap, pos: Point): Item {
+  let scroll = new Item(
+    pos,
+    nameReturnToAltarScroll,
+    false,
+    's',
+    colorViolet,
+    colorBlack,
+    RenderOrder.Item,
+    (map, actor) => {
+      MessageLog.addMessage('You activate the scroll...', colorViolet, false);
+      const animation = new ReturnToAltarAnimation(() => {
+        actor.pos = map.altar().pos.copy();
+        ++actor.pos.x;
+      }, () => {
+        MessageLog.addMessage('You teleported back to the altar!', colorViolet, false);
+      });
+
+      AnimationManager.setAnimation(animation);
+      return true;
+    }
+  );
+
+  map.addItem(scroll);
   return scroll;
 }

@@ -1,5 +1,5 @@
-import { padding } from "../config";
-import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll } from "../entity/entityFactory";
+import { Config } from "../config";
+import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
@@ -35,8 +35,8 @@ export abstract class LevelGenerator {
     this.roomHeight = START_ROOM.length;
     
     // create the map with the correct number of tiles
-    this.widthMultiplier = this.roomWidth+padding;
-    this.heightMultiplier = this.roomHeight+padding;
+    this.widthMultiplier = this.roomWidth+Config.padding;
+    this.heightMultiplier = this.roomHeight+Config.padding;
     this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
   }
 
@@ -76,7 +76,8 @@ export abstract class LevelGenerator {
       case '&': {
         // TODO: support multiple items
         this.map.setTile(pos, tileFactory.floor);
-        spawnLightningScroll(this.map, pos);
+        // spawnLightningScroll(this.map, pos);
+        spawnReturnToAltarScroll(this.map, pos);
         break;
       }
       default: {
