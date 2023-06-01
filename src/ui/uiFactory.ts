@@ -30,7 +30,12 @@ export function helpMenu() : Menu {
   ));
 
   m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, colorBlack));
-  m.addText(new Text(x+3, y+4, "I to inspect.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+4, "E to interact.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+5, "I to open your inventory.", colorWhite, colorBlack));
+
+  m.addText(new Text(x+3, y+7, "Your goal is to collect gems to\nget to the next level in the\nprison.", colorWhite, colorBlack));
+
+  m.addText(new Text(x+3, y+11, "Make sure to avoid the enemies,\nthey move every third turn and\nwill kill you contact.", colorWhite, colorBlack));
 
   return m;
 }
@@ -53,7 +58,7 @@ export function mainMenu(callback: ()=>void) : Menu {
   const attribution = "by Colan F. Biemer"
   m.addText(new Text(width/2-attribution.length/2, height/2 - 8, attribution, colorLightGray, colorBlack));
 
-  const instructions = "Press space to start or h for instructions."
+  const instructions = "Press enter to start or h for instructions."
   m.addText(new Text(width/2-instructions.length/2, height/2, instructions, colorWhite, colorBlack));
 
   return m;
