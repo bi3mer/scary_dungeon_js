@@ -41,7 +41,7 @@ export class PlayerBehavior implements Behavior {
       return [new BumpAction(new Point(1,0)), requestAnotherTurn];
     }
 
-    if (InputManager.isKeyDown(Key.G)) {
+    if (InputManager.isKeyDown(Key.E)) {
       InputManager.clear();
       ++this.turn;
       return [new PickUpItemAction(), requestAnotherTurn];
