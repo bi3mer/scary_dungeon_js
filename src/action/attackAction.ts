@@ -5,6 +5,7 @@ import { nameMauledCorpse, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
 import { colorBlack, colorLightGray, colorRed } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
+import { Sound } from "../utility/sound";
 import { Action } from "./action";
 
 export class AttackAction extends Action {
@@ -16,6 +17,8 @@ export class AttackAction extends Action {
   }
 
   private playerDeath(actor: Actor): void {
+    Sound.playEnemyKillEnemy(); // TODO: should be a different sound
+
     actor.char = '%';
     actor.fg = colorRed;
     actor.bg = colorBlack;
@@ -34,6 +37,7 @@ export class AttackAction extends Action {
     } else if (this.otherActor.name === namePlayer) {
       this.playerDeath(this.otherActor);
     } else {
+      Sound.playEnemyKillEnemy();
       map.removeActor(actor);
       spawnCorpse(map, actor.pos, nameMauledCorpse);
       MessageLog.addMessage(`A ${actor.name} was killed its comrade!`, colorLightGray, false);

@@ -3,6 +3,7 @@ import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
 import { colorBlack, colorDarkGray, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
+import { Sound } from "../utility/sound";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
@@ -43,6 +44,7 @@ export function helpMenu() : Menu {
 export function mainMenu(callback: ()=>void) : Menu {
   let m = new Menu(0, 0, Config.width, Config.height, "Main Menu", true, false, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
+      Sound.playGameStart();
       m.shouldExit = true;
       callback();
     } else if (InputManager.isKeyDown(Key.H)) {

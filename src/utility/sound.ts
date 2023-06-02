@@ -3,7 +3,10 @@ export class Sound {
 
   static init(): void {
     this.sounds.push(new Audio("assets/thunder.wav"));
-    this.sounds.push(new Audio("assets/teleport_sound.wav"));
+    this.sounds.push(new Audio("assets/teleport_sound.mp3"));
+    this.sounds.push(new Audio("assets/game_start.wav"));
+    this.sounds.push(new Audio("assets/unlock_altar.wav"));
+    this.sounds.push(new Audio("assets/enemyKillEnemySound.wav"));
   }
 
   static playThunder(): void {
@@ -12,7 +15,22 @@ export class Sound {
   }
 
   static playTeleport(): void {
-    this.sounds[1].currentTime = 0.1;
+    this.sounds[1].currentTime = 0.2;
     this.sounds[1].play();
+  }
+
+  static playGameStart(): void {
+    this.sounds[2].currentTime = 0.1;
+    this.sounds[2].play();
+  }
+  
+  static playUnlockAltar(): void {
+    this.sounds[3].currentTime = 0.05;
+    this.sounds[3].play();
+  }
+
+  static playEnemyKillEnemy(): void {
+    this.sounds[4].currentTime = 0.1;
+    this.sounds[4].play();
   }
 }

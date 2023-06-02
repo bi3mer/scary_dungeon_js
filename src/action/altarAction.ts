@@ -3,6 +3,7 @@ import { nameGem, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
 import { colorGreen, colorLightGray, colorWhite } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
+import { Sound } from "../utility/sound";
 import { Action } from "./action";
 
 export class AltarAction extends Action {
@@ -19,6 +20,7 @@ export class AltarAction extends Action {
 
     const shouldRender = playerGemCount == requiredGemCount;
     if (shouldRender) {
+      Sound.playUnlockAltar();
       MessageLog.addMessage(
         'The altar has opened. Step through it... if you dare!',
         colorGreen,
@@ -41,6 +43,7 @@ export class AltarAction extends Action {
   }
 
   private stepThroughAltar(actor: Actor, map: GameMap): boolean {
+    Sound.playGameStart();
     MessageLog.addMessage('You step into the next level of the prison...', colorWhite, false);
     map.markLevelComplete();
     return true;
