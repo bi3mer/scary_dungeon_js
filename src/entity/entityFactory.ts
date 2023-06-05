@@ -12,6 +12,8 @@ import { MessageLog } from "../utility/messageLog";
 import { LightningAnimation } from "../animation/lightningAnimation";
 import { AnimationManager } from "../animation/animationManager";
 import { ReturnToAltarAnimation } from "../animation/returnToAltarAnimation";
+import { LightningAction } from "../action/lightningAction";
+import { ReturnToAltarAction } from "../action/returnToAltarAction";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
@@ -90,37 +92,7 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
     colorBlack,
     RenderOrder.Item,
     (map, actor) => {
-      const a = map.nearestActor(actor.pos);
-      if (a === null) {
-        MessageLog.addMessage(`You don't see anything to strike with your ${nameLightningScroll}.`, colorLightGray, true);
-        return false; // do not consume the item
-      }
-
-      if (a.name === nameAltar) {
-        let l = new LightningAnimation(a.pos, map.player().pos, () => {
-          MessageLog.addMessage(
-            `The lightning struck the altar! But, it didn't do anything. Maybe find the gems.`,
-            colorLightGray,
-            true);
-        });
-        console.log(a);
-        AnimationManager.setAnimation(l);
-        return true; // Consume the item
-      }
-
-      if (map.positionVisible(a.pos)){
-        map.removeActor(a);
-        spawnCorpse(map, a.pos, nameLightningCorpse);
-        let l = new LightningAnimation(a.pos, map.player().pos, () => {
-          MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);
-        });
-  
-        AnimationManager.setAnimation(l);
-        return true; // consume the item
-      } 
-
-      MessageLog.addMessage(`You don't see anything to strike with your ${nameLightningScroll}.`, colorLightGray, true);
-      return false; // do not consume the item
+      return (new LightningAction()).execute(actor, map);
     }
   );
 
@@ -139,16 +111,7 @@ export function spawnReturnToAltarScroll(map: GameMap, pos: Point): Item {
     colorBlack,
     RenderOrder.Item,
     (map, actor) => {
-      MessageLog.addMessage('You activate the scroll...', colorViolet, false);
-      const animation = new ReturnToAltarAnimation(() => {
-        actor.pos = map.altar().pos.copy();
-        ++actor.pos.x;
-      }, () => {
-        MessageLog.addMessage('You teleported back to the altar!', colorViolet, false);
-      });
-
-      AnimationManager.setAnimation(animation);
-      return true;
+      return (new ReturnToAltarAction()).execute(actor, map);
     }
   );
 
