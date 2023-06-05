@@ -131,7 +131,7 @@ export class Game {
         menu = helpMenu();
         this.render(menu, false);
         InputManager.clear();
-      } else if (InputManager.isKeyDown(Key.I)) {
+      } else if (InputManager.isKeyDown(Key.Q)) {
         menu = inventoryMenu(this.map, this.map.player());
         this.render(menu, false);
         InputManager.clear();

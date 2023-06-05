@@ -32,11 +32,11 @@ export function helpMenu() : Menu {
 
   m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, colorBlack));
   m.addText(new Text(x+3, y+4, "E to interact.", colorWhite, colorBlack));
-  m.addText(new Text(x+3, y+5, "I to open your inventory.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+5, "Q to open your inventory.", colorWhite, colorBlack));
 
   m.addText(new Text(x+3, y+7, "Your goal is to collect gems to\nget to the next level in the\nprison.", colorWhite, colorBlack));
 
-  m.addText(new Text(x+3, y+11, "Make sure to avoid the enemies,\nthey move every third turn and\nwill kill you contact.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+11, "Make sure to avoid the enemies,\nthey move every third turn and\nwill kill you on contact.", colorWhite, colorBlack));
 
   return m;
 }
@@ -104,7 +104,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
     const x = Config.width/4;
     const y = 5;
     m = new Menu(x, y, Config.width/2, y, "Inventory", true, true, true, () => {
-      if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
+      if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
       }
@@ -116,7 +116,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
     const y = 5;
     
     m = new Menu(x, y, Config.width/2, 3+size*3, "Inventory", true, true, false, () => {
-      if (InputManager.isKeyDown(Key.I, Key.ESCAPE)) {
+      if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
       }

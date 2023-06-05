@@ -56,7 +56,7 @@ export class Button {
   }
 
   update() {
-    if(this.highlighted && InputManager.isKeyDown(Key.ENTER)) {
+    if(this.highlighted && InputManager.isKeyDown(Key.ENTER, Key.SPACE)) {
       this.callback();
     }
   }
