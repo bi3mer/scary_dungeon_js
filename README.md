@@ -2,7 +2,6 @@
 
 ## General todo:
 - More scroll types:
-    - Stun
     - Confusion
     - Distraction
     - AOE fire ball

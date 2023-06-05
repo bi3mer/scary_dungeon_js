@@ -16,7 +16,7 @@ export const colorEnemy = "rgba(204,0,0,1)";
 export const colorViolet = "rgba(238,130,238,1)";
 export const colorIndigo = "rgba(75,0,130,1)";
 
-// `*` gem item
+// items
 export const colorGem = 'rgba(143,255,146,1)';
-
+export const colorStunScroll = 'rgba(158, 173, 200, 1)';
 export const colorLightningScroll = 'rgba(147,185,223,1)';

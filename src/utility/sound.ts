@@ -7,6 +7,7 @@ export class Sound {
     this.sounds.push(new Audio("assets/game_start.wav"));
     this.sounds.push(new Audio("assets/unlock_altar.wav"));
     this.sounds.push(new Audio("assets/enemyKillEnemySound.wav"));
+    this.sounds.push(new Audio("assets/stun_sound.wav"));
   }
 
   static playThunder(): void {
@@ -32,5 +33,10 @@ export class Sound {
   static playEnemyKillEnemy(): void {
     this.sounds[4].currentTime = 0.1;
     this.sounds[4].play();
+  }
+
+  static playStun(): void {
+    this.sounds[5].currentTime = 0.05;
+    this.sounds[5].play();
   }
 }

@@ -15,7 +15,21 @@ export class AIBehavior implements Behavior {
     this.startPos = startPos.copy();
   }
 
-  moveTowardsPlayer(targetX: number, targetY: number, actor: Actor): [Action, boolean] {
+  act(actor: Actor, map: GameMap): [Action, boolean] {
+    // Get target based on distances
+    if (
+      actor.euclideanDistance(this.startPos) <= 3 &&
+      actor.euclideanDistance(map.player().pos) <= 3
+    ) {
+      return this.moveTowardsPlayer(map.player().pos.x, map.player().pos.y, actor);
+    } else if (!actor.pos.equals(this.startPos)) {
+      return this.moveBackToStart(actor, map);
+    }
+
+    return [new PassAction(), false];
+  }
+
+  private moveTowardsPlayer(targetX: number, targetY: number, actor: Actor): [Action, boolean] {
     // get moves towards the target
     const moves = this.getMoves(actor.pos.x, actor.pos.y, targetX, targetY);
 
@@ -41,7 +55,7 @@ export class AIBehavior implements Behavior {
     return [new BumpAction(new Point(moves[closestIndex][0], moves[closestIndex][1])), false];
   }
 
-  moveBackToStart(actor: Actor, map: GameMap): [Action, boolean] {
+  private moveBackToStart(actor: Actor, map: GameMap): [Action, boolean] {
     // const path = astar(actor.pos, this.startPos, map);
     const path = bfs(actor.pos, this.startPos, map);
     if (path.length === 0) {
@@ -49,20 +63,6 @@ export class AIBehavior implements Behavior {
     }
 
     return [new BumpAction(path[0]), false];
-  }
-
-  act(actor: Actor, map: GameMap): [Action, boolean] {
-    // Get target based on distances
-    if (
-      actor.euclideanDistance(this.startPos) <= 3 &&
-      actor.euclideanDistance(map.player().pos) <= 3
-    ) {
-      return this.moveTowardsPlayer(map.player().pos.x, map.player().pos.y, actor);
-    } else if (!actor.pos.equals(this.startPos)) {
-      return this.moveBackToStart(actor, map);
-    }
-
-    return [new PassAction(), false];
   }
 
   private getMoves(x1: number, y1: number, x2: number, y2: number): [number, number][] {

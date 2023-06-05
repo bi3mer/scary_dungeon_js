@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll } from "../entity/entityFactory";
+import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll, spawnStunScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
@@ -76,11 +76,12 @@ export abstract class LevelGenerator {
       case '&': {
         // TODO: support multiple items
         this.map.setTile(pos, tileFactory.floor);
-        if (Math.random() >= 0.5) {
-          spawnLightningScroll(this.map, pos);
-        } else {
-          spawnReturnToAltarScroll(this.map, pos);
-        }
+        spawnStunScroll(this.map, pos);
+        // if (Math.random() >= 0.5) {
+        //   spawnLightningScroll(this.map, pos);
+        // } else {
+        //   spawnReturnToAltarScroll(this.map, pos);
+        // }
         break;
       }
       default: {
