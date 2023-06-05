@@ -9,11 +9,10 @@ import { MessageLog } from "../utility/messageLog";
 import { Action } from "./action";
 
 export class LightningAction extends Action {
-
   // This action interacts with the inventory, so the boolean represents whether
   // the scroll that activated this action should be consumed.
   execute(actor: Actor, map: GameMap): boolean {
-    const a = map.nearestActor(actor.pos);
+    const a = map.nearestActorInVision(actor.pos);
     if (a === null) {
       MessageLog.addMessage(`You don't see anything to strike with your ${nameLightningScroll}.`, colorLightGray, true);
       return false; // do not consume the item

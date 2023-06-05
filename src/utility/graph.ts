@@ -107,6 +107,10 @@ export class Graph {
     }
   }
 
+  *leaves(): Generator<Node> {
+    
+  }
+
   /**
    * Get every node that the source node connects to via edges.
    * @param src - id of node

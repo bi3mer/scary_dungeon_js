@@ -14,6 +14,7 @@ import { START_ROOM } from "../generation/rooms";
 import { Config } from "../config";
 import { Point } from "../utility/point";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
+import { MessageLog } from "../utility/messageLog";
 
 
 export class GameMap {
@@ -386,6 +387,41 @@ export class GameMap {
       }
 
       if (a.pos.equals(pos)) {
+        continue;
+      }
+
+      let dist = pos.euclideanDistance(a.pos);
+      if (dist < closestDistance) {
+        closestActor = a;
+        closestDistance = dist;
+      }
+    }
+
+    return closestActor;
+  }
+
+  /**
+   * Find the nearest actor that is visible
+   * 
+   * @remarks 
+   * This search excludes any actor found at that exact position.
+   * 
+   * @param pos - position to find nearest actor. 
+   * @returns the closest actor or null if none was found
+   */
+  nearestActorInVision(pos: Point): Actor | null {
+    let closestActor = null;
+    let closestDistance = 1000000;
+    for (let a of this.actors) {
+      if (a === null) {
+        continue;
+      }
+
+      if (a.pos.equals(pos)) {
+        continue;
+      }
+
+      if (!this.visible[this.index(a.pos)]) {
         continue;
       }
 
