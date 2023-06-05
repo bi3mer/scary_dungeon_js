@@ -11,6 +11,16 @@ export class Sound {
     this.sounds.push(new Audio("assets/confusion_sound.wav"));
   }
 
+  static isLoaded(): boolean {
+    for(let sound of this.sounds) {
+      if (!sound.readyState) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
   static playThunder(): void {
     this.sounds[0].currentTime = 0.15;
     this.sounds[0].play();

@@ -20,4 +20,4 @@ export const colorIndigo = "rgba(75,0,130,1)";
 export const colorGem = 'rgba(143,255,146,1)';
 export const colorStunScroll = 'rgba(158, 173, 200, 1)';
 export const colorConfusionScroll = 'rgba(64,224,208,1)';
-export const colorLightningScroll = 'rgba(147,185,223,1)';
+export const colorLightningScroll = 'rgba(80,200,255,1)';
