@@ -57,6 +57,8 @@ export class LightningAnimation extends Animation {
     } 
 
     this.lightningPath.reverse();
+
+
   }
 
   animationUpdate(dt: number): boolean {

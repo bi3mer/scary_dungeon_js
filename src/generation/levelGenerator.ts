@@ -76,8 +76,11 @@ export abstract class LevelGenerator {
       case '&': {
         // TODO: support multiple items
         this.map.setTile(pos, tileFactory.floor);
-        // spawnLightningScroll(this.map, pos);
-        spawnReturnToAltarScroll(this.map, pos);
+        if (Math.random() >= 0.5) {
+          spawnLightningScroll(this.map, pos);
+        } else {
+          spawnReturnToAltarScroll(this.map, pos);
+        }
         break;
       }
       default: {

@@ -109,10 +109,10 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
       }
 
       if (map.positionVisible(a.pos)){
+        map.removeActor(a);
+        spawnCorpse(map, a.pos, nameLightningCorpse);
         let l = new LightningAnimation(a.pos, map.player().pos, () => {
           MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);
-          map.removeActor(a);
-          spawnCorpse(map, a.pos, nameLightningCorpse);
         });
   
         AnimationManager.setAnimation(l);

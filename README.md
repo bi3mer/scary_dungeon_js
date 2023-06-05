@@ -2,7 +2,6 @@
 
 ## General todo:
 - More scroll types:
-    - Return to altar
     - Stun
     - Confusion
     - Distraction
