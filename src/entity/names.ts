@@ -8,5 +8,6 @@ export const nameLightningCorpse = 'Charred Corpse';
 // items
 export const nameGem = "Gem";
 export const nameStunScroll = 'Stun Scroll';
+export const nameConfusionScroll = 'Confusion Scroll';
 export const nameLightningScroll = "Lightning Scroll";
 export const nameReturnToAltarScroll = "Return to Altar Scroll";

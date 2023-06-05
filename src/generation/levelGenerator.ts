@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { spawnAltar, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll, spawnStunScroll } from "../entity/entityFactory";
+import { spawnAltar, spawnConfusionScroll, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll, spawnStunScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
@@ -74,14 +74,27 @@ export abstract class LevelGenerator {
         break;
       }
       case '&': {
-        // TODO: support multiple items
         this.map.setTile(pos, tileFactory.floor);
-        spawnStunScroll(this.map, pos);
-        // if (Math.random() >= 0.5) {
-        //   spawnLightningScroll(this.map, pos);
-        // } else {
-        //   spawnReturnToAltarScroll(this.map, pos);
-        // }
+        
+        const itemSpawners = [
+          spawnStunScroll,
+          spawnConfusionScroll,
+          spawnLightningScroll,
+          spawnReturnToAltarScroll
+        ];
+        const p = 1/itemSpawners.length;
+
+        const r = Math.random();
+        let probability = 0;
+
+        for (let spawn of itemSpawners) {
+          probability += p;
+          if (probability >= r) {
+            spawn(this.map, pos);
+            break;
+          }
+        }
+
         break;
       }
       default: {

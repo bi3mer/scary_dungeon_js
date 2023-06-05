@@ -1,12 +1,12 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorDarkGray, colorEnemy, colorGem, colorLightGray, colorLightningScroll, colorRed, colorStunScroll, colorViolet,  colorWhite } from "../utility/colors";
+import { colorBlack, colorConfusionScroll, colorDarkGray, colorEnemy, colorGem, colorLightGray, colorLightningScroll, colorRed, colorStunScroll, colorViolet,  colorWhite } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
-import { nameAltar, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll, nameReturnToAltarScroll, nameStunScroll } from "./names";
+import { nameAltar, nameConfusionScroll, nameEnemy, nameGem, nameLightningCorpse, nameLightningScroll, nameReturnToAltarScroll, nameStunScroll } from "./names";
 import { Point } from "../utility/point";
 import { MessageLog } from "../utility/messageLog";
 import { LightningAnimation } from "../animation/lightningAnimation";
@@ -15,6 +15,7 @@ import { ReturnToAltarAnimation } from "../animation/returnToAltarAnimation";
 import { LightningAction } from "../action/lightningAction";
 import { ReturnToAltarAction } from "../action/returnToAltarAction";
 import { StunAction } from "../action/stunAction";
+import { ConfusionScrollAction } from "../action/confusionScrollAction";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
@@ -131,6 +132,23 @@ export function spawnStunScroll(map: GameMap, pos: Point): Item {
     RenderOrder.Item,
     (map, actor) => {
       return (new StunAction()).execute(actor, map);
+    }
+  );
+
+  map.addItem(scroll);
+  return scroll;
+}
+export function spawnConfusionScroll(map: GameMap, pos: Point): Item {
+  let scroll = new Item(
+    pos,
+    nameConfusionScroll,
+    false,
+    's',
+    colorConfusionScroll,
+    colorBlack,
+    RenderOrder.Item,
+    (map, actor) => {
+      return (new ConfusionScrollAction()).execute(actor, map);
     }
   );
 
