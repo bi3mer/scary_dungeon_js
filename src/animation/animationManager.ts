@@ -19,9 +19,9 @@ export class AnimationManager {
     return this.animation !== null;
   }
 
-  static update(dt: number): void {
+  static update(dt: number, ctx: CanvasRenderingContext2D): void {
     AnimationManager.shouldComputeFOV = false;
-    if(this.animation !== null &&this.animation.update(dt)) {
+    if(this.animation !== null &&this.animation.update(dt, ctx)) {
       this.animation = null;
       InputManager.clear();
     } 

@@ -25,15 +25,15 @@ export class StunAnimation extends Animation {
     Sound.playStun();
   }
 
-  animationUpdate(dt: number): boolean {
+  animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     this.elapsed += dt;
-    this.ctx.lineWidth = 4;
-    this.ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
 
-    this.ctx.beginPath();
-    this.ctx.lineTo(this.start.x, this.start.y);
-    this.ctx.lineTo(this.end.x, this.end.y);
-    this.ctx.stroke();
+    ctx.beginPath();
+    ctx.lineTo(this.start.x, this.start.y);
+    ctx.lineTo(this.end.x, this.end.y);
+    ctx.stroke();
 
     return this.elapsed > this.animationTime;
   }

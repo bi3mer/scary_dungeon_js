@@ -7,7 +7,7 @@ import { Actor } from "../entity/actor";
 import PreciseShadowcasting from "rot-js/lib/fov/precise-shadowcasting";
 import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
-import { colorBlack, colorDarkGray, colorWhite } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorTransparent, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
 import { nameAltar, nameGem, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
@@ -25,7 +25,7 @@ export class GameMap {
   private roomCols: number
 
   private tiles: Tile[]
-  private visible: boolean[]
+  private visible: number[]
   private explored: boolean[]
 
   private gemCount: number = 0
@@ -49,7 +49,7 @@ export class GameMap {
     this.roomCols = START_ROOM[0].length + Config.padding;
 
     this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
-    this.visible = Array(this.tiles.length).fill(false);  
+    this.visible = Array(this.tiles.length).fill(0);  
     this.explored = Array(this.tiles.length).fill(false); 
 
     this.actors.push(new Actor(
@@ -77,7 +77,7 @@ export class GameMap {
 
   reset(): void {
     this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
-    this.visible = Array(this.tiles.length).fill(false);  
+    this.visible = Array(this.tiles.length).fill(0);  
     this.explored = Array(this.tiles.length).fill(false); 
 
     this.gemCount = 0;
@@ -216,12 +216,13 @@ export class GameMap {
           
         // draw tiles in relative position 
         const tile = this.tiles[index];
+        const visibility = this.visible[index];
 
-        if(this.visible[index]) {
-          display.draw(x+midX, y+midY, tile.char, tile.inViewFG, tile.inViewBG);
+        if(visibility > 0.2) {
+          display.draw(x+midX, y+midY, tile.char, `rgba(100,100,100,${1-visibility})`, colorTransparent);
         } else if (this.explored[index]) {
-          display.draw(x+midX, y+midY, tile.char, tile.outOfViewFG, tile.outOfViewBG);
-        }
+          display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,${0.8})`, colorTransparent);
+        } 
       }
     }
 
@@ -232,8 +233,8 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(e.pos)]) {
-        e.render(display, playerPosition, midX, midY);
+      if (this.positionVisible(e.pos)) {
+        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)]);
       }
     }
 
@@ -243,8 +244,8 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(e.pos)]) {
-        e.render(display, playerPosition, midX, midY);
+      if (this.positionVisible(e.pos)) {
+        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)]);
       }
     }
 
@@ -255,8 +256,8 @@ export class GameMap {
         continue;
       }
 
-      if (this.visible[this.index(a.pos)]) {
-        a.render(display, playerPosition, midX, midY);
+      if (this.positionVisible(a.pos)) {
+        a.render(display, playerPosition, midX, midY, this.visible[this.index(a.pos)]);
       }
     }
   }
@@ -421,7 +422,7 @@ export class GameMap {
         continue;
       }
 
-      if (!this.visible[this.index(a.pos)]) {
+      if (!this.positionVisible(a.pos)) {
         continue;
       }
 
@@ -446,7 +447,7 @@ export class GameMap {
       return false;
     }
 
-    return this.visible[index];
+    return this.visible[index] !== 0;
   }
 
   // ---------- 
@@ -461,7 +462,7 @@ export class GameMap {
       return false;
     });
 
-    this.visible.fill(false);
+    this.visible.fill(0);
 
     fov.compute(
       this.player().pos.x, 
@@ -469,12 +470,10 @@ export class GameMap {
       SIGHT_RADIUS, 
       (x: number, y: number, r: number, visibility: number) => {
         const index = this.index(new Point(x, y));
+        this.visible[index] = visibility;
         if (visibility > 0.0) {
           this.explored[index] = true;
-          this.visible[index] = true;
-        } else {
-          this.visible[index] = false;
-        }
+        } 
       }
     );
   }

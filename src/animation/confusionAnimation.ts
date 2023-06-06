@@ -20,17 +20,17 @@ export class ConfusionAnimation extends Animation {
     Sound.playConfusion();
   }
 
-  animationUpdate(dt: number): boolean {
+  animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     this.elapsed += dt;
-    const temp = this.ctx.font;
+    const temp = ctx.font;
     
-    this.ctx.font = `${Math.round(42*this.elapsed/this.animationTime)}px serif`;
-    this.ctx.fillStyle = colorConfusionScroll;
-    this.ctx.fillText('?', this.start.x+Config.tileWidth, this.start.y, 100);
-    this.ctx.fillText('?', this.start.x-Config.tileWidth, this.start.y, 100);
-    this.ctx.fillText('?', this.start.x, this.start.y-Config.tileHeight, 100);
+    ctx.font = `${Math.round(42*this.elapsed/this.animationTime)}px serif`;
+    ctx.fillStyle = colorConfusionScroll;
+    ctx.fillText('?', this.start.x+Config.tileWidth, this.start.y, 100);
+    ctx.fillText('?', this.start.x-Config.tileWidth, this.start.y, 100);
+    ctx.fillText('?', this.start.x, this.start.y-Config.tileHeight, 100);
 
-    this.ctx.font = temp;
+    ctx.font = temp;
 
     return this.elapsed > this.animationTime;
   }

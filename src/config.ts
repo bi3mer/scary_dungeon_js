@@ -1,6 +1,6 @@
 export class Config {
   // Effects game play
-  static width: number = 80;
+  static width: number = 70;
   static height: number = 40;
   static padding: number = 7;
 

@@ -21,22 +21,36 @@ export class AltarAction extends Action {
     const shouldRender = playerGemCount == requiredGemCount;
     if (shouldRender) {
       Sound.playUnlockAltar();
+      map.altar().char = 'A';
       MessageLog.addMessage(
-        'The altar has opened. Step through it... if you dare!',
+        'The fountain filled up!',
         colorGreen,
         false
       );
+
+      MessageLog.addMessage(
+        'In the distance, you hear a door open...',
+        colorWhite,
+        false
+      );
+
+      MessageLog.addErrorMessage('There is no door... Nothing opened up, step through the fountain', true);
       
       this.altar.fg = colorGreen;
       this.altar.bg = colorLightGray;
 
       actor.inventory.destroyItemsWithName(nameGem);
     } else {
-      MessageLog.addMessage(
-        `The altar needs ${requiredGemCount - actor.inventory.getCount(nameGem)} more gems to unlock.`, 
-        colorLightGray, 
-        true
-      );
+      const left = requiredGemCount - actor.inventory.getCount(nameGem);
+      let m: string;
+
+      if (left === 1) {
+        m = `The fountain seems empty. It looks like it would take a potion more to fill it.`;
+      } else {
+        m = `The fountain seems empty. It looks like it would take ${left} potions to fill it.`; 
+      }
+
+      MessageLog.addMessage(m, colorLightGray, true);
     }
 
     return shouldRender;

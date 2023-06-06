@@ -4,21 +4,34 @@ export class Text {
   x: number
   y: number
   text: string
-  fg: string
-  bg: string
+  color: string
+  font: string
+  maxLength: number | undefined
 
-  constructor(x: number, y: number, text: string, fg: string, bg: string) {
+  constructor(
+    x: number, 
+    y: number, 
+    text: string, 
+    color: string, 
+    center: boolean,
+    fontSize: number = 12,
+    maxLength: number|undefined=undefined
+  ) {
     this.x = x;
     this.y = y;
     this.text = text;
-    this.fg = fg;
-    this.bg = bg;
-  }
+    this.color = color;
+    this.font = `${fontSize}px monospace`
+    this.maxLength = maxLength;
 
-  render(display: Display) {
-    // for(let c of this.text) {
-    //   display.drawOver(this.x, this.y, c, this.fg, this.bg);
-    // }
-    display.drawText(this.x, this.y, `%c{${this.fg}}%b{${this.bg}}${this.text}`);
+    if (center) {
+      this.x -= this.text.length / 2;
+    }
+  }
+  
+  render(ctx: CanvasRenderingContext2D) {
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText(this.text, this.x, this.y);
   }
 }

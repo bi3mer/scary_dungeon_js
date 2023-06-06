@@ -2,7 +2,7 @@ import { assert } from "../utility/error";
 import { RenderOrder } from "../utility/renderOrder";
 import { Display } from "rot-js";
 import { euclideanDistance } from "../utility/distance";
-import { colorBlack, colorWhite } from "../utility/colors";
+import { colorBlack, colorTransparent, colorWhite } from "../utility/colors";
 import { Point } from "../utility/point";
 
 export class Entity {
@@ -42,10 +42,10 @@ export class Entity {
     this.pos.y += dPos.y;
   }
 
-  render(display: Display, playerPos: Point, midX: number, midY: number): void {
+  render(display: Display, playerPos: Point, midX: number, midY: number, visibility: number): void {
     const x = midX + this.pos.x-playerPos.x;
     const y = midY + this.pos.y-playerPos.y;
-    display.draw(x, y, this.char, this.fg, this.bg);
+    display.draw(x, y, ['.', this.char], `rgba(100,100,100,${1-visibility})`, colorTransparent);
   }
 
   euclideanDistance(pos: Point): number {

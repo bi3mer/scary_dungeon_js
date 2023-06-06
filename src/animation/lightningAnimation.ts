@@ -34,7 +34,7 @@ export class LightningAnimation extends Animation {
           turnedLeft = false;
         }
       } else if (turnedRight) {
-        if (target.x < this.width - SIZE && Math.random() < 0.5) {
+        if (target.x < Config.width - SIZE && Math.random() < 0.5) {
           target.x += SIZE;
         } else {
           target.y -= SIZE;
@@ -45,7 +45,7 @@ export class LightningAnimation extends Animation {
         if (target.x > SIZE && r < 0.33) {
           target.x -= SIZE;
           turnedLeft = true;
-        } else if (target.x < this.width - SIZE && r < 0.66) {
+        } else if (target.x < Config.width - SIZE && r < 0.66) {
           target.x += SIZE;
           turnedRight = true;
         } else {
@@ -57,12 +57,12 @@ export class LightningAnimation extends Animation {
     } 
   }
 
-  animationUpdate(dt: number): boolean {
+  animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     this.elapsed += dt;
-    this.ctx.strokeStyle = colorLightningScroll;
-    this.ctx.lineWidth = 2;
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
+    ctx.strokeStyle = colorLightningScroll;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     
     if (!this.playedSound) {
       Sound.playThunder();
@@ -70,25 +70,25 @@ export class LightningAnimation extends Animation {
     }
 
     if (this.elapsed < this.lightningAnimationTime) {
-      this.ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
+      ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
       for(let i = 1; i < this.lightningPath.length; ++i) {
-        this.ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
+        ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
       }
 
-      this.ctx.stroke();
-      this.ctx.closePath();
+      ctx.stroke();
+      ctx.closePath();
 
       return false;
     } 
 
     if (this.elapsed < this.lightningAnimationTime + this.flashAnimationTime) {
-      this.ctx.strokeStyle = `rgba(255, 255, 255, ${1 - this.elapsed / (this.lightningAnimationTime + this.flashAnimationTime)})`;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${1 - this.elapsed / (this.lightningAnimationTime + this.flashAnimationTime)})`;
       for(let i = 1; i < this.lightningPath.length; ++i) {
-        this.ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
+        ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
       }
 
-      this.ctx.stroke();
-      this.ctx.closePath();
+      ctx.stroke();
+      ctx.closePath();
       
       return false;
     }

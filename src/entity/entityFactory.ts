@@ -1,7 +1,7 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorConfusionScroll, colorDarkGray, colorEnemy, colorGem, colorLightningScroll, colorRed, colorStunScroll, colorViolet,  colorWhite } from "../utility/colors";
+import { colorBlack, colorConfusionScroll, colorDarkGray, colorEnemy, colorGem, colorLightningScroll, colorRed, colorStunScroll, colorTransparent, colorViolet,  colorWhite } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
@@ -22,7 +22,7 @@ export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
     false,
     '%',
     colorRed,
-    colorBlack,
+    colorTransparent,
     RenderOrder.Corpse
   );
 
@@ -44,6 +44,7 @@ export function spawnEnemy(map: GameMap, pos: Point): Actor {
   enemy.name = nameEnemy;
   enemy.char = 'E';
   enemy.fg = colorEnemy;
+  enemy.bg = colorTransparent;
   enemy.behavior = new AIBehavior(pos);
 
   map.addActor(enemy);
@@ -52,9 +53,10 @@ export function spawnEnemy(map: GameMap, pos: Point): Actor {
 }
 
 export function spawnAltar(map: GameMap, pos: Point): Actor {
+  map.altar().char = 'a';
   map.altar().pos = pos;
   map.altar().fg = colorDarkGray;
-  map.altar().bg = colorWhite;
+  map.altar().bg = colorTransparent;
   map.altar().behavior = new EmptyBehavior();
 
   return map.altar();
@@ -68,7 +70,7 @@ export function spawnGem(map: GameMap, pos: Point): Item {
     false,
     '*',
     colorGem,
-    colorBlack,
+    colorTransparent,
     RenderOrder.Item,
     (map, actor) => {
       MessageLog.addMessage(`The gem is scary.`, colorGem, true);
@@ -88,7 +90,7 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
     false,
     's',
     colorLightningScroll,
-    colorBlack,
+    colorTransparent,
     RenderOrder.Item,
     (map, actor) => {
       return (new LightningAction()).execute(actor, map);
@@ -125,7 +127,7 @@ export function spawnStunScroll(map: GameMap, pos: Point): Item {
     false,
     's',
     colorStunScroll,
-    colorBlack,
+    colorTransparent,
     RenderOrder.Item,
     (map, actor) => {
       return (new StunAction()).execute(actor, map);
@@ -142,7 +144,7 @@ export function spawnConfusionScroll(map: GameMap, pos: Point): Item {
     false,
     's',
     colorConfusionScroll,
-    colorBlack,
+    colorTransparent,
     RenderOrder.Item,
     (map, actor) => {
       return (new ConfusionScrollAction()).execute(actor, map);

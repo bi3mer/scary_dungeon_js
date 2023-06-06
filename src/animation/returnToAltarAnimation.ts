@@ -15,7 +15,7 @@ export class ReturnToAltarAnimation extends Animation {
     Sound.playTeleport();
   }
 
-  animationUpdate(dt: number): boolean {
+  animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     if (this.animationTime >= this.totalAnimationTime) {
       return true;
     }
@@ -30,11 +30,11 @@ export class ReturnToAltarAnimation extends Animation {
       this.middleCallback = null;
     }
 
-    this.ctx.beginPath();
-    this.ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
-    this.ctx.fillStyle = `rgba(0,0,0,${opacity})`;
-    this.ctx.fillRect(0,0, Config.screenWidth, Config.screenHeight);
-    this.ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
+    ctx.fillStyle = `rgba(0,0,0,${opacity})`;
+    ctx.fillRect(0,0, Config.screenWidth, Config.screenHeight);
+    ctx.stroke();
 
     return false;
   }

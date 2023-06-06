@@ -68,32 +68,32 @@ export abstract class LevelGenerator {
         spawnGem(this.map, pos);
         break;
       }
-      case 'A': {
+      case 'a': {
         this.map.setTile(pos, tileFactory.floor);
         spawnAltar(this.map, pos);
         break;
       }
       case '&': {
         this.map.setTile(pos, tileFactory.floor);
-        
-        const itemSpawners = [
-          spawnStunScroll,
-          spawnConfusionScroll,
-          spawnLightningScroll,
-          spawnReturnToAltarScroll
-        ];
-        const p = 1/itemSpawners.length;
+        spawnLightningScroll(this.map, pos);
+        // const itemSpawners = [
+        //   spawnStunScroll,
+        //   spawnConfusionScroll,
+        //   spawnLightningScroll,
+        //   spawnReturnToAltarScroll
+        // ];
+        // const p = 1/itemSpawners.length;
 
-        const r = Math.random();
-        let probability = 0;
+        // const r = Math.random();
+        // let probability = 0;
 
-        for (let spawn of itemSpawners) {
-          probability += p;
-          if (probability >= r) {
-            spawn(this.map, pos);
-            break;
-          }
-        }
+        // for (let spawn of itemSpawners) {
+        //   probability += p;
+        //   if (probability >= r) {
+        //     spawn(this.map, pos);
+        //     break;
+        //   }
+        // }
 
         break;
       }

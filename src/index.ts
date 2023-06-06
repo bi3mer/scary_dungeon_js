@@ -10,12 +10,14 @@ document.body.onload = () => {
 
   Sound.init();
   InputManager.init();
+  const tileSet = document.createElement("img");
+  tileSet.src = "assets/tilemap-kenney_tiny-dungeon.png";
 
   ClingoSolver.init().then(() => {
     const loader = () => {
-      if (Sound.isLoaded()) {
+      if (Sound.isLoaded() && tileSet.complete) {
         MessageLog.clear();
-        (new Game()).start();
+        (new Game(tileSet)).start();
       } else {
         MessageLog.addMessage('Loading...', colorWhite, true);
         window.requestAnimationFrame(loader);

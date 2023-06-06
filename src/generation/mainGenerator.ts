@@ -62,7 +62,7 @@ export class MainGenerator extends LevelGenerator {
       if (type === 'altar') {
         const center = rooms[`${x},${y}`].center()
         playerPos.x = center.x;
-        playerPos.y = center.y-1;
+        playerPos.y = center.y;
       }
     }
 

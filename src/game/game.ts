@@ -1,4 +1,4 @@
-import { Display, Map, RNG } from "rot-js";
+import { Display } from "rot-js";
 
 import { GameMap } from "./gameMap";
 import { InputManager, Key } from "./inputManager";
@@ -9,26 +9,56 @@ import { MessageLog } from "../utility/messageLog";
 import { MainGenerator } from "../generation/mainGenerator";
 import { Config } from "../config";
 import { AnimationManager } from "../animation/animationManager";
-import { Sound } from "../utility/sound";
+import { colorBlack } from "../utility/colors";
 
 export class Game {
   private level: number
-  private display: Display
+  private gameDisplay: Display
+
+  private uiCanvas: HTMLCanvasElement
+  private uiCtx: CanvasRenderingContext2D
+
   private map: GameMap
   private config: { roomCols: number, roomRows: number }
   private delta: number
   private mapGenerating: boolean
 
-
-  constructor() {
+  constructor(tileSet: HTMLImageElement) {
     this.config = { roomCols: 5, roomRows: 5};
-    this.display = new Display({
+
+    this.uiCanvas = document.createElement("canvas");
+    this.uiCanvas.setAttribute('id', 'uiCanvas');
+    this.uiCtx = this.uiCanvas.getContext('2d')!; 
+    
+    this.gameDisplay = new Display({
       width: Config.width,
       height: Config.height,
+      layout: 'tile',
+      tileWidth: 16,
+      tileHeight: 16,
+      bg: colorBlack,
+      tileSet: tileSet,
+      tileColorize: true,
+      tileMap: {
+        '@': [0, 128],
+        's': [80, 112],
+        '#': [64, 48],
+        '.': [0, 64],
+        'g': [112, 16],
+        'a': [112, 32],
+        'G': [112, 16],
+        'A': [128, 32],
+        'E': [32, 160],
+        '*': [96,144],
+        '%': [0, 144],
+      },
     });
 
     this.map = new GameMap(Config.width, Config.height);
-    document.body.appendChild(this.display.getContainer()!);
+    this.gameDisplay.getContainer()!.setAttribute('id', 'gameCanvas');
+
+    document.getElementById('game')!.appendChild(this.uiCanvas);
+    document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
 
     this.delta = 0;
     this.mapGenerating = false;
@@ -55,37 +85,58 @@ export class Game {
   }
 
   private setUISize(): void {
-    const canvas = document.querySelector('canvas')?.getContext('2d')!.canvas!;
     const log = document.getElementById('messages')!;
-    log.style.left = `${canvas.offsetLeft}px`;
-    log.style.width = `${canvas.width}px`;
+    // @ts-ignore
+    const gameCanvas = document.getElementById('gameCanvas')!; 
 
-    Config.screenHeight = canvas.height;
-    Config.screenWidth = canvas.width;
-    Config.tileHeight = canvas.height / Config.height;
-    Config.tileWidth = canvas.width / Config.width;
+    log.style.left = `${gameCanvas.offsetLeft}px`;
+
+    // @ts-ignore
+    log.style.width = `${gameCanvas.width}px`;
+
+    // @ts-ignore
+    Config.screenHeight = gameCanvas.height;
+    // @ts-ignore
+    Config.screenWidth = gameCanvas.width;
+    // @ts-ignore
+    Config.tileHeight = gameCanvas.height / Config.height;
+    // @ts-ignore
+    Config.tileWidth = gameCanvas.width / Config.width;
+
+    // UI canvas is absolute so it's position is set completely based
+    // on the games position.
+    this.uiCanvas.width = Config.screenWidth;
+    this.uiCanvas.height = Config.screenHeight;
+
+    // Since the game canvas is centered, we need to set the margins exactly
+    // to guarantee a correct overlay.
+    const style = window.getComputedStyle(gameCanvas)!;
+    this.uiCanvas.style.marginLeft = style.marginLeft;
+    this.uiCanvas.style.marginRight = style.marginRight;
+    this.uiCanvas.style.marginTop = style.marginTop;
+    this.uiCanvas.style.marginBottom = style.marginBottom;
   }
   
   render(menu: Menu | null, computeFOV: boolean): void {
-    this.display.clear();
+    this.gameDisplay.clear();
+    this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); // transparent clear doesn't work
 
     if (computeFOV) {
       this.map.computeFOV();
     }
 
-    this.map.render(this.display);
+    this.map.render(this.gameDisplay);
 
     if (menu !== null) {
-      menu.render(this.display);
+      menu.render(this.uiCtx);
     }
   }
 
   start(): void {
     // GUI set up for the browser
-    document.getElementById('game')!.appendChild(this.display.getContainer()!);
+    document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
     this.setUISize();
     addEventListener('resize', this.setUISize);
-
 
     let oldTimeStamp : number;
     let fps : number;
@@ -107,13 +158,14 @@ export class Game {
         // NOTE: I don't love this solution, but I'm starting to not like this
         // game loop, so it may end up being time to refactor it pretty soon.
         handlingAnimation = false;
+        this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); // transparent clear doesn't work
       }
 
       if (this.mapGenerating) {
         // Nothing to do while map is generating
       } else if (AnimationManager.animationIsRunning()) {
-        this.render(null, AnimationManager.shouldComputeFOV);
-        AnimationManager.update(this.delta);
+        // this.render(null, AnimationManager.shouldComputeFOV);
+        AnimationManager.update(this.delta, this.uiCtx);
         handlingAnimation = true;
       } else if (menu !== null) {
         // if there is a menu then it handles input
@@ -164,3 +216,59 @@ export class Game {
     window.requestAnimationFrame(gameLoop);
   }
 }
+
+
+
+ // let fontTileMap: {[name: string]:  [number, number]} = {
+    //   '┌': [160,208],
+    //   '┐': [240,176],
+    //   '└': [0,192],
+    //   '┘': [144,208],
+    //   '│': [48,176],
+    //   '─': [64,192],
+    //   '┤': [64,176],
+    //   '├': [48,192],
+    //   ' ': [0, 0],
+    //   ',': [192,32],
+    //   '-': [208,32],
+    //   '.': [224,32],
+    //   '#': [48,64]
+    // };
+
+    // // lower case letters
+    // let x = 16;
+    // let y = 96;
+    // for(let i = 0; i < 26; ++i,x+=16) {
+    //   const char = String.fromCharCode(97+i);
+    //   fontTileMap[char] = [x, y];
+      
+    //   if (i == 14) {
+    //     x = -16;
+    //     y+=16;
+    //   }
+    // }
+
+    // // upper case letters
+    // x = 16;
+    // y = 64;
+    // for(let i = 0; i < 26; ++i, x+=16) {
+    //   const char = String.fromCharCode(65+i);
+    //   fontTileMap[char] = [x, y];
+      
+    //   if (i == 14) {
+    //     x = -16;
+    //     y+=16;
+    //   }
+    // }
+    // this.uiDisplay = new Display({
+    //   width: Config.width,
+    //   height: Config.height,
+    //   fontSize: 16
+    //   // layout: 'tile',
+    //   // tileWidth: 16,
+    //   // tileHeight: 16,
+    //   // bg: colorBlack,
+    //   // tileSet: font,
+    //   // tileColorize: true,
+    //   // tileMap: fontTileMap
+    // });

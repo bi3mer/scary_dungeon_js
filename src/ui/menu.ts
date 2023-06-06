@@ -3,6 +3,9 @@ import { Button } from "./button"
 import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
+import { colorBlack, colorRed, colorWhite } from "../utility/colors"
+import { MessageLog } from "../utility/messageLog"
+import { Config } from "../config"
 
 export class Menu {
   x: number
@@ -66,21 +69,21 @@ export class Menu {
     this.text.push(text);
   }
 
-  render(display: Display): void {
-    drawFrameWithTitle(display, this.title, this.x, this.y, this.width, this.height);
+  render(ctx: CanvasRenderingContext2D): void {
+    // drawFrameWithTitle(ctx, this.title, this.x, this.y, this.width, this.height);
 
     if (this.childMenu) {
-      this.childMenu.render(display);
+      this.childMenu.render(ctx);
     } else {
-      for (let b of this.buttons) {
-        b.render(display);
-      }
+      MessageLog.addErrorMessage('menu rendering disabled', true);
+      // for (let b of this.buttons) {
+      //   b.render(display);
+      // }
 
       for (let t of this.text) {
-        t.render(display);
+        t.render(ctx);
       }
     }
-
     this.shouldRender = false;
   }
 

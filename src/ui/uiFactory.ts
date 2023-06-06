@@ -30,13 +30,25 @@ export function helpMenu() : Menu {
     () => { }
   ));
 
-  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, colorBlack));
-  m.addText(new Text(x+3, y+4, "E to interact.", colorWhite, colorBlack));
-  m.addText(new Text(x+3, y+5, "Q to open your inventory.", colorWhite, colorBlack));
+  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, true));
+  m.addText(new Text(x+3, y+4, "E to interact.", colorWhite, true));
+  m.addText(new Text(x+3, y+5, "Q to open your inventory.", colorWhite, true));
 
-  m.addText(new Text(x+3, y+7, "Your goal is to collect gems to\nget to the next level in the\nprison.", colorWhite, colorBlack));
+  m.addText(new Text(
+    x+3, 
+    y+7, 
+    "Your goal is to collect gems to\nget to the next level in the prison.", 
+    colorWhite, 
+    true, 
+    35));
 
-  m.addText(new Text(x+3, y+11, "Make sure to avoid the enemies,\nthey move every third turn and\nwill kill you on contact.", colorWhite, colorBlack));
+  m.addText(new Text(
+    x+3, 
+    y+11, 
+    "Make sure to avoid the enemies, they move every third turn and will kill you on contact.", 
+    colorWhite, 
+    true, 
+    35));
 
   return m;
 }
@@ -55,13 +67,13 @@ export function mainMenu(callback: ()=>void) : Menu {
   });
 
   const title = "Scary Dungeon";
-  m.addText(new Text(Config.width/2-title.length/2, Config.height/2 - 10, title, colorYellow, colorBlack));
+  m.addText(new Text(Config.width/2-title.length/2, Config.height/2 - 10, title, colorYellow, true));
 
   const attribution = "by Colan F. Biemer"
-  m.addText(new Text(Config.width/2-attribution.length/2, Config.height/2 - 8, attribution, colorLightGray, colorBlack));
+  m.addText(new Text(Config.width/2-attribution.length/2, Config.height/2 - 8, attribution, colorLightGray, true));
 
   const instructions = "Press enter to start or h for instructions."
-  m.addText(new Text(Config.width/2-instructions.length/2, Config.height/2, instructions, colorWhite, colorBlack));
+  m.addText(new Text(Config.width/2-instructions.length/2, Config.height/2, instructions, colorWhite, true));
 
   return m;
 }
@@ -90,7 +102,7 @@ export function gameOverMenu(callback: ()=>void): Menu {
   ));
   
   const text = 'You failed.'
-  m.addText(new Text(Config.width/2 - text.length/2, y + 2, text, colorWhite, colorBlack));
+  m.addText(new Text(Config.width/2 - text.length/2, y + 2, text, colorWhite, true));
 
   return m;
 }
@@ -110,7 +122,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
       }
     });
 
-    m.addText(new Text(x+12, y+y/2, 'Inventory empty.', colorWhite, colorBlack));
+    m.addText(new Text(x+12, y+y/2, 'Inventory empty.', colorWhite, true));
   } else {
     const x = Config.width/4;
     const y = 5;
