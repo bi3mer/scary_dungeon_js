@@ -2,24 +2,24 @@ import { Config } from "../config";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { InputManager, Key } from "../game/inputManager";
-import { colorBlack, colorDarkGray, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
+import { colorDarkGray, colorLightGray, colorWhite, colorYellow } from "../utility/colors";
 import { Sound } from "../utility/sound";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
 
 export function helpMenu() : Menu {
-  const x = Config.width/4;
-  const y = Config.height/4;
-  let m = new Menu(x, y, Config.width/2, Config.height/2, "Help", true, true, false, () => {
+  const x = Config.screenWidth/4;
+  const y = Config.screenHeight/4;
+  let m = new Menu(x, y, Config.screenWidth/2, Config.screenHeight/2, "Help", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       m.shouldExit = true;
     }
   });
 
   m.addButton(new Button(
-    Config.width/2-4, 
-    Config.height - Config.height/4 - 4, 
+    Config.screenWidth/2-4, 
+    Config.screenHeight - Config.height/4 - 4, 
     8, 
     3, 
     "Ok", 
@@ -30,31 +30,30 @@ export function helpMenu() : Menu {
     () => { }
   ));
 
-  m.addText(new Text(x+3, y+3, "WASD or arrow keys to move.", colorWhite, true));
-  m.addText(new Text(x+3, y+4, "E to interact.", colorWhite, true));
-  m.addText(new Text(x+3, y+5, "Q to open your inventory.", colorWhite, true));
+  m.addText(new Text(x+20, y+60, "WASD or arrow keys to move.", colorWhite, false));
+  m.addText(new Text(x+20, y+70, "E to interact.", colorWhite, false));
+  m.addText(new Text(x+20, y+80, "Q to open your inventory.", colorWhite, false));
 
   m.addText(new Text(
-    x+3, 
-    y+7, 
-    "Your goal is to collect gems to\nget to the next level in the prison.", 
+    x+20, 
+    y+100, 
+    "Your goal is to collect gems to get to the next level in the prison.", 
     colorWhite, 
-    true, 
-    35));
+    false));
 
   m.addText(new Text(
-    x+3, 
-    y+11, 
-    "Make sure to avoid the enemies, they move every third turn and will kill you on contact.", 
+    x+20, 
+    y+120, 
+    "Make sure to avoid the enemies, they move every third turn and kill\nyou on contact.", 
     colorWhite, 
-    true, 
-    35));
+    false,
+    12));
 
   return m;
 }
 
 export function mainMenu(callback: ()=>void) : Menu {
-  let m = new Menu(0, 0, Config.width, Config.height, "Main Menu", true, false, false, () => {
+  let m = new Menu(0, 0, Config.screenWidth, Config.screenHeight, "Main Menu", true, false, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       Sound.playGameStart();
       m.shouldExit = true;

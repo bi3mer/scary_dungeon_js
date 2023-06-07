@@ -56,6 +56,8 @@ export class Menu {
 
     this.updateCallback = updateCallback;
     this.childMenu = null;
+
+    this.text.push(new Text(this.x + width/2, this.y + 30, this.title, colorWhite, true, 20));
   }
 
   addButton(button: Button): void {
@@ -70,7 +72,7 @@ export class Menu {
   }
 
   render(ctx: CanvasRenderingContext2D): void {
-    // drawFrameWithTitle(ctx, this.title, this.x, this.y, this.width, this.height);
+    this.drawFrame(ctx);
 
     if (this.childMenu) {
       this.childMenu.render(ctx);
@@ -140,5 +142,13 @@ export class Menu {
     } else {
       this.updateCallback();
     }
+  }
+
+  private drawFrame(ctx: CanvasRenderingContext2D): void {
+    ctx.strokeStyle = colorWhite;
+    ctx.fillStyle = colorBlack;
+    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.fill();
+    ctx.stroke();
   }
 }
