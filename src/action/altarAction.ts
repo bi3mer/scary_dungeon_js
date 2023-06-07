@@ -1,6 +1,7 @@
 import { Actor } from "../entity/actor";
 import { nameGem, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
+import tileFactory from "../tile/tileFactory";
 import { colorGreen, colorLightGray, colorWhite } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
 import { Sound } from "../utility/sound";
@@ -22,6 +23,13 @@ export class AltarAction extends Action {
     if (shouldRender) {
       Sound.playUnlockAltar();
       map.altar().char = 'A';
+
+      let pos = map.altar().pos.copy();
+      pos.y--;
+
+      map.setTile(pos, tileFactory.altarWallSolved);
+
+
       MessageLog.addMessage(
         'The fountain filled up!',
         colorGreen,

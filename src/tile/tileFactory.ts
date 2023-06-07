@@ -1,4 +1,4 @@
-import { colorBlack, colorDarkGray, colorIndigo, colorLightGray, colorViolet, colorVisible } from "../utility/colors";
+import { colorBlack, colorDarkGray, colorIndigo, colorLightGray, colorTransparent, colorViolet, colorVisible } from "../utility/colors";
 import { Tile } from "./tile";
 
 let tileFactory: {[name: string]: Tile} = {};
@@ -48,6 +48,24 @@ tileFactory.backwardSlash = new Tile(
   colorIndigo,
   colorBlack
 )
+
+tileFactory.altarWall = new Tile(
+  'g',
+  false,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent
+);
+
+tileFactory.altarWallSolved = new Tile(
+  'G',
+  false,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent
+);
 
 
 export default tileFactory;

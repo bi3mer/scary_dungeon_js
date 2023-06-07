@@ -13,6 +13,7 @@ import { LightningAction } from "../action/lightningAction";
 import { ReturnToAltarAction } from "../action/returnToAltarAction";
 import { StunAction } from "../action/stunAction";
 import { ConfusionScrollAction } from "../action/confusionScrollAction";
+import tileFactory from "../tile/tileFactory";
 
 // ------------ Entities ------------
 export function spawnCorpse(map: GameMap, pos: Point, name: string): Entity {
@@ -58,6 +59,10 @@ export function spawnAltar(map: GameMap, pos: Point): Actor {
   map.altar().fg = colorDarkGray;
   map.altar().bg = colorTransparent;
   map.altar().behavior = new EmptyBehavior();
+
+  const gargoylePosition = pos.copy();
+  gargoylePosition.y--;
+  map.setTile(gargoylePosition, tileFactory.altarWallSolved);
 
   return map.altar();
 }
