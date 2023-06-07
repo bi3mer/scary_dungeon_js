@@ -1,12 +1,10 @@
-import { Display } from "rot-js";
-
 export class Text {
   x: number
   y: number
   text: string
   color: string
   font: string
-  maxLength: number | undefined
+  center: boolean
 
   constructor(
     x: number, 
@@ -15,23 +13,30 @@ export class Text {
     color: string, 
     center: boolean,
     fontSize: number = 12,
-    maxLength: number|undefined=undefined
+    maxLength: undefined | number = undefined
   ) {
     this.x = x;
     this.y = y;
     this.text = text;
     this.color = color;
     this.font = `${fontSize}px monospace`
-    this.maxLength = maxLength;
+    this.center = center;
 
-    if (center) {
-      this.x -= this.text.length / 2;
+    if (maxLength !== undefined) {
+      console.error('Max length not implemented!')
     }
   }
   
   render(ctx: CanvasRenderingContext2D) {
     ctx.font = this.font;
     ctx.fillStyle = this.color;
-    ctx.fillText(this.text, this.x, this.y);
+    
+    if (this.center) {
+      const temp = ctx.measureText(this.text);
+      const x = this.x - temp.width / 2;
+      ctx.fillText(this.text, x, this.y);
+    } else {
+      ctx.fillText(this.text, this.x, this.y);
+    }
   }
 }

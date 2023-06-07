@@ -67,13 +67,13 @@ export function mainMenu(callback: ()=>void) : Menu {
   });
 
   const title = "Scary Dungeon";
-  m.addText(new Text(Config.width/2-title.length/2, Config.height/2 - 10, title, colorYellow, true));
+  m.addText(new Text(Config.screenWidth/2, Config.screenHeight/4, title, colorYellow, true, 50));
 
   const attribution = "by Colan F. Biemer"
-  m.addText(new Text(Config.width/2-attribution.length/2, Config.height/2 - 8, attribution, colorLightGray, true));
+  m.addText(new Text(Config.screenWidth/2, Config.screenHeight/4+40, attribution, colorLightGray, true,20));
 
   const instructions = "Press enter to start or h for instructions."
-  m.addText(new Text(Config.width/2-instructions.length/2, Config.height/2, instructions, colorWhite, true));
+  m.addText(new Text(Config.screenWidth/2, Config.screenHeight/2, instructions, colorWhite, true, 20));
 
   return m;
 }
