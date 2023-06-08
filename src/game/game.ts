@@ -57,6 +57,9 @@ export class Game {
     this.map = new GameMap(Config.width, Config.height);
     this.gameDisplay.getContainer()!.setAttribute('id', 'gameCanvas');
 
+    // @ts-ignore
+    // this.gameDisplay.getContainer()!.getContext('2d')!.scale(2,2);
+
     document.getElementById('game')!.appendChild(this.uiCanvas);
     document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
 
@@ -119,7 +122,7 @@ export class Game {
   
   render(menu: Menu | null, computeFOV: boolean): void {
     this.gameDisplay.clear();
-    this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); // transparent clear doesn't work
+    this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); 
 
     if (computeFOV) {
       this.map.computeFOV();
@@ -158,7 +161,7 @@ export class Game {
         // NOTE: I don't love this solution, but I'm starting to not like this
         // game loop, so it may end up being time to refactor it pretty soon.
         handlingAnimation = false;
-        this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); // transparent clear doesn't work
+        this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); 
       }
 
       if (this.mapGenerating) {
@@ -169,11 +172,12 @@ export class Game {
         handlingAnimation = true;
       } else if (menu !== null) {
         // if there is a menu then it handles input
-        menu.update();
+        menu.update(this.uiCtx);
 
         if (menu.shouldExit) {
+          menu.clear(this.uiCtx);
           menu = null;
-          this.render(menu, false);
+          // this.render(menu, false);
           InputManager.clear();
         } else if (menu.shouldRender) {
           this.render(menu, false);

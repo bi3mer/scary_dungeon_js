@@ -3,7 +3,7 @@ import { Button } from "./button"
 import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
-import { colorBlack, colorRed, colorWhite } from "../utility/colors"
+import { colorBlack, colorConfusionScroll, colorIndigo, colorRed, colorViolet, colorWhite, colorYellow } from "../utility/colors"
 import { MessageLog } from "../utility/messageLog"
 import { Config } from "../config"
 
@@ -71,6 +71,11 @@ export class Menu {
     this.text.push(text);
   }
 
+  clear(ctx: CanvasRenderingContext2D): void {
+    ctx.clearRect(this.x, this.y, this.width, this.height);
+    ctx.clearRect(0, 0, Config.screenWidth, Config.screenHeight);
+  }
+
   render(ctx: CanvasRenderingContext2D): void {
     this.drawFrame(ctx);
 
@@ -89,11 +94,12 @@ export class Menu {
     this.shouldRender = false;
   }
 
-  update(): void {
+  update(ctx: CanvasRenderingContext2D): void {
     if (this.childMenu) {
-      this.childMenu.update();
+      this.childMenu.update(ctx);
 
       if (this.childMenu.shouldExit) {
+        this.childMenu.clear(ctx);
         this.childMenu = null;
         this.shouldRender = true;
         InputManager.clear();
@@ -147,8 +153,8 @@ export class Menu {
   private drawFrame(ctx: CanvasRenderingContext2D): void {
     ctx.strokeStyle = colorWhite;
     ctx.fillStyle = colorBlack;
-    ctx.rect(this.x, this.y, this.width, this.height);
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
     ctx.fill();
-    ctx.stroke();
   }
 }

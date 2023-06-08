@@ -45,7 +45,7 @@ export class LightningAnimation extends Animation {
         if (target.x > SIZE && r < 0.33) {
           target.x -= SIZE;
           turnedLeft = true;
-        } else if (target.x < Config.width - SIZE && r < 0.66) {
+        } else if (target.x < Config.screenWidth - SIZE && r < 0.66) {
           target.x += SIZE;
           turnedRight = true;
         } else {

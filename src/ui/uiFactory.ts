@@ -11,7 +11,7 @@ import { Text } from "./text";
 export function helpMenu() : Menu {
   const x = Config.screenWidth/4;
   const y = Config.screenHeight/4;
-  let m = new Menu(x, y, Config.screenWidth/2, Config.screenHeight/2, "Help", true, true, false, () => {
+  let m = new Menu(x, y, Config.screenWidth/2, Config.screenHeight/2, "Help Menu", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       m.shouldExit = true;
     }
@@ -30,30 +30,32 @@ export function helpMenu() : Menu {
     () => { }
   ));
 
-  m.addText(new Text(x+20, y+60, "WASD or arrow keys to move.", colorWhite, false));
-  m.addText(new Text(x+20, y+70, "E to interact.", colorWhite, false));
-  m.addText(new Text(x+20, y+80, "Q to open your inventory.", colorWhite, false));
+  const startY = y+70
+  m.addText(new Text(x+20, startY, "- WASD or arrow keys to move.", colorWhite, false, 15));
+  m.addText(new Text(x+20, startY+15, "- E to interact.", colorWhite, false, 15));
+  m.addText(new Text(x+20, startY+30, "- Q to open your inventory.", colorWhite, false, 15));
 
   m.addText(new Text(
     x+20, 
-    y+100, 
-    "Your goal is to collect gems to get to the next level in the prison.", 
-    colorWhite, 
-    false));
-
-  m.addText(new Text(
-    x+20, 
-    y+120, 
-    "Make sure to avoid the enemies, they move every third turn and kill\nyou on contact.", 
+    startY+60, 
+    "Your goal is to collect gems to get to the next level in\nthe prison.", 
     colorWhite, 
     false,
-    12));
+    15));
+
+  m.addText(new Text(
+    x+20, 
+    startY + 105, 
+    "Make sure to avoid the enemies, they move every third turn\nand kill you on contact.", 
+    colorWhite, 
+    false,
+    15));
 
   return m;
 }
 
 export function mainMenu(callback: ()=>void) : Menu {
-  let m = new Menu(0, 0, Config.screenWidth, Config.screenHeight, "Main Menu", true, false, false, () => {
+  let m = new Menu(0, 0, Config.screenWidth, Config.screenHeight, "", true, false, false, () => {
     if (InputManager.isKeyDown(Key.SPACE, Key.ENTER)) {
       Sound.playGameStart();
       m.shouldExit = true;
