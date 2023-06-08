@@ -75,6 +75,15 @@ export class Point {
   }
 
   /**
+   * Compute the un squared euclidean distance between two points
+   * @param other - point to compare to
+   * @returns distance
+   */
+  unSquaredEuclideanDistance(other: Point): number {
+    return Math.pow(this.x-other.x, 2) + (Math.pow(this.y-other.y, 2))
+  }
+
+  /**
    * Compute the manhattan distance between two points
    * @param other - point to compare to
    * @returns distance

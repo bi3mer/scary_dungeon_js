@@ -181,6 +181,7 @@ export class GameMap {
   }
 
   render(display: Display): void {
+    const maxDist = Config.sightRadius*Config.sightRadius;
     let y: number;
     let x: number;
 
@@ -217,11 +218,18 @@ export class GameMap {
         // draw tiles in relative position 
         const tile = this.tiles[index];
         const visibility = this.visible[index];
-
-        if(visibility > 0.2) {
-          display.draw(x+midX, y+midY, tile.char, `rgba(100,100,100,${1-visibility})`, colorTransparent);
+        
+        if(visibility > 0.05) {
+          const p = new Point(worldX, worldY);
+          if (playerPosition.equals(p)) {
+            display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
+          } else {
+            const dist = playerPosition.unSquaredEuclideanDistance(p);
+            const color = `rgba(0,0,0,${dist/maxDist})`;
+            display.draw(x+midX, y+midY, tile.char, color, color);
+          }
         } else if (this.explored[index]) {
-          display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,${0.8})`, colorTransparent);
+          display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,${0.9})`, colorTransparent);
         } 
       }
     }
@@ -234,7 +242,7 @@ export class GameMap {
       }
 
       if (this.positionVisible(e.pos)) {
-        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)]);
+        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
       }
     }
 
@@ -245,7 +253,7 @@ export class GameMap {
       }
 
       if (this.positionVisible(e.pos)) {
-        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)]);
+        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
       }
     }
 
@@ -257,7 +265,7 @@ export class GameMap {
       }
 
       if (this.positionVisible(a.pos)) {
-        a.render(display, playerPosition, midX, midY, this.visible[this.index(a.pos)]);
+        a.render(display, playerPosition, midX, midY, this.visible[this.index(a.pos)], maxDist);
       }
     }
   }
@@ -452,7 +460,6 @@ export class GameMap {
 
   // ---------- 
   computeFOV(): void {
-    const SIGHT_RADIUS = 10;
     const fov = new PreciseShadowcasting((x, y) => {
       const index = this.index(new Point(x, y));
       if (index < this.tiles.length && index >= 0) {
@@ -467,11 +474,11 @@ export class GameMap {
     fov.compute(
       this.player().pos.x, 
       this.player().pos.y, 
-      SIGHT_RADIUS, 
+      Config.sightRadius, 
       (x: number, y: number, r: number, visibility: number) => {
         const index = this.index(new Point(x, y));
         this.visible[index] = visibility;
-        if (visibility > 0.0) {
+        if (visibility === 1.0) {
           this.explored[index] = true;
         } 
       }

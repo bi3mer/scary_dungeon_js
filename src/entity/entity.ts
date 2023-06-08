@@ -42,10 +42,17 @@ export class Entity {
     this.pos.y += dPos.y;
   }
 
-  render(display: Display, playerPos: Point, midX: number, midY: number, visibility: number): void {
+  render(display: Display, playerPos: Point, midX: number, midY: number, visibility: number, maxDist: number): void {
     const x = midX + this.pos.x-playerPos.x;
     const y = midY + this.pos.y-playerPos.y;
-    display.draw(x, y, ['.', this.char], `rgba(100,100,100,${1-visibility})`, colorTransparent);
+
+    if (playerPos.equals(this.pos)) {
+      display.draw(x, y, ['.', this.char], colorTransparent, colorTransparent);
+    } else {
+      const dist = playerPos.unSquaredEuclideanDistance(this.pos);
+      const color = `rgba(0,0,0,${dist/maxDist})`;
+      display.draw(x, y, ['.', this.char], color, color);
+    }
   }
 
   euclideanDistance(pos: Point): number {

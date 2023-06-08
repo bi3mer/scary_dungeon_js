@@ -4,6 +4,9 @@ export class Config {
   static height: number = 20;
   static padding: number = 7;
 
+  // lighting
+  static sightRadius: number = 6;
+
   // These are set based on the above by the resize UI code in Game.ts
   static screenWidth: number = 800;
   static screenHeight: number = 600;
