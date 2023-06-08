@@ -11,7 +11,7 @@ document.body.onload = () => {
   Sound.init();
   InputManager.init();
   const tileSet = document.createElement("img");
-  tileSet.src = "assets/tilemap-kenney_tiny-dungeon.png";
+  tileSet.src = "assets/tilemap-kenney_tiny-dungeon_32_32.png";
 
   ClingoSolver.init().then(() => {
     const loader = () => {

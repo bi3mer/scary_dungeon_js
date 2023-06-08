@@ -1,7 +1,7 @@
 export class Config {
   // Effects game play
-  static width: number = 70;
-  static height: number = 40;
+  static width: number = 35;
+  static height: number = 20;
   static padding: number = 7;
 
   // These are set based on the above by the resize UI code in Game.ts

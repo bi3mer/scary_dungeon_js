@@ -18,7 +18,7 @@ export class LightningAnimation extends Animation {
     target.x = (Math.round(Config.width/2) + target.x - playerPosition.x) * Config.tileWidth + Config.tileWidth/2;
     target.y = (Math.round(Config.height/2) + target.y - playerPosition.y) * Config.tileHeight + Config.tileHeight/2;
 
-    const SIZE = 4
+    const SIZE = 8;
     this.lightningPath.push(target);
 
     let turnedLeft = false;
@@ -60,7 +60,7 @@ export class LightningAnimation extends Animation {
   animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     this.elapsed += dt;
     ctx.strokeStyle = colorLightningScroll;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     

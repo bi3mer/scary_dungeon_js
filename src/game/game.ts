@@ -34,30 +34,32 @@ export class Game {
       width: Config.width,
       height: Config.height,
       layout: 'tile',
-      tileWidth: 16,
-      tileHeight: 16,
+      tileWidth: 32,
+      tileHeight: 32,
       bg: colorBlack,
       tileSet: tileSet,
       tileColorize: true,
       tileMap: {
-        '@': [0, 128],
-        's': [80, 112],
-        '#': [64, 48],
-        '.': [0, 64],
-        'g': [112, 16],
-        'a': [112, 32],
-        'G': [112, 16],
-        'A': [128, 32],
-        'E': [32, 160],
-        '*': [96,144],
-        '%': [0, 144],
+        '@': [0, 256],
+        's': [160, 224],
+        '#': [128, 96],
+        '.': [0, 128],
+        'g': [224, 32],
+        'a': [224, 64],
+        'G': [224, 32],
+        'A': [256, 64],
+        'E': [64, 320],
+        '*': [192,288],
+        '%': [0, 288],
       },
     });
 
     this.map = new GameMap(Config.width, Config.height);
     this.gameDisplay.getContainer()!.setAttribute('id', 'gameCanvas');
 
-    // @ts-ignore
+    // // @ts-ignoreimage
+    // this.gameDisplay.getContainer()!.getContext('2d')!.SmoothingEnabled = false;
+    // // @ts-ignoreimage
     // this.gameDisplay.getContainer()!.getContext('2d')!.scale(2,2);
 
     document.getElementById('game')!.appendChild(this.uiCanvas);
