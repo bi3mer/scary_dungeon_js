@@ -8,8 +8,20 @@ import { Animation } from "./animation";
  */
 export class AnimationManager {
   private static animation: Animation | null = null
+  private static _shouldRender: boolean = false;
 
   static shouldComputeFOV: boolean = false;
+
+  static getShouldRender(): boolean {
+    const temp = this._shouldRender;
+    this._shouldRender = false;
+
+    return temp;
+  }
+
+  static shouldRender(): void {
+    this._shouldRender = true;
+  }
 
   static setAnimation(animation: Animation): void {  
     this.animation = animation

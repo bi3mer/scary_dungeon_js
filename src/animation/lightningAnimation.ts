@@ -3,6 +3,7 @@ import { colorLightningScroll, colorWhite } from "../utility/colors";
 import { Point } from "../utility/point";
 import { Sound } from "../utility/sound";
 import { Animation } from "./animation";
+import { AnimationManager } from "./animationManager";
 
 export class LightningAnimation extends Animation {
   private elapsed: number = 0;

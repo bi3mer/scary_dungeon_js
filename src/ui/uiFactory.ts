@@ -114,16 +114,17 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
   let m: Menu;
 
   if (size === 0) {
-    const x = Config.width/4;
-    const y = 5;
-    m = new Menu(x, y, Config.width/2, y, "Inventory", true, true, true, () => {
+    const x = Config.screenWidth/4+Config.screenWidth/8;
+    const y = Config.screenHeight/4+Config.screenHeight/8;
+    console.log(x,y)
+    m = new Menu(x, y, Config.screenWidth/4, Config.screenHeight/4, "", true, true, true, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
       }
     });
 
-    m.addText(new Text(x+12, y+y/2, 'Inventory empty.', colorWhite, true));
+    m.addText(new Text(x+Config.screenWidth/8, y+Config.screenHeight/8, 'Inventory empty.', colorWhite, true, 25));
   } else {
     const x = Config.width/4;
     const y = 5;

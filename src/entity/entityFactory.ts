@@ -62,7 +62,7 @@ export function spawnAltar(map: GameMap, pos: Point): Actor {
 
   const gargoylePosition = pos.copy();
   gargoylePosition.y--;
-  map.setTile(gargoylePosition, tileFactory.altarWallSolved);
+  map.setTile(gargoylePosition, tileFactory.altarWall);
 
   return map.altar();
 }

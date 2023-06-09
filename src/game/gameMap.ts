@@ -225,7 +225,7 @@ export class GameMap {
             display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
           } else {
             const dist = playerPosition.unSquaredEuclideanDistance(p);
-            const color = `rgba(0,0,0,${dist/maxDist})`;
+            const color = `rgba(0,0,0,${Math.min(0.8, dist/maxDist)})`;
             display.draw(x+midX, y+midY, tile.char, color, color);
           }
         } else if (this.explored[index]) {

@@ -45,8 +45,8 @@ export class Game {
         '#': [128, 96],
         '.': [0, 128],
         'g': [224, 32],
+        'G': [256, 32],
         'a': [224, 64],
-        'G': [224, 32],
         'A': [256, 64],
         'E': [64, 320],
         '*': [192,288],
@@ -170,6 +170,9 @@ export class Game {
         // Nothing to do while map is generating
       } else if (AnimationManager.animationIsRunning()) {
         // this.render(null, AnimationManager.shouldComputeFOV);
+        if (AnimationManager.getShouldRender()) {
+          this.render(null, AnimationManager.shouldComputeFOV);
+        }
         AnimationManager.update(this.delta, this.uiCtx);
         handlingAnimation = true;
       } else if (menu !== null) {
