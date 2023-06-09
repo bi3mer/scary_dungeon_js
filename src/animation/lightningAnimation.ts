@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { colorLightningScroll } from "../utility/colors";
+import { colorLightningScroll, colorWhite } from "../utility/colors";
 import { Point } from "../utility/point";
 import { Sound } from "../utility/sound";
 import { Animation } from "./animation";
@@ -18,7 +18,7 @@ export class LightningAnimation extends Animation {
     target.x = (Math.round(Config.width/2) + target.x - playerPosition.x) * Config.tileWidth + Config.tileWidth/2;
     target.y = (Math.round(Config.height/2) + target.y - playerPosition.y) * Config.tileHeight + Config.tileHeight/2;
 
-    const SIZE = 8;
+    const SIZE = 2;
     this.lightningPath.push(target);
 
     let turnedLeft = false;
@@ -60,7 +60,7 @@ export class LightningAnimation extends Animation {
   animationUpdate(dt: number, ctx: CanvasRenderingContext2D): boolean {
     this.elapsed += dt;
     ctx.strokeStyle = colorLightningScroll;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(this.lightningPath[0].x, this.lightningPath[0].y);
     
@@ -70,7 +70,7 @@ export class LightningAnimation extends Animation {
     }
 
     if (this.elapsed < this.lightningAnimationTime) {
-      ctx.strokeStyle = `rgba(255, 255, 255, 1)`;
+      ctx.strokeStyle = colorWhite;
       for(let i = 1; i < this.lightningPath.length; ++i) {
         ctx.lineTo(this.lightningPath[i].x, this.lightningPath[i].y);
       }
