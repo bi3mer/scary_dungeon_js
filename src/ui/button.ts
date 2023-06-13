@@ -1,6 +1,5 @@
-import { Display } from "rot-js"
-import { drawFrame } from "./util"
 import { InputManager, Key } from "../game/inputManager"
+import { colorBlack, colorWhite } from "../utility/colors"
 
 export class Button {
   x: number      
@@ -13,6 +12,7 @@ export class Button {
   frameColor: string
   frameHighlightedColor: string
   highlighted: boolean
+  centered: boolean
   callback: () => void
 
   constructor(
@@ -25,8 +25,10 @@ export class Button {
     textHighlightedColor: string, 
     frameColor: string,
     frameHighlightedColor: string,
+    centered: boolean,
     callback: () => void
   ) {
+
     this.x = x;
     this.y = y;
     this.width = width;
@@ -38,21 +40,49 @@ export class Button {
     this.frameColor = frameColor;
     this.frameHighlightedColor = frameHighlightedColor;
     this.highlighted = false;
+    this.centered = centered;
     this.callback = callback;
   }
 
-  render(display: Display) {
-    // choose colors based on whether or not the button is highlighted
+  render(ctx: CanvasRenderingContext2D): void {
+    ctx.font = `20px monospace`
+    if (this.centered) {
+      this.renderCenter(ctx);
+    } else {
+      this.renderRegular(ctx);
+    }
+  }
+
+  private renderCenter(ctx: CanvasRenderingContext2D): void {
     const frameColor  = this.highlighted ? this.frameHighlightedColor : this.frameColor;
     const textColor = this.highlighted ? this.textHighlightedColor : this.textColor;
 
-    // draw frame
-    drawFrame(display, this.x, this.y, this.width, this.height, frameColor);
-    // drawFrame(display, this.x, this.y, this.width, this.height);
+    const measurements = ctx.measureText(this.text);
+    const fontHeight = measurements.fontBoundingBoxAscent + measurements.fontBoundingBoxDescent
+    const charLength = measurements.width/this.text.length; // only works because we are using monospace
 
-    // draw text in the center of the button
-    let center = this.width / 2;
-    display.drawText(this.x + center - this.text.length/2, this.y + 1, `%c{${textColor}}${this.text}`);
+    ctx.fillStyle = colorBlack;
+    ctx.strokeStyle = frameColor;
+    ctx.fillRect(this.x-charLength, this.y-fontHeight, this.width+3*charLength, this.height+1.5*fontHeight);
+    ctx.strokeRect(this.x-charLength, this.y-fontHeight, this.width+3*charLength, this.height+1.5*fontHeight);
+
+    ctx.fillStyle = textColor;
+    ctx.strokeStyle = colorBlack;
+    ctx.fillText(this.text, this.x, this.y);
+  }
+
+  private renderRegular(ctx: CanvasRenderingContext2D): void {
+    const frameColor  = this.highlighted ? this.frameHighlightedColor : this.frameColor;
+    const textColor = this.highlighted ? this.textHighlightedColor : this.textColor;
+
+    ctx.fillStyle = colorBlack;
+    ctx.strokeStyle = frameColor;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+    ctx.fillStyle = textColor;
+    ctx.strokeStyle = colorBlack;
+    ctx.fillText(this.text, this.x, this.y);
   }
 
   update() {

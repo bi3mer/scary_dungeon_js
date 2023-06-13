@@ -82,10 +82,9 @@ export class Menu {
     if (this.childMenu) {
       this.childMenu.render(ctx);
     } else {
-      MessageLog.addErrorMessage('menu rendering disabled', true);
-      // for (let b of this.buttons) {
-      //   b.render(display);
-      // }
+      for (let b of this.buttons) {
+        b.render(ctx);
+      }
 
       for (let t of this.text) {
         t.render(ctx);
@@ -155,6 +154,5 @@ export class Menu {
     ctx.fillStyle = colorBlack;
     ctx.fillRect(this.x, this.y, this.width, this.height);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-    ctx.fill();
   }
 }

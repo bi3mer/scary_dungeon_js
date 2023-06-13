@@ -35,15 +35,16 @@ export class Text {
     if (this.text !== undefined) {
       if (this.center) {
         // text and center
-        const width = ctx.measureText(this.text).width;
-        const x = this.x - width / 2;
-        ctx.fillText(this.text, x, this.y)
+        ctx.textAlign = 'center';
+        ctx.fillText(this.text, this.x, this.y)
       } else {
         // Just text
+        ctx.textAlign = 'left';
         ctx.fillText(this.text, this.x, this.y);
       }
     } else if (this.center) {
       // multi-line and center
+      ctx.textAlign = 'center';
       for(let i = 0; i < this.splitText!.length; ++i) {
         const measurements = ctx.measureText(this.splitText![i]);
         const yIncrement = measurements.fontBoundingBoxAscent + measurements.fontBoundingBoxDescent;
@@ -51,6 +52,7 @@ export class Text {
       }
     }  else {
       // multi-line without centering
+      ctx.textAlign = 'left';
       const measurements = ctx.measureText('A');
       const yIncrement = measurements.fontBoundingBoxAscent + measurements.fontBoundingBoxDescent;
       for(let i = 0; i < this.splitText!.length; ++i) {

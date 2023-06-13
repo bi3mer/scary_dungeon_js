@@ -18,8 +18,8 @@ export function helpMenu() : Menu {
   });
 
   m.addButton(new Button(
-    Config.screenWidth/2-4, 
-    Config.screenHeight - Config.height/4 - 4, 
+    Config.screenWidth/2, 
+    Config.screenHeight - Config.screenHeight/4-20, 
     8, 
     3, 
     "Ok", 
@@ -27,6 +27,7 @@ export function helpMenu() : Menu {
     colorWhite, 
     colorLightGray, 
     colorWhite,
+    true,
     () => { }
   ));
 
@@ -99,6 +100,7 @@ export function gameOverMenu(callback: ()=>void): Menu {
     colorWhite, 
     colorLightGray, 
     colorWhite,
+    true, 
     callback
   ));
   
@@ -148,6 +150,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
         colorWhite,
         colorDarkGray,
         colorWhite, 
+        true, 
         () => {
           // on consume returns a bool for whether or not the item should be
           // destroyed or not

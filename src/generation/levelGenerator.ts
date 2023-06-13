@@ -108,7 +108,33 @@ export abstract class LevelGenerator {
   setRoom(room: string[], startX: number, startY: number): void {
     for (let y = 0; y < room.length; ++y) {
       for (let x = 0; x < room[0].length; ++x) {
-        this.setTile(new Point(startX + x, startY + y), room[y][x]);
+        const pos = new Point(startX + x, startY + y);
+        const char = room[y][x];
+
+        if (char == 'X') {
+            this.setTile(new Point(startX + x, startY + y), char);
+          // if (x === 0 && y === 0) {
+          //   // top left
+          //   this.map.setTile(pos, tileFactory.wall);
+          // } else if (x === room[0].length-1 && y == 0) {
+          //   // top right
+          //   this.map.setTile(pos, tileFactory.wall);
+          // } else if (x == 0) {
+          //   // top middle
+          //   this.map.setTile(pos, tileFactory.wall);
+          // } else if () {
+          //   // bottom left
+          //   this.map.setTile(pos, tileFactory.wall);
+          // } else if () {
+          //   // bottom right
+          //   this.map.setTile(pos, tileFactory.wall);
+          // } else {
+          //   this.map.setTile(pos, tileFactory.wall);
+          //   // bottom middle
+          // }
+        } else {
+          this.setTile(new Point(startX + x, startY + y), char);
+        }
       }
     }
   }
