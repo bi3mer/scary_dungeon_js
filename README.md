@@ -17,7 +17,6 @@
 - Fill in room right before the player gets to it
 - Support for button and mouse input
 - Better walls based on nearby tiles
-- Render is weird in corners of empty rooms
 
 ## Known Bugs
 - If you kill an enemy when they are on top of a scroll, the rendering is bugged.

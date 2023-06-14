@@ -219,14 +219,13 @@ export class GameMap {
         const tile = this.tiles[index];
         const visibility = this.visible[index];
         
-        // @todo: doesn't work in big room corners. Torch effect ruined
-        if(visibility > 0.05) {
+        if(visibility > 0.1) {
           const p = new Point(worldX, worldY);
           if (playerPosition.equals(p)) {
             display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
           } else {
             const dist = playerPosition.unSquaredEuclideanDistance(p);
-            const color = `rgba(0,0,0,${Math.min(0.8, dist/maxDist)})`;
+            const color = `rgba(0,0,0,${Math.min(0.9, dist/maxDist)})`;
             display.draw(x+midX, y+midY, tile.char, color, color);
           }
         } else if (this.explored[index]) {

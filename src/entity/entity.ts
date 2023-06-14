@@ -50,7 +50,7 @@ export class Entity {
       display.draw(x, y, ['.', this.char], colorTransparent, colorTransparent);
     } else {
       const dist = playerPos.unSquaredEuclideanDistance(this.pos);
-      const color = `rgba(0,0,0,${Math.min(0.8, dist/maxDist)})`;
+      const color = `rgba(0,0,0,${Math.min(0.9, dist/maxDist)})`;
       display.draw(x, y, ['.', this.char], color, color);
     }
   }
