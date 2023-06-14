@@ -21,6 +21,33 @@ tileFactory.wall = new Tile(
   colorBlack
 )
 
+tileFactory.tombstone = new Tile(
+  'T',
+  false,
+  colorVisible,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
+)
+
+tileFactory.grave = new Tile(
+  't',
+  false,
+  colorVisible,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
+)
+
+tileFactory.anvil = new Tile(
+  'X',
+  false,
+  colorVisible,
+  colorBlack,
+  colorDarkGray,
+  colorBlack
+)
+
 tileFactory.downStairs = new Tile(
   '>',
   false,

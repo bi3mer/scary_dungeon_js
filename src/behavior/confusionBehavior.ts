@@ -5,6 +5,7 @@ import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
 import { colorConfusionScroll } from "../utility/colors";
 import { Point } from "../utility/point";
+import { choice } from "../utility/random";
 import { Behavior } from "./behavior";
 
 
@@ -36,17 +37,9 @@ export class ConfusionBehavior implements Behavior {
       [new BumpAction(new Point(0,-1)), false],
       [new BumpAction(new Point(1,0)), false],
       [new BumpAction(new Point(-1,0)), false],
+      [new PassAction(), false],
     ]
 
-    const r = Math.random();
-    let val = 0;
-    for (let a of actions) {
-      val += 0.2; // 1 / 5 where 5 is the number of actions, pass is the fifth
-      if (val >= r) {
-        return a;
-      }
-    }
-
-    return [new PassAction(), false];
+    return choice(actions);
   }
 } 

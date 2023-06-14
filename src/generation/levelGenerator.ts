@@ -3,6 +3,7 @@ import { spawnAltar, spawnConfusionScroll, spawnEnemy, spawnGem, spawnLightningS
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
+import { choice } from "../utility/random";
 import { LEVELS } from "./levels";
 import { Room } from "./room";
 
@@ -46,6 +47,15 @@ export abstract class LevelGenerator {
         // default is wall.
         break;
       }
+      case 'T':
+        this.map.setTile(pos, tileFactory.tombstone);
+        break;
+      case 't':
+        this.map.setTile(pos, tileFactory.grave);
+        break;
+      case 'x': 
+        this.map.setTile(pos, tileFactory.anvil);
+        break;
       case '#': {
         this.map.setTile(pos, tileFactory.floor);
         spawnEnemy(this.map, pos);
@@ -76,12 +86,14 @@ export abstract class LevelGenerator {
       case '&': {
         this.map.setTile(pos, tileFactory.floor);
         spawnLightningScroll(this.map, pos);
+        
         // const itemSpawners = [
-        //   spawnStunScroll,
-        //   spawnConfusionScroll,
-        //   spawnLightningScroll,
-        //   spawnReturnToAltarScroll
-        // ];
+        //     spawnStunScroll,
+        //     spawnConfusionScroll,
+        //     spawnLightningScroll,
+        //     spawnReturnToAltarScroll
+        //   ];
+        // choice(itemSpawners)(this.map, pos);
         // const p = 1/itemSpawners.length;
 
         // const r = Math.random();
@@ -112,7 +124,7 @@ export abstract class LevelGenerator {
         const char = room[y][x];
 
         if (char == 'X') {
-            this.setTile(new Point(startX + x, startY + y), char);
+          this.setTile(new Point(startX + x, startY + y), choice(['T','t','x']));
           // if (x === 0 && y === 0) {
           //   // top left
           //   this.map.setTile(pos, tileFactory.wall);
