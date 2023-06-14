@@ -19,7 +19,7 @@ export function helpMenu() : Menu {
 
   m.addButton(new Button(
     Config.screenWidth/2, 
-    Config.screenHeight - Config.screenHeight/4-20, 
+    Config.screenHeight - 5*Config.screenHeight/16, 
     8, 
     3, 
     "Ok", 

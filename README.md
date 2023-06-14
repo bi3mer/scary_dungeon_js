@@ -20,3 +20,4 @@
 ## Known Bugs
 - If you kill an enemy when they are on top of a scroll, the rendering is bugged.
 - UI dies on resize until there is an update
+- Input fails if the user has caps-lock on

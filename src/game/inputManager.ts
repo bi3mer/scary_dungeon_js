@@ -1,4 +1,5 @@
-import { MessageLog } from "../utility/messageLog";
+import { Config } from "../config";
+import { Point } from "../utility/point";
 
 export enum Key {
   LEFT = 0,
@@ -26,6 +27,8 @@ export enum Key {
 export class InputManager {
   private static _keys: boolean[] = []
 
+  private static mousePosition: Point = new Point(0,0);
+
   public static init(): void {
     for(let i = 0; i < Object.keys(Key).length; ++i) {
       InputManager._keys.push(false);
@@ -33,6 +36,11 @@ export class InputManager {
 
     window.addEventListener("keydown", InputManager.onKeyDown);
     window.addEventListener("keyup", InputManager.onKeyUp);
+
+    window.addEventListener('mousemove', (ev) => {
+      this.mousePosition.x = ev.clientX - Config.canvasOffsetLeft;
+      this.mousePosition.y = ev.clientY - Config.canvasOffsetTop;
+    });
   }
 
   public static isKeyDown(...keys: Key[]): boolean {
@@ -113,5 +121,9 @@ export class InputManager {
     for(let i = 0; i < InputManager._keys.length; ++i) {
       InputManager._keys[i] = false;
     }
+  }
+
+  static onMouseMove(ev: MouseEvent): void {
+
   }
 }

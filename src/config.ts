@@ -10,6 +10,8 @@ export class Config {
   // These are set based on the above by the resize UI code in Game.ts
   static screenWidth: number = 800;
   static screenHeight: number = 600;
+  static canvasOffsetLeft: number = 0;
+  static canvasOffsetTop: number = 0;
   static tileWidth: number = 10;
   static tileHeight: number = 8;
 }

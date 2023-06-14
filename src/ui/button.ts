@@ -63,12 +63,12 @@ export class Button {
 
     ctx.fillStyle = colorBlack;
     ctx.strokeStyle = frameColor;
-    ctx.fillRect(this.x-charLength, this.y-fontHeight, this.width+3*charLength, this.height+1.5*fontHeight);
-    ctx.strokeRect(this.x-charLength, this.y-fontHeight, this.width+3*charLength, this.height+1.5*fontHeight);
+    ctx.fillRect(this.x-charLength*2.5, this.y-fontHeight, this.width+4.5*charLength, this.height+1.5*fontHeight);
+    ctx.strokeRect(this.x-charLength*2.5, this.y-fontHeight, this.width+4.5*charLength, this.height+1.5*fontHeight);
 
     ctx.fillStyle = textColor;
     ctx.strokeStyle = colorBlack;
-    ctx.fillText(this.text, this.x, this.y);
+    ctx.fillText(this.text, this.x, this.y+ fontHeight*0.05);
   }
 
   private renderRegular(ctx: CanvasRenderingContext2D): void {

@@ -219,6 +219,7 @@ export class GameMap {
         const tile = this.tiles[index];
         const visibility = this.visible[index];
         
+        // @todo: doesn't work in big room corners. Torch effect ruined
         if(visibility > 0.05) {
           const p = new Point(worldX, worldY);
           if (playerPosition.equals(p)) {

@@ -9,7 +9,7 @@ import { MessageLog } from "../utility/messageLog";
 import { MainGenerator } from "../generation/mainGenerator";
 import { Config } from "../config";
 import { AnimationManager } from "../animation/animationManager";
-import { colorBlack } from "../utility/colors";
+import { colorBlack, colorTransparent } from "../utility/colors";
 
 export class Game {
   private level: number
@@ -93,6 +93,8 @@ export class Game {
     const log = document.getElementById('messages')!;
     // @ts-ignore
     const gameCanvas = document.getElementById('gameCanvas')!; 
+    Config.canvasOffsetLeft = gameCanvas.offsetLeft;
+    Config.canvasOffsetTop = gameCanvas.offsetTop;
 
     log.style.left = `${gameCanvas.offsetLeft}px`;
 
@@ -120,6 +122,7 @@ export class Game {
     this.uiCanvas.style.marginRight = style.marginRight;
     this.uiCanvas.style.marginTop = style.marginTop;
     this.uiCanvas.style.marginBottom = style.marginBottom;
+
   }
   
   render(menu: Menu | null, computeFOV: boolean): void {
