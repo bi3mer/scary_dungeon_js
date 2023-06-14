@@ -77,14 +77,14 @@ export class Game {
     this.mapGenerating = true;
     let generator = new MainGenerator(this.config.roomRows, this.config.roomRows);
 
-    generator.generate(this.level, (map, playerPos) => {
+    generator.generate(this.level, (playerPos) => {
+      generator.runWallRuleUpdates();
+      this.map = generator.map;
       if (this.level === 1) {
-        this.map = map;
         spawnPlayer(this.map, playerPos);
       } else {
-        map.player().pos = playerPos;
-        map.player().inventory = this.map.player().inventory;
-        this.map = map;
+        this.map.player().pos = playerPos;
+        this.map.player().inventory = this.map.player().inventory;
       }
       
       this.render(null, true);

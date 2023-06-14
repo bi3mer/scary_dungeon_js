@@ -120,36 +120,36 @@ export abstract class LevelGenerator {
   setRoom(room: string[], startX: number, startY: number): void {
     for (let y = 0; y < room.length; ++y) {
       for (let x = 0; x < room[0].length; ++x) {
-        const pos = new Point(startX + x, startY + y);
         const char = room[y][x];
-
-        if (char == 'X') {
-          this.setTile(new Point(startX + x, startY + y), choice(['T','t','x']));
-          // if (x === 0 && y === 0) {
-          //   // top left
-          //   this.map.setTile(pos, tileFactory.wall);
-          // } else if (x === room[0].length-1 && y == 0) {
-          //   // top right
-          //   this.map.setTile(pos, tileFactory.wall);
-          // } else if (x == 0) {
-          //   // top middle
-          //   this.map.setTile(pos, tileFactory.wall);
-          // } else if () {
-          //   // bottom left
-          //   this.map.setTile(pos, tileFactory.wall);
-          // } else if () {
-          //   // bottom right
-          //   this.map.setTile(pos, tileFactory.wall);
-          // } else {
-          //   this.map.setTile(pos, tileFactory.wall);
-          //   // bottom middle
-          // }
-        } else {
-          this.setTile(new Point(startX + x, startY + y), char);
-        }
+        this.setTile(new Point(startX + x, startY + y), char);
       }
     }
   }
+
+  runWallRuleUpdates(): void {
+    // let p = new Point(0,0);
+    // for (let y = 0; y < this.map.height(); ++y) {
+    //   p.y = y;
+    //   for (let x = 0; x < this.map.height(); ++x) {
+    //     p.x = x;
+
+    //     // Nothing to do if this is not a wall
+    //     if (this.map.isWalkable(p)) {
+    //       continue;
+    //     }
+        
+    //     // get neighbors for if it is wall or not
+    //     const [up, down, left, right] = this.map.getWallNeighbors(p);
+
+    //     if (up || down || left || right) {
+    //       // top middle 
+    //       this.setTile(p, '#');
+    //     } else {
+    //       this.setTile(p, choice(['T','t','x']));
+    //     }
+    //   }
+    // }
+  }
   
-  abstract generate(level: number, callback: (map: GameMap, playerPos: Point) => void): void;
+  abstract generate(level: number, callback: (playerPos: Point) => void): void;
 }

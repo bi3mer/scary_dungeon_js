@@ -75,6 +75,22 @@ export class GameMap {
     ));
   }
 
+  /**
+   * Get Width
+   * @returns width of the map
+   */
+  width(): number {
+    return this.cols*this.roomCols;
+  }
+
+  /**
+   * Get Height
+   * @returns height of the map
+   */
+  height(): number {
+    return this.rows*this.roomRows;
+  }
+
   reset(): void {
     this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
     this.visible = Array(this.tiles.length).fill(0);  
@@ -519,5 +535,20 @@ export class GameMap {
 
   levelComplete(): boolean {
     return this.playerWon;
+  }
+
+  /**
+   * Get if there are wall neighbors in the four cardinal directions.
+   * @param point - point to check neighbor for
+   * @returns if wall exists in up, down left, and right positions
+   */
+  getWallNeighbors(point: Point): [boolean, boolean, boolean, boolean] {
+
+    return [
+      !this.isWalkable(new Point(point.x, point.y-1)),
+      !this.isWalkable(new Point(point.x, point.y+1)),
+      !this.isWalkable(new Point(point.x-1, point.y)),
+      !this.isWalkable(new Point(point.x+1, point.y)),
+    ];
   }
 }

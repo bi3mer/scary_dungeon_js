@@ -36,7 +36,7 @@ export class MainGenerator extends LevelGenerator {
 
   private fillInLayout(
     layout: [number, number, string][], 
-    callback: (map: GameMap, playerPos: Point) => void): void
+    callback: (playerPos: Point) => void): void
   {
     let playerPos = new Point(0,0);
     let rooms: {[name: string]: Room } = {};
@@ -98,10 +98,10 @@ export class MainGenerator extends LevelGenerator {
       }
     }
       
-    callback(this.map, playerPos);
+    callback(playerPos);
   }
 
-  generate(level: number, callback: (map: GameMap, playerPos: Point) => void): void {
+  generate(level: number, callback: (playerPos: Point) => void): void {
     Progression.getLayout(level, (layout) => {
       this.fillInLayout(layout, callback);
     });
