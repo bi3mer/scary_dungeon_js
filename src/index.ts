@@ -12,6 +12,7 @@ document.body.onload = () => {
   InputManager.init();
   const tileSet = document.createElement("img");
   tileSet.src = "assets/tilemap-kenney_tiny-dungeon_32_32.png";
+  // tileSet.crossOrigin = "anonymous";
 
   ClingoSolver.init().then(() => {
     const loader = () => {

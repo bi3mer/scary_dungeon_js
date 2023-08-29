@@ -11,7 +11,10 @@
   <br/>
   <br/>
 
-  <div id="game"></div>
+  <div id="game">
+
+  </div>
+  </div>
   <br/>
   <pre id="messages"></pre>
 
@@ -26,7 +29,7 @@
       margin-right: auto;
     }
 
-    canvas {
+    #gameCanvas {
       display: block;
       margin-left: auto;
       margin-right: auto;
@@ -43,11 +46,20 @@
       padding: 0.5em 1em;
       text-align: left;
       position: relative;
-  }
+    }
+
+    #uiCanvas {
+      display: block;
+      position: absolute;
+      background:transparent;
+      /* left: 0%; */
+      /* top: 40%; */
+      /* left: 50%; */
+      /* transform: translateY(-50%) translateX(-50%); */
+    }
   </style>
 
   <script src="dist/bundle.js"></script>
-
   
   <!-- Global Site Tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>

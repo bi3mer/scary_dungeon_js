@@ -33,7 +33,8 @@ export class Game {
     this.gameDisplay = new Display({
       width: Config.width,
       height: Config.height,
-      layout: 'tile',
+      // layout: 'tile',
+      layout: "tile-gl",
       tileWidth: 32,
       tileHeight: 32,
       bg: colorBlack,

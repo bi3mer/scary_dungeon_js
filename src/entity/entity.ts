@@ -4,6 +4,7 @@ import { Display } from "rot-js";
 import { euclideanDistance } from "../utility/distance";
 import { colorBlack, colorTransparent, colorWhite } from "../utility/colors";
 import { Point } from "../utility/point";
+import { interpolate } from "rot-js/lib/color";
 
 export class Entity {
   id: number
@@ -46,12 +47,18 @@ export class Entity {
     const x = midX + this.pos.x-playerPos.x;
     const y = midY + this.pos.y-playerPos.y;
 
+    // TODO: It would be better to use visibility
     if (playerPos.equals(this.pos)) {
-      display.draw(x, y, ['.', this.char], colorTransparent, colorTransparent);
+      // 234,165,108 is the base color for tiles
+      display.draw(x, y, this.char, colorTransparent, 'rgba(234,165,108,1');
     } else {
       const dist = playerPos.unSquaredEuclideanDistance(this.pos);
-      const color = `rgba(0,0,0,${Math.min(0.9, dist/maxDist)})`;
-      display.draw(x, y, ['.', this.char], color, color);
+      const M = dist/maxDist;
+      const fg = `rgba(0,0,0,${M})`;
+      const bg = interpolate([234,165,108], [0,0,0], M); // interpolate between case color and transparent
+      const bgRGBA = `rgba(${bg[0]},${bg[1]},${bg[2]},${1-M})`;
+
+      display.draw(x, y, this.char, fg, bgRGBA);
     }
   }
 

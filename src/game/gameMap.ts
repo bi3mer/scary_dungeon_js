@@ -235,8 +235,8 @@ export class GameMap {
         const tile = this.tiles[index];
         const visibility = this.visible[index];
         
+        const p = new Point(worldX, worldY);
         if(visibility > 0.1) {
-          const p = new Point(worldX, worldY);
           if (playerPosition.equals(p)) {
             display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
           } else {
