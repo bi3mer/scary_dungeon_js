@@ -21,7 +21,7 @@ export class LightningAction extends Action {
     if (a.name === nameAltar) {
       let l = new LightningAnimation(a.pos, map.player().pos, () => {
         MessageLog.addMessage(
-          `The lightning struck the altar! But, it didn't do anything. Maybe find the gems.`,
+          `The lightning struck the altar! But, it didn't do anything. Maybe find the potions.`,
           colorLightGray,
           true);
       });

@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { spawnAltar, spawnConfusionScroll, spawnEnemy, spawnGem, spawnLightningScroll, spawnReturnToAltarScroll, spawnStunScroll } from "../entity/entityFactory";
+import { spawnAltar, spawnConfusionScroll, spawnEnemy, spawnPotion, spawnLightningScroll, spawnReturnToAltarScroll, spawnStunScroll } from "../entity/entityFactory";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
@@ -75,7 +75,7 @@ export abstract class LevelGenerator {
       }
       case '*': {
         this.map.setTile(pos, tileFactory.floor);
-        spawnGem(this.map, pos);
+        spawnPotion(this.map, pos);
         break;
       }
       case 'a': {

@@ -14,17 +14,17 @@ export class ClingoSolver {
 
   /**
    * Async function to call to clingo wasm to solve a problem to build a layout
-   * with the parameters of width, height, and the number of gems that are in 
+   * with the parameters of width, height, and the number of potions that are in 
    * the layout.
    * 
    * @param width - width of the layout
    * @param height - height of the layout
-   * @param gems - number of gems in the layout
+   * @param potions - number of potions in the layout
    * @returns a promise to return a boolean for if an error occurred and an array
    * that of sprite types and the location on the grid if there was no error
    */
-  static async get(width: number, height: number, gems: number): Promise<[boolean, [number, number, string][]]> {
-    const asp = `#const width=${width}.\n#const height=${height}.\n#const gems=${gems}.\n${LP}`;
+  static async get(width: number, height: number, potions: number): Promise<[boolean, [number, number, string][]]> {
+    const asp = `#const width=${width}.\n#const height=${height}.\n#const gems=${potions}.\n${LP}`;
     let result = await run(asp, undefined, [`--seed=${RNG.getUniformInt(0,10000)}`, '--rand-freq=1']);
     const satisfiable = result.Result == "SATISFIABLE";
 

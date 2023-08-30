@@ -61,7 +61,7 @@ export class InventoryComponent extends BaseComponent {
    * Get the number of items with a given name  are in the inventory.
    * 
    * @remarks
-   * I don't see this being used outside of the altar for checking how many gem
+   * I don't see this being used outside of the altar for checking how many potions
    * that the player has collected.
    * 
    * @param name - name of the item

@@ -40,7 +40,7 @@ export function helpMenu() : Menu {
   m.addText(new Text(
     x+20, 
     startY+60, 
-    "Your goal is to collect gems to get to the next level in\nthe prison.", 
+    "Your goal is to collect potions to get to the next level in\nthe prison.", 
     colorWhite, 
     false,
     15));

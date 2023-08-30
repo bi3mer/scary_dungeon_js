@@ -8,7 +8,7 @@ export const START_ROOM = [
   "---------",
 ];
 
-export const GEM_ROOMS = [
+export const POTION_ROOMS = [
   [
     "---------",
     "---------",

@@ -1,12 +1,12 @@
 import { Actor } from "./actor";
 import { GameMap } from "../game/gameMap";
 import { AIBehavior } from "../behavior/aiBehavior";
-import { colorBlack, colorConfusionScroll, colorDarkGray, colorEnemy, colorGem, colorLightningScroll, colorRed, colorStunScroll, colorTransparent, colorViolet,  colorWhite } from "../utility/colors";
+import { colorBlack, colorConfusionScroll, colorDarkGray, colorEnemy, colorPotion as colorPotion, colorLightningScroll, colorRed, colorStunScroll, colorTransparent, colorViolet,  colorWhite } from "../utility/colors";
 import { Item } from "./item";
 import { RenderOrder } from "../utility/renderOrder";
 import { Entity } from "./entity";
 import { EmptyBehavior } from "../behavior/emptyBehavior";
-import { nameAltar, nameConfusionScroll, nameEnemy, nameGem, nameLightningScroll, nameReturnToAltarScroll, nameStunScroll } from "./names";
+import { nameAltar, nameConfusionScroll, nameEnemy, namePotion, nameLightningScroll, nameReturnToAltarScroll, nameStunScroll } from "./names";
 import { Point } from "../utility/point";
 import { MessageLog } from "../utility/messageLog";
 import { LightningAction } from "../action/lightningAction";
@@ -68,24 +68,24 @@ export function spawnAltar(map: GameMap, pos: Point): Actor {
 }
 
 // ------------ Items ------------
-export function spawnGem(map: GameMap, pos: Point): Item {
-  let gem = new Item(
+export function spawnPotion(map: GameMap, pos: Point): Item {
+  let portion = new Item(
     pos,
-    nameGem,
+    namePotion,
     false,
     's',
-    colorGem,
+    colorPotion,
     colorTransparent,
     RenderOrder.Item,
     (map, actor) => {
-      MessageLog.addMessage(`The gem is scary.`, colorGem, true);
+      MessageLog.addMessage(`The potion is scary.`, colorPotion, true);
       return false;
     }
   );
 
-  map.addItem(gem);
+  map.addItem(portion);
 
-  return gem;
+  return portion;
 }
 
 export function spawnLightningScroll(map: GameMap, pos: Point): Item {

@@ -6,7 +6,7 @@ export const nameMauledCorpse = 'Mauled Corpse';
 export const nameLightningCorpse = 'Charred Corpse';
 
 // items
-export const nameGem = "Gem";
+export const namePotion = "Potion";
 export const nameStunScroll = 'Stun Scroll';
 export const nameConfusionScroll = 'Confusion Scroll';
 export const nameLightningScroll = "Lightning Scroll";

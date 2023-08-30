@@ -1,5 +1,5 @@
 import { Actor } from "../entity/actor";
-import { nameGem, namePlayer } from "../entity/names";
+import { namePotion, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
 import tileFactory from "../tile/tileFactory";
 import { colorGreen, colorLightGray, colorWhite } from "../utility/colors";
@@ -16,10 +16,10 @@ export class AltarAction extends Action {
   }
   
   private unlockAltar(actor: Actor, map: GameMap): boolean {
-    const requiredGemCount = map.requiredGems();
-    const playerGemCount = actor.inventory.getCount(nameGem);
+    const requiredPotionCount = map.requiredPotions();
+    const playerPotionCount = actor.inventory.getCount(namePotion);
 
-    const shouldRender = playerGemCount == requiredGemCount;
+    const shouldRender = playerPotionCount == requiredPotionCount;
     if (shouldRender) {
       Sound.playUnlockAltar();
       map.altar().char = 'A';
@@ -46,9 +46,9 @@ export class AltarAction extends Action {
       this.altar.fg = colorGreen;
       this.altar.bg = colorLightGray;
 
-      actor.inventory.destroyItemsWithName(nameGem);
+      actor.inventory.destroyItemsWithName(namePotion);
     } else {
-      const left = requiredGemCount - actor.inventory.getCount(nameGem);
+      const left = requiredPotionCount - actor.inventory.getCount(namePotion);
       let m: string;
 
       if (left === 1) {

@@ -3,7 +3,7 @@ import { GameMap } from "../game/gameMap";
 
 import tileFactory from "../tile/tileFactory";
 import { bresenham } from "./generationUtility";
-import { START_ROOM, ROOMS, GEM_ROOMS } from "./rooms";
+import { START_ROOM, ROOMS, POTION_ROOMS } from "./rooms";
 import { LevelGenerator } from "./levelGenerator";
 import { Room } from "./room";
 import { MessageLog } from "../utility/messageLog";
@@ -16,7 +16,7 @@ export class MainGenerator extends LevelGenerator {
   private getRoom(type: string): string[] | undefined {
     switch(type) {
       case 'gem': {
-        return GEM_ROOMS[RNG.getUniformInt(0, GEM_ROOMS.length-1)];
+        return POTION_ROOMS[RNG.getUniformInt(0, POTION_ROOMS.length-1)];
       }
       case 'altar': {
         return START_ROOM;

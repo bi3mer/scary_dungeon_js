@@ -9,7 +9,7 @@ import { RenderOrder } from "../utility/renderOrder";
 import { PlayerBehavior } from "../behavior/playerBehavior";
 import { colorBlack, colorDarkGray, colorTransparent, colorWhite } from "../utility/colors";
 import { Item } from "../entity/item";
-import { nameAltar, nameGem, namePlayer } from "../entity/names";
+import { nameAltar, namePotion, namePlayer } from "../entity/names";
 import { START_ROOM } from "../generation/rooms";
 import { Config } from "../config";
 import { Point } from "../utility/point";
@@ -28,7 +28,7 @@ export class GameMap {
   private visible: number[]
   private explored: boolean[]
 
-  private gemCount: number = 0
+  private potionCount: number = 0
 
   private entities: (Entity|null)[] = []
   private items: (Item|null)[] = []
@@ -96,7 +96,7 @@ export class GameMap {
     this.visible = Array(this.tiles.length).fill(0);  
     this.explored = Array(this.tiles.length).fill(false); 
 
-    this.gemCount = 0;
+    this.potionCount = 0;
 
     this.player().char = '@';
     this.player().fg = colorWhite;
@@ -146,11 +146,11 @@ export class GameMap {
   }
 
   /**
-   * Get the number of gems in the map for the altar to unlock.
+   * Get the number of potions in the map for the altar to unlock.
    * @returns number
    */
-  requiredGems(): number {
-    return this.gemCount;
+  requiredPotions(): number {
+    return this.potionCount;
   }
 
   /**
@@ -316,8 +316,8 @@ export class GameMap {
   addItem(item: Item): void {
     assert(this.locationOccupied(item.pos) === false);
 
-    if (item.name === nameGem) {
-      ++this.gemCount;
+    if (item.name === namePotion) {
+      ++this.potionCount;
     }
 
     if (this.itemIds.length > 0) {
