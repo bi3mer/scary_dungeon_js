@@ -34,7 +34,7 @@ export class PickUpItemAction extends Action {
       map.addEntity(new Entity(
         actor.pos,
         'Opened Chest',
-        false,
+        true,
         'c',
         colorTransparent,
         colorTransparent,

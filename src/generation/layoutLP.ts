@@ -1,9 +1,9 @@
 export const LP = `
 %%%%%%%%%%%%%% Problem Definition %%%%%%%%%%%%%%
-% #const width=9.
-% #const height=5.
-% #const gems=1.
-#const dist=(width+height)/2.
+%%% #const width=9.
+%%% #const height=9.
+%%% #const gems=3.
+#const dist=(width+height)/4.
 
 param("width",width).
 param("height",height).
@@ -66,20 +66,11 @@ completed :- finish(T), touch(T, 3).
 0 { sprite(T3, wall) : adj(T1,T2), adj(T2,T3) } 0 :- sprite(T1, altar).
 
 % Distance between altar and key must be reasonably large
-|X1-X2|+|Y1-Y2| > minval/2 :- sprite((X1, Y1), altar), sprite((X2, Y2), gem).
+|X1-X2|+|Y1-Y2| > dist :- sprite((X1, Y1), altar), sprite((X2, Y2), gem).
 
 % Distance between gems must be reasonably large
-|X1-X2|+|Y1-Y2| > minval/2 :- X1 != X2, sprite((X1, Y1), gem), sprite((X2, Y2), gem).
-|X1-X2|+|Y1-Y2| > minval/2 :- Y1 != Y2, sprite((X1, Y1), gem), sprite((X2, Y2), gem).
-
-% altars have four adjacent tiles (not up against edge of map)
-% :- sprite(T1, altar), not 4 { adj(T1, T2) }.
-
-% Every wall has at least two neighboring walls (no isolated rocks and spurs )
-% 2 { sprite(T2, wall) : adj(T1, T2) } :- sprite(T1, wall).
-
-% Gems have at least three surrounding walls (they are stuck in a larger wall )
-% 3 { sprite(T2, wall) : adj(T1, T2) } 3 :- sprite(T1, gem).
+|X1-X2|+|Y1-Y2| > dist :- X1 != X2, sprite((X1, Y1), gem), sprite((X2, Y2), gem).
+|X1-X2|+|Y1-Y2| > dist :- Y1 != Y2, sprite((X1, Y1), gem), sprite((X2, Y2), gem).
 
 % All non-wall tiles must be reachable
 :- tile(T1), not touch(T1, 1), not sprite(T1, wall).
@@ -87,5 +78,4 @@ completed :- finish(T), touch(T, 3).
 :- tile(T1), not touch(T1, 3), not sprite(T1, wall).
 
 #show sprite/2.
-
 `;

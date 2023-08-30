@@ -479,7 +479,7 @@ export class GameMap {
     const fov = new PreciseShadowcasting((x, y) => {
       const index = this.index(new Point(x, y));
       if (index < this.tiles.length && index >= 0) {
-        return this.tiles[index].walkable;
+        return !this.tiles[index].blockFoV;
       }
 
       return false;

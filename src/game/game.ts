@@ -146,6 +146,7 @@ export class Game {
   }
 
   start(): void {
+    alert('hi');
     // GUI set up for the browser
     document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
     this.setUISize();

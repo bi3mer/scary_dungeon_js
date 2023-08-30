@@ -6,6 +6,8 @@ import { AltarAction } from "./altarAction";
 import { AttackAction } from "./attackAction";
 import { DirectionAction } from "./directionAction"
 import { MoveAction } from "./moveAction";
+import { OpenChestAction } from "./openChestAction";
+import { PickUpItemAction } from "./pickUpItemAction";
 
 export class BumpAction extends DirectionAction {
   constructor(dPos: Point) {
@@ -16,14 +18,19 @@ export class BumpAction extends DirectionAction {
     let pos= this.destination(actor);
     const actorAtLocation = map.actorAtLocation(pos);
     
-    if (actorAtLocation != null) {
+    if (actorAtLocation !== null) {
       if (actorAtLocation.name === nameAltar) {
-      return (new AltarAction(actorAtLocation)).execute(actor, map);
+        return (new AltarAction(actorAtLocation)).execute(actor, map);
       } else {
-      return (new AttackAction(actorAtLocation).execute(actor, map));
+        return (new AttackAction(actorAtLocation).execute(actor, map));
       }
-    } else {
-      return (new MoveAction(new Point(this.dPos.x, this.dPos.y))).execute(actor, map);
     }
+    
+    const itemAtLocation = map.itemAtLocation(pos);
+    if (itemAtLocation !== null) {
+      return (new OpenChestAction(pos)).execute(actor, map);
+    }
+
+    return (new MoveAction(new Point(this.dPos.x, this.dPos.y))).execute(actor, map);
   }
 }

@@ -6,101 +6,67 @@ let tileFactory: {[name: string]: Tile} = {};
 tileFactory.floor = new Tile(
   '.',
   true,
-  colorVisible,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  false,
 )
 
 tileFactory.wall = new Tile(
   '#',
   false,
-  colorVisible,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  true,
 )
 
 tileFactory.tombstone = new Tile(
   'T',
   false,
-  colorVisible,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  true,
 )
 
 tileFactory.grave = new Tile(
   't',
   false,
-  colorVisible,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  true,
 )
 
 tileFactory.anvil = new Tile(
   'X',
   false,
-  colorVisible,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  true,
 )
 
 tileFactory.downStairs = new Tile(
   '>',
   false,
-  colorLightGray,
-  colorBlack,
-  colorDarkGray,
-  colorBlack
+  false,
 )
 
 tileFactory.forwardSlash = new Tile(
   '/',
   false,
-  colorViolet,
-  colorBlack,
-  colorIndigo,
-  colorBlack
+  true,
 )
-
 
 tileFactory.backwardSlash = new Tile(
   '\\',
   false,
-  colorViolet,
-  colorBlack,
-  colorIndigo,
-  colorBlack
+  true,
 )
 
 tileFactory.altarWall = new Tile(
   'g',
   false,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent
+  true,
 );
 
 tileFactory.altarWallSolved = new Tile(
   'G',
   false,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent
+  true,
 );
 
 tileFactory.openedChest = new Tile(
   'c',
   false,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent,
-  colorTransparent
+  false,
 );
 
 

@@ -1,24 +1,11 @@
 export class Tile {
   char: string
   walkable: boolean
-  inViewFG: string // foreground
-  inViewBG: string // background
-  outOfViewFG: string // foreground
-  outOfViewBG: string // background
+  blockFoV: boolean
 
-  constructor(
-    char: string, 
-    walkable: boolean,
-    inViewFG: string, 
-    inViewBG: string,
-    outOfViewFG: string, 
-    outOfViewBG: string,
-  ) {
+  constructor(char: string, walkable: boolean, blockFoV: boolean) {
     this.char = char;
     this.walkable = walkable;
-    this.inViewFG = inViewFG;
-    this.inViewBG = inViewBG;
-    this.outOfViewFG = outOfViewFG;
-    this.outOfViewBG = outOfViewBG;
+    this.blockFoV = blockFoV
   }
 }

@@ -5,7 +5,7 @@ export class Progression {
 
   static getLayout(level: number, callback: (layout: [number, number, string][], ) => void): void {
     if (level === 1) {
-      callback(this.tutorial());
+      callback(Progression.tutorial());
       return;
     }
 
@@ -14,21 +14,27 @@ export class Progression {
     }
     
     let w: number, h: number;
-    if (this.potions % 4 === 0) {
-      w = Math.floor(level*1.5);
-      h = w;
-    } else if (this.potions % 3 === 0) {
-      w = Math.floor(level*1.5);
-      h = level;
+    const r = Math.random();
+    if (r <= 0.45) {
+      w = level*3;
+      h = level*2;
+    } else if (r <= 0.9){
+      w = level*2;
+      h = level*3;
     } else {
-      w = level;
-      h = Math.floor(level*1.5);
+      w = level*3;
+      h = level*3;
     }
 
-    ClingoSolver.get(level*2, level*2, this.potions).then((result) => {
+    // console.log(w, h, this.potions);
+    // callback(Progression.tutorial());
+    // return;
+
+    ClingoSolver.get(w, h, this.potions).then((result) => {
       if (result[0]) {
         console.error(`Generation failed for level ${this.potions}, increase the map size.`);
-        this.getLayout(level+1, callback);
+        // this.getLayout(level+1, callback);
+        callback(this.tutorial());
       } else {
         // No error, use the layout to fill out the results.
         this.potions = -1;

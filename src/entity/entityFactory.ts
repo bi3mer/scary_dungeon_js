@@ -72,7 +72,7 @@ export function spawnPotion(map: GameMap, pos: Point): Item {
   let portion = new Item(
     pos,
     namePotion,
-    false,
+    true,
     's',
     colorPotion,
     colorTransparent,
@@ -92,7 +92,7 @@ export function spawnLightningScroll(map: GameMap, pos: Point): Item {
   let scroll = new Item(
     pos,
     nameLightningScroll,
-    false,
+    true,
     's',
     colorLightningScroll,
     colorTransparent,
@@ -111,7 +111,7 @@ export function spawnReturnToAltarScroll(map: GameMap, pos: Point): Item {
   let scroll = new Item(
     pos,
     nameReturnToAltarScroll,
-    false,
+    true,
     's',
     colorViolet,
     colorBlack,
@@ -129,7 +129,7 @@ export function spawnStunScroll(map: GameMap, pos: Point): Item {
   let scroll = new Item(
     pos,
     nameStunScroll,
-    false,
+    true,
     's',
     colorStunScroll,
     colorTransparent,
@@ -146,7 +146,7 @@ export function spawnConfusionScroll(map: GameMap, pos: Point): Item {
   let scroll = new Item(
     pos,
     nameConfusionScroll,
-    false,
+    true,
     's',
     colorConfusionScroll,
     colorTransparent,
