@@ -149,15 +149,19 @@ export class Game {
     // GUI set up for the browser
     document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
     this.setUISize();
-    addEventListener('resize', this.setUISize);
-
+    
     let oldTimeStamp : number;
     let fps : number;
     let handlingAnimation = true;
-
+    
     // we start at the main menu
     let menu: Menu | null = mainMenu(() => {
       this.generateMap();
+    });
+    
+    addEventListener('resize', () => {
+      this.setUISize();
+      this.render(menu, false);
     });
 
     // the loop is a callback handled by window.requestAnimationFrame
