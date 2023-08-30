@@ -352,7 +352,7 @@ export class GameMap {
       if (entity === null) {
         continue;
       }
-      if (entity.pos.x === pos.x && entity.pos.y === pos.y) {
+      if (entity.pos.equals(pos)) {
         return entity;
       }
     }
@@ -366,7 +366,7 @@ export class GameMap {
         continue;
       }
 
-      if (actor.pos.x === pos.x && actor.pos.y === pos.y) {
+      if (actor.pos.equals(pos)) {
         return actor;
       }
     }
@@ -380,7 +380,7 @@ export class GameMap {
         continue;
       }
 
-      if (item.pos.x === pos.x && item.pos.y === pos.y) {
+      if (item.pos.equals(pos)) {
         return item;
       }
     }
@@ -389,9 +389,9 @@ export class GameMap {
   }
 
   locationOccupied(pos: Point): boolean {
-    return this.entityAtLocation(pos) != null || 
-           this.actorAtLocation(pos) != null ||
-           this.itemAtLocation(pos) != null;
+    return this.entityAtLocation(pos) !== null || 
+           this.actorAtLocation(pos) !== null ||
+           this.itemAtLocation(pos) !== null;
   }
 
   /**

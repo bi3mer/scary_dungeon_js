@@ -1,7 +1,10 @@
 import { Actor } from "../entity/actor";
+import { Entity } from "../entity/entity";
 import { GameMap } from "../game/gameMap";
-import { colorLightGray } from "../utility/colors";
+import tileFactory from "../tile/tileFactory";
+import { colorLightGray, colorTransparent } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
+import { RenderOrder } from "../utility/renderOrder";
 import { Action } from "./action";
 
 export class PickUpItemAction extends Action {
@@ -28,6 +31,16 @@ export class PickUpItemAction extends Action {
       }
     } else if (actor.inventory.addItem(item)) {
       map.removeItem(item);
+      map.addEntity(new Entity(
+        actor.pos,
+        'Opened Chest',
+        false,
+        'c',
+        colorTransparent,
+        colorTransparent,
+        RenderOrder.Corpse
+      ));
+      // map.setTile(actor.pos, tileFactory.openedChest);
       MessageLog.addMessage(`Picked up ${item.name}.`, colorLightGray, true);
       return true;
     }

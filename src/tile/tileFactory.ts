@@ -94,5 +94,14 @@ tileFactory.altarWallSolved = new Tile(
   colorTransparent
 );
 
+tileFactory.openedChest = new Tile(
+  'c',
+  false,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent,
+  colorTransparent
+);
+
 
 export default tileFactory;

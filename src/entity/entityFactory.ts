@@ -73,7 +73,7 @@ export function spawnGem(map: GameMap, pos: Point): Item {
     pos,
     nameGem,
     false,
-    '*',
+    's',
     colorGem,
     colorTransparent,
     RenderOrder.Item,

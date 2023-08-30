@@ -29,7 +29,6 @@ export class AltarAction extends Action {
 
       map.setTile(pos, tileFactory.altarWallSolved);
 
-
       MessageLog.addMessage(
         'The fountain filled up!',
         colorGreen,
