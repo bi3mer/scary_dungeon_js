@@ -116,7 +116,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
   if (size === 0) {
     const x = Config.screenWidth/4+Config.screenWidth/8;
     const y = Config.screenHeight/4+Config.screenHeight/8;
-    console.log(x,y)
+
     m = new Menu(x, y, Config.screenWidth/4, Config.screenHeight/4, "", true, true, true, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();

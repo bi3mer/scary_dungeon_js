@@ -43,7 +43,7 @@ export class Game {
       tileMap: {
         '@': [0, 256],
         's': [160, 224],  // Goes to a chest that can be opened... idk
-        'c': [192,224],   // opened chest
+        'c': [224,224],   // opened chest
         '#': [128, 96],
         '.': [0, 128],
         'g': [224, 32],
