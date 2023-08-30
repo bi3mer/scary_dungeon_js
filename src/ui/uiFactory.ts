@@ -1,3 +1,4 @@
+import { config } from "process";
 import { Config } from "../config";
 import { Actor } from "../entity/actor";
 import { GameMap } from "../game/gameMap";
@@ -81,9 +82,9 @@ export function mainMenu(callback: ()=>void) : Menu {
 }
 
 export function gameOverMenu(callback: ()=>void): Menu {
-  const x = Config.width/4;
-  const y = 5;
-  let m = new Menu(x, y, Config.width/2, Config.height/5, "GAME OVER", true, true, false, () => {
+  const x = Config.screenWidth*0.4;
+  const y = Config.screenHeight/4;
+  let m = new Menu(x, y, Config.screenWidth*0.2, Config.screenHeight/8, "GAME OVER", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       InputManager.clear();
       callback();
@@ -91,8 +92,8 @@ export function gameOverMenu(callback: ()=>void): Menu {
   });
 
   m.addButton(new Button(
-    Config.width/2-4, 
-    y + Config.height/5 - 4, 
+    x + Config.screenWidth*0.1, 
+    y + Config.screenHeight/8 - 4, 
     8, 
     3, 
     "Ok", 
@@ -104,9 +105,6 @@ export function gameOverMenu(callback: ()=>void): Menu {
     callback
   ));
   
-  const text = 'You failed.'
-  m.addText(new Text(Config.width/2 - text.length/2, y + 2, text, colorWhite, true));
-
   return m;
 }
 
