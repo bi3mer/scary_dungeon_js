@@ -25,8 +25,7 @@ export class ClingoSolver {
    */
   static async get(width: number, height: number, potions: number): Promise<[boolean, [number, number, string][]]> {
     const asp = `#const width=${width}.\n#const height=${height}.\n#const gems=${potions}.\n${LP}`;
-    console.log(asp);
-    let result = await run(asp, undefined, [`--seed=${RNG.getUniformInt(0,10000)}`, '--ran`d-freq=1']);
+    let result = await run(asp, undefined, [`--seed=${RNG.getUniformInt(0,10000)}`, '--rand-freq=1']);
     const satisfiable = result.Result == "SATISFIABLE";
 
     if (satisfiable) {

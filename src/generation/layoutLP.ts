@@ -59,7 +59,6 @@ touch(T,1) :- start(T).
 completed :- finish(T), touch(T, 3).
 :- not completed.
 
-
 %%%%%%%%%%%%%% Style %%%%%%%%%%%%%%
 % Altars have no surrounding walls for two steps
 0 { sprite(T2, wall) : adj(T1,T2) } 0 :- sprite(T1, altar).
