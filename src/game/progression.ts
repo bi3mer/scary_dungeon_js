@@ -29,8 +29,7 @@ export class Progression {
     ClingoSolver.get(w, h, this.potions).then((result) => {
       if (result[0]) {
         console.error(`Generation failed for level ${this.potions}, increase the map size.`);
-        // this.getLayout(level+1, callback);
-        callback(this.tutorial());
+        this.getLayout(level+1, callback);
       } else {
         // No error, use the layout to fill out the results.
         this.potions = -1;

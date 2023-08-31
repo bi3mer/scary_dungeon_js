@@ -4,6 +4,7 @@ import tileFactory from "../tile/tileFactory";
 import { colorLightGray } from "../utility/colors";
 import { MessageLog } from "../utility/messageLog";
 import { Point } from "../utility/point";
+import { Sound } from "../utility/sound";
 import { Action } from "./action";
 
 export class OpenChestAction extends Action {
@@ -29,6 +30,8 @@ export class OpenChestAction extends Action {
     if (item === null) {
       console.error('OpenChestAction called on invalid chest.')
     } else if (actor.inventory.addItem(item)) {
+      Sound.playChestOpen();
+      
       map.removeItem(item);
       map.setTile(this.chestPos, tileFactory.openedChest);
 

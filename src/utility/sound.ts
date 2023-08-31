@@ -9,6 +9,8 @@ export class Sound {
     this.sounds.push(new Audio("assets/enemyKillEnemySound.wav"));
     this.sounds.push(new Audio("assets/stun_sound.wav"));
     this.sounds.push(new Audio("assets/confusion_sound.wav"));
+    this.sounds.push(new Audio("assets/chest_open_1.wav"));
+    this.sounds.push(new Audio("assets/chest_open_2.wav"));
   }
 
   static isLoaded(): boolean {
@@ -54,5 +56,15 @@ export class Sound {
   static playConfusion(): void {
     this.sounds[6].currentTime = 0.05;
     this.sounds[6].play();
+  }
+
+  static playChestOpen(): void {
+    if (Math.random() <= 0.5) {
+      this.sounds[7].currentTime = 0.0;
+      this.sounds[7].play();
+    } else {
+      this.sounds[8].currentTime = 0.0;
+      this.sounds[8].play();
+    }
   }
 }
