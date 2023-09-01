@@ -1,5 +1,5 @@
 import { Actor } from "../entity/actor";
-import { nameAltar } from "../entity/names";
+import { nameAltar, namePlayer } from "../entity/names";
 import { GameMap } from "../game/gameMap";
 import { Point } from "../utility/point";
 import { AltarAction } from "./altarAction";
@@ -7,7 +7,7 @@ import { AttackAction } from "./attackAction";
 import { DirectionAction } from "./directionAction"
 import { MoveAction } from "./moveAction";
 import { OpenChestAction } from "./openChestAction";
-import { PickUpItemAction } from "./pickUpItemAction";
+import { PassAction } from "./passAction";
 
 export class BumpAction extends DirectionAction {
   constructor(dPos: Point) {
@@ -26,9 +26,14 @@ export class BumpAction extends DirectionAction {
       }
     }
     
+    
     const itemAtLocation = map.itemAtLocation(pos);
     if (itemAtLocation !== null) {
-      return (new OpenChestAction(pos)).execute(actor, map);
+      if (actor.name === namePlayer) {
+        return (new OpenChestAction(pos)).execute(actor, map);
+      } else if (itemAtLocation.blocksMovement) {
+        return (new PassAction()).execute(actor, map); // Only players can open chests
+      }
     }
 
     return (new MoveAction(new Point(this.dPos.x, this.dPos.y))).execute(actor, map);
