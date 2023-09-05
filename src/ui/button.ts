@@ -1,19 +1,20 @@
 import { InputManager, Key } from "../game/inputManager"
-import { colorBlack, colorWhite } from "../utility/colors"
+import { colorBlack } from "../utility/colors"
 
 export class Button {
-  x: number      
-  y: number      
-  width: number  
-  height: number 
-  text: string
-  textColor: string
-  textHighlightedColor: string
-  frameColor: string
-  frameHighlightedColor: string
-  highlighted: boolean
-  centered: boolean
-  callback: () => void
+  public highlighted: boolean
+
+  private x: number      
+  private y: number      
+  private width: number  
+  private height: number 
+  private text: string
+  private textColor: string
+  private textHighlightedColor: string
+  private frameColor: string
+  private frameHighlightedColor: string
+  private renderFunction: (ctx: CanvasRenderingContext2D) => void
+  private callback: () => void
 
   constructor(
     x: number, 
@@ -40,17 +41,18 @@ export class Button {
     this.frameColor = frameColor;
     this.frameHighlightedColor = frameHighlightedColor;
     this.highlighted = false;
-    this.centered = centered;
     this.callback = callback;
+
+    if (centered) {
+      this.renderFunction = this.renderCenter;
+    } else {
+      this.renderFunction = this.renderRegular;
+    }
   }
 
   render(ctx: CanvasRenderingContext2D): void {
     ctx.font = `20px monospace`
-    if (this.centered) {
-      this.renderCenter(ctx);
-    } else {
-      this.renderRegular(ctx);
-    }
+    this.renderFunction(ctx);
   }
 
   private renderCenter(ctx: CanvasRenderingContext2D): void {

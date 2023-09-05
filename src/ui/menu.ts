@@ -1,10 +1,7 @@
-import { Display } from "rot-js"
 import { Button } from "./button"
-import { drawFrameWithTitle } from "./util"
 import { InputManager, Key } from "../game/inputManager"
 import { Text } from "./text"
-import { colorBlack, colorConfusionScroll, colorIndigo, colorRed, colorViolet, colorWhite, colorYellow } from "../utility/colors"
-import { MessageLog } from "../utility/messageLog"
+import { colorBlack, colorWhite } from "../utility/colors"
 import { Config } from "../config"
 
 export class Menu {

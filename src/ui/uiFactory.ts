@@ -126,23 +126,29 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
 
     m.addText(new Text(x+Config.screenWidth/8, y+Config.screenHeight/8, 'Inventory empty.', colorWhite, true, 25));
   } else {
-    const x = Config.width/4;
-    const y = 5;
+    const x = Config.screenWidth*0.1;
+    const y = Config.screenHeight*0.05;
+    const w = Config.screenWidth*0.3
+    const itemWidth = Config.screenWidth*0.20
+    const itemHeight = Config.screenHeight*0.015;
+    const paddingW = Config.screenWidth*0.05;
+    const paddingH = Config.screenHeight*0.01;
+    const h = Config.screenHeight * 0.12 + paddingH + (itemHeight + paddingH*2) * inventory.items.length;
     
-    m = new Menu(x, y, Config.width/2, 3+size*3, "Inventory", true, true, false, () => {
+    m = new Menu(x, y, w, h, "Inventory", true, true, false, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
       }
     });
     
-    let curY = 2;
+    let curY = y + Config.screenHeight * 0.12;
     for (let item of inventory.items) {
       m.addButton(new Button(
-        x+4,
-        y+curY,
-        Config.width/2 - 8,
-        3,
+        x + paddingW,
+        curY,
+        itemWidth,
+        itemHeight,
         item.name,
         colorDarkGray,
         colorWhite,
@@ -150,8 +156,6 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
         colorWhite, 
         true, 
         () => {
-          // on consume returns a bool for whether or not the item should be
-          // destroyed or not
           if (item.onConsume(map, map.player())) {
             inventory.destroyItemWithID(item.id);
           }
@@ -161,7 +165,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
         }
       ));
 
-      curY += 3;
+      curY += itemHeight + paddingH;
     }
   }
 

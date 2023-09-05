@@ -7,6 +7,10 @@ import { Actor } from "./actor";
 
 export class Item extends Entity {
   id: number
+
+  /**
+   * Return true if item should be destroyed.
+   */
   onConsume: (map: GameMap, actor: Actor) => boolean
   
   constructor(
