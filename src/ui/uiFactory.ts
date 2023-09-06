@@ -21,8 +21,8 @@ export function helpMenu() : Menu {
   m.addButton(new Button(
     Config.screenWidth/2, 
     Config.screenHeight - 5*Config.screenHeight/16, 
-    8, 
-    3, 
+    Config.screenWidth * 0.03, 
+    Config.screenHeight * 0.05, 
     "Ok", 
     colorLightGray, 
     colorWhite, 
@@ -84,18 +84,21 @@ export function mainMenu(callback: ()=>void) : Menu {
 export function gameOverMenu(callback: ()=>void): Menu {
   const x = Config.screenWidth*0.4;
   const y = Config.screenHeight/4;
-  let m = new Menu(x, y, Config.screenWidth*0.2, Config.screenHeight/8, "GAME OVER", true, true, false, () => {
+  const w = Config.screenWidth*0.2;
+  const h = Config.screenHeight/8;
+  let m = new Menu(x, y, w, h, "GAME OVER", true, true, false, () => {
     if (InputManager.isKeyDown(Key.H, Key.ENTER, Key.ESCAPE)) {
       InputManager.clear();
       callback();
     }
   });
 
+
   m.addButton(new Button(
-    x + Config.screenWidth*0.1, 
-    y + Config.screenHeight/8 - 4, 
-    8, 
-    3, 
+    x + w/2.5, 
+    y + h/2, 
+    Config.screenWidth * 0.03,  
+    Config.screenHeight * 0.05, 
     "Ok", 
     colorLightGray, 
     colorWhite, 
@@ -113,27 +116,24 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
   const size = inventory.items.length;
   let m: Menu;
 
-  if (size === 0) {
-    const x = Config.screenWidth/4+Config.screenWidth/8;
-    const y = Config.screenHeight/4+Config.screenHeight/8;
+  const x = Config.screenWidth*0.1;
+  const y = Config.screenHeight*0.02;
+  const w = Config.screenWidth*0.3
 
-    m = new Menu(x, y, Config.screenWidth/4, Config.screenHeight/4, "", true, true, true, () => {
+  if (size === 0) {
+    m = new Menu(x, y, w, Config.screenHeight*0.07, "Inventory Empty", true, true, true, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
         InputManager.clear();
         m.shouldExit = true;
       }
     });
 
-    m.addText(new Text(x+Config.screenWidth/8, y+Config.screenHeight/8, 'Inventory empty.', colorWhite, true, 25));
   } else {
-    const x = Config.screenWidth*0.1;
-    const y = Config.screenHeight*0.05;
-    const w = Config.screenWidth*0.3
-    const itemWidth = Config.screenWidth*0.20
-    const itemHeight = Config.screenHeight*0.015;
-    const paddingW = Config.screenWidth*0.05;
-    const paddingH = Config.screenHeight*0.01;
-    const h = Config.screenHeight * 0.12 + paddingH + (itemHeight + paddingH*2) * inventory.items.length;
+    const itemWidth = Config.screenWidth*0.26
+    const itemHeight = Config.screenHeight*0.07;
+    const paddingW = Config.screenWidth*0.02;
+    const paddingH = Config.screenHeight*0.02;
+    const h = Config.screenHeight * 0.08 + paddingH + (itemHeight + paddingH) * inventory.items.length;
     
     m = new Menu(x, y, w, h, "Inventory", true, true, false, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
@@ -142,7 +142,7 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
       }
     });
     
-    let curY = y + Config.screenHeight * 0.12;
+    let curY = y + Config.screenHeight * 0.08;
     for (let item of inventory.items) {
       m.addButton(new Button(
         x + paddingW,

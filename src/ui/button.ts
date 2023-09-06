@@ -61,16 +61,20 @@ export class Button {
 
     const measurements = ctx.measureText(this.text);
     const fontHeight = measurements.fontBoundingBoxAscent + measurements.fontBoundingBoxDescent
-    const charLength = measurements.width/this.text.length; // only works because we are using monospace
+    // const charLength = measurements.width/this.text.length; // only works because we are using monospace
 
     ctx.fillStyle = colorBlack;
     ctx.strokeStyle = frameColor;
-    ctx.fillRect(this.x-charLength*2.5, this.y-fontHeight, this.width+4.5*charLength, this.height+1.5*fontHeight);
-    ctx.strokeRect(this.x-charLength*2.5, this.y-fontHeight, this.width+4.5*charLength, this.height+1.5*fontHeight);
+
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+    const textX = (this.x + this.x + this.width ) /2;
+    const textY = this.y + this.height/2 + fontHeight/4; // /4 looked right
 
     ctx.fillStyle = textColor;
     ctx.strokeStyle = colorBlack;
-    ctx.fillText(this.text, this.x, this.y+ fontHeight*0.05);
+    ctx.fillText(this.text, textX, textY);
   }
 
   private renderRegular(ctx: CanvasRenderingContext2D): void {
