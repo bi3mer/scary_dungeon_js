@@ -1,5 +1,5 @@
 #!/bin/bash
-npm run prod
+bun run prod
 git add *
 git commit
 git push

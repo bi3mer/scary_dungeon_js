@@ -1,5 +1,21 @@
 # scary_dungeon_js
 
+## Developing
+
+You need two process to develop locally. The first process needs to serve files. 
+
+```bash
+python3 -m http.server
+```
+
+The second process needs to transpile typescript to javascript and bundle the results.
+
+```bash
+bun run watch
+```
+
+I'm a bit lazy and just use two terminals. Lastly, I recommend using `./push.sh` for commits because it forces `bun run prod` before making a push.
+
 ## General todo:
 - A door is in the level
     - Update clingo
