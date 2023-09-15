@@ -32,7 +32,7 @@ export class LightningAction extends Action {
     if (map.positionVisible(a.pos)){
       map.removeActor(a);
       spawnCorpse(map, a.pos, nameLightningCorpse);
-      AnimationManager.shouldRender();
+      AnimationManager.requestRender();
 
       let l = new LightningAnimation(a.pos, map.player().pos, () => {
         MessageLog.addMessage(`${a.name} was slain by lightning!`, colorLightningScroll, false);

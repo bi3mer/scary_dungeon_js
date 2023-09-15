@@ -62,11 +62,6 @@ export class Game {
     this.map = new GameMap(Config.width, Config.height);
     this.gameDisplay.getContainer()!.setAttribute('id', 'gameCanvas');
 
-    // // @ts-ignoreimage
-    // this.gameDisplay.getContainer()!.getContext('2d')!.SmoothingEnabled = false;
-    // // @ts-ignoreimage
-    // this.gameDisplay.getContainer()!.getContext('2d')!.scale(2,2);
-
     document.getElementById('game')!.appendChild(this.uiCanvas);
     document.getElementById('game')!.appendChild(this.gameDisplay.getContainer()!);
 
@@ -82,7 +77,6 @@ export class Game {
     generator.generate(this.level, (playerPos) => {
       generator.runWallRuleUpdates();
       if (this.level === 1) {
-        console.log(1);
         this.map = generator.map;
         spawnPlayer(this.map, playerPos);
       } else {
@@ -178,15 +172,18 @@ export class Game {
         // game loop, so it may end up being time to refactor it pretty soon.
         handlingAnimation = false;
         this.uiCtx.clearRect(0, 0, Config.screenWidth, Config.screenHeight); 
+        if (AnimationManager.getShouldRender()) {
+          this.render(menu, true);
+        }
       }
 
       if (this.mapGenerating) {
         // Nothing to do while map is generating
       } else if (AnimationManager.animationIsRunning()) {
-        // this.render(null, AnimationManager.shouldComputeFOV);
         if (AnimationManager.getShouldRender()) {
           this.render(null, AnimationManager.shouldComputeFOV);
         }
+
         AnimationManager.update(this.delta, this.uiCtx);
         handlingAnimation = true;
       } else if (menu !== null) {

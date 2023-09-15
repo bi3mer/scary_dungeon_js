@@ -85,28 +85,14 @@ export abstract class LevelGenerator {
       }
       case '&': {
         this.map.setTile(pos, tileFactory.floor);
-        spawnLightningScroll(this.map, pos);
-        
-        // const itemSpawners = [
-        //     spawnStunScroll,
-        //     spawnConfusionScroll,
-        //     spawnLightningScroll,
-        //     spawnReturnToAltarScroll
-        //   ];
-        // choice(itemSpawners)(this.map, pos);
-        // const p = 1/itemSpawners.length;
 
-        // const r = Math.random();
-        // let probability = 0;
-
-        // for (let spawn of itemSpawners) {
-        //   probability += p;
-        //   if (probability >= r) {
-        //     spawn(this.map, pos);
-        //     break;
-        //   }
-        // }
-
+        // randomly choose a spawn function and call it
+        choice([
+          spawnStunScroll,
+          spawnConfusionScroll,
+          spawnLightningScroll,
+          spawnReturnToAltarScroll
+        ])(this.map, pos); 
         break;
       }
       default: {
