@@ -8,6 +8,7 @@ import { Sound } from "../utility/sound";
 import { Button } from "./button";
 import { Menu } from "./menu";
 import { Text } from "./text";
+import { Item } from "../entity/item";
 
 export function helpMenu() : Menu {
   const x = Config.screenWidth/4;
@@ -129,11 +130,23 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
     });
 
   } else {
+    // get items
+    let items: {[name: string]: [Item, number]} = {}; // [Item, count]
+
+    for (let item of inventory.items) {
+      if (item.name in items) {
+        ++items[item.name][1];
+      } else {
+        items[item.name] = [item, 1];
+      }
+    }
+
+    // display
     const itemWidth = Config.screenWidth*0.26
     const itemHeight = Config.screenHeight*0.07;
     const paddingW = Config.screenWidth*0.02;
     const paddingH = Config.screenHeight*0.02;
-    const h = Config.screenHeight * 0.08 + paddingH + (itemHeight + paddingH) * inventory.items.length;
+    const h = Config.screenHeight * 0.08 + paddingH + (itemHeight + paddingH) * Object.keys(items).length;
     
     m = new Menu(x, y, w, h, "Inventory", true, true, false, () => {
       if (InputManager.isKeyDown(Key.Q, Key.ESCAPE)) {
@@ -143,23 +156,31 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
     });
     
     let curY = y + Config.screenHeight * 0.08;
-    for (let item of inventory.items) {
+
+    for (let key in items) {
+      // use items dictionary to stack inventory to save UI space
+      let name: string;
+      if (items[key][1] === 1) {
+        name = key;
+      } else {
+        name = `${key} x${items[key][1]}`
+      }
+
       m.addButton(new Button(
         x + paddingW,
         curY,
         itemWidth,
         itemHeight,
-        item.name,
+        name,
         colorDarkGray,
         colorWhite,
         colorDarkGray,
         colorWhite, 
         true, 
         () => {
-          if (item.onConsume(map, map.player())) {
-            inventory.destroyItemWithID(item.id);
+          if (items[key][0].onConsume(map, map.player())) {
+            inventory.destroyItemWithID(items[key][0].id);
           }
-
           // close the inventory after use
           m.shouldExit = true;
         }
