@@ -31,8 +31,18 @@
 
     #gameCanvas {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      /* margin-left: auto;
+      margin-right: auto; */
+      left: 0;
+    }
+
+    #uiCanvas {
+      position: absolute;
+      background:transparent;
+      /* left: 0%; */
+      /* top: 40%; */
+      /* left: 50%; */
+      /* transform: translateY(-50%) translateX(-50%); */
     }
 
     #messages {
@@ -48,15 +58,7 @@
       position: relative;
     }
 
-    #uiCanvas {
-      display: block;
-      position: absolute;
-      background:transparent;
-      /* left: 0%; */
-      /* top: 40%; */
-      /* left: 50%; */
-      /* transform: translateY(-50%) translateX(-50%); */
-    }
+    
   </style>
 
   <script src="dist/bundle.js"></script>
