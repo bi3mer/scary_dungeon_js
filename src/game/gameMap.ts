@@ -252,36 +252,33 @@ export class GameMap {
 
     // render entities
     // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
-    for (let e of this.entities) {
-      if (e === null) {
-        continue;
-      }
-
-      if (this.positionVisible(e.pos)) {
+    let e: Entity | null;
+    let i: number;
+    const entitiesLength = this.entities.length;
+    for (i = 0; i < entitiesLength; ++i) {
+      e = this.entities[i];
+      if (e !== null && this.positionVisible(e.pos)) {
         e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
       }
     }
 
     // render items
-    for (let e of this.items) {
-      if (e === null) {
-        continue;
-      }
-
-      if (this.positionVisible(e.pos)) {
-        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
+    let item: Item | null;
+    const itemsLength = this.items.length;
+    for (i = 0; i < itemsLength; ++i) {
+      item = this.items[i];
+      if (item !== null && this.positionVisible(item.pos)) {
+        item.render(display, playerPosition, midX, midY, this.visible[this.index(item.pos)], maxDist);
       }
     }
 
     // render actors
-    // this.entities.sort((a, b) => {return a.renderOrder.valueOf() - b.renderOrder.valueOf()});
-    for (let a of this.actors) {
-      if ( a === null) {
-        continue;
-      }
-
-      if (this.positionVisible(a.pos)) {
-        a.render(display, playerPosition, midX, midY, this.visible[this.index(a.pos)], maxDist);
+    let actor: Actor | null;
+    const actorsLength = this.actors.length;
+    for (i = 0; i < actorsLength; ++i) {
+      actor = this.actors[i];
+      if (actor !== null && this.positionVisible(actor.pos)) {
+        actor.render(display, playerPosition, midX, midY, this.visible[this.index(actor.pos)], maxDist);
       }
     }
   }
