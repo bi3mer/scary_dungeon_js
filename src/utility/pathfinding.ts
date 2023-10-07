@@ -8,6 +8,8 @@ const MOVES = [
   new Point(-1,0),
 ];
 
+const MOVES_LENGTH = MOVES.length;
+
 class Seen {
   private values: Point[] = []
 
@@ -16,8 +18,9 @@ class Seen {
   }
 
   has(p: Point): boolean {
-    for(let v of this.values) {
-      if (v.equals(p)) {
+    const size = this.values.length;
+    for(let i = 0; i < size; ++i) {
+      if (this.values[i].equals(p)) {
         return true;
       }
     }
@@ -38,7 +41,9 @@ export function bfs(start: Point, target: Point, map: GameMap): Point[] {
       seen.add(point);
     }
 
-    for (let m of MOVES) {
+    let m: Point;
+    for(let i = 0; i < MOVES_LENGTH; ++i) {
+      m = MOVES[i];
       let newPos = point.add(m);
       if (newPos.equals(target)) {
         moves.push(m);

@@ -1,5 +1,6 @@
 export class Sound {
   private static sounds: HTMLAudioElement[] = []
+  private static numSounds = 0;
 
   static init(): void {
     this.sounds.push(new Audio("assets/thunder.wav"));
@@ -11,11 +12,13 @@ export class Sound {
     this.sounds.push(new Audio("assets/confusion_sound.wav"));
     this.sounds.push(new Audio("assets/chest_open_1.wav"));
     this.sounds.push(new Audio("assets/chest_open_2.wav"));
+
+    this.numSounds = this.sounds.length;
   }
 
   static isLoaded(): boolean {
-    for(let sound of this.sounds) {
-      if (!sound.readyState) {
+    for (let i = 0; i < this.numSounds; ++i) {
+      if (!this.sounds[i].readyState) {
         return false;
       }
     }

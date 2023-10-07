@@ -345,12 +345,13 @@ export class GameMap {
 
   // ---------- Location
   entityAtLocation(pos: Point): Entity | null {
-    for(var entity of this.entities) {
-      if (entity === null) {
-        continue;
-      }
-      if (entity.pos.equals(pos)) {
-        return entity;
+    const size = this.entities.length;
+    let e: Entity | null;
+
+    for(let i = 0; i < size; ++i) {
+      e = this.entities[i];
+      if (e !== null && e.pos.equals(pos)) {
+        return e;
       }
     }
 
@@ -358,13 +359,13 @@ export class GameMap {
   }
 
   actorAtLocation(pos: Point): Actor | null {
-    for(var actor of this.actors) {
-      if (actor === null) {
-        continue;
-      }
+    const size = this.actors.length;
+    let a: Actor | null;
 
-      if (actor.pos.equals(pos)) {
-        return actor;
+    for (let i = 0; i < size; ++i) {
+      a = this.actors[i];
+      if (a !== null && a.pos.equals(pos)) {
+        return a;
       }
     }
 
@@ -372,12 +373,12 @@ export class GameMap {
   }
 
   itemAtLocation(pos: Point): Item | null {
-    for (var item of this.items) {
-      if (item === null) {
-        continue;
-      }
+    const size = this.items.length;
+    let item: Item | null;
 
-      if (item.pos.equals(pos)) {
+    for (let i = 0; i < size; ++i) {
+      item = this.items[i];
+      if (item !== null && item.pos.equals(pos)) {
         return item;
       }
     }
@@ -401,21 +402,20 @@ export class GameMap {
    * @returns the closest actor or null if none was found
    */
   nearestActor(pos: Point): Actor | null {
-    let closestActor = null;
+    let closestActor: Actor | null = null;
     let closestDistance = 1000000;
-    for (let a of this.actors) {
-      if (a === null) {
-        continue;
-      }
+    let a: Actor | null
+    let dist: number;
+    const size = this.actors.length;
 
-      if (a.pos.equals(pos)) {
-        continue;
-      }
-
-      let dist = pos.euclideanDistance(a.pos);
-      if (dist < closestDistance) {
-        closestActor = a;
-        closestDistance = dist;
+    for(let i = 0; i < size; ++i) {
+      a = this.actors[i];
+      if (a !== null && !a.pos.equals(pos)) {
+        dist = pos.euclideanDistance(a.pos);
+        if (dist < closestDistance) {
+          closestDistance = dist;
+          closestActor = a;
+        }
       }
     }
 
@@ -432,25 +432,20 @@ export class GameMap {
    * @returns the closest actor or null if none was found
    */
   nearestActorInVision(pos: Point): Actor | null {
-    let closestActor = null;
+    let closestActor: Actor | null = null;
     let closestDistance = 1000000;
-    for (let a of this.actors) {
-      if (a === null) {
-        continue;
-      }
+    let dist: number;
+    let a: Actor | null;
+    let size = this.actors.length;
 
-      if (a.pos.equals(pos)) {
-        continue;
-      }
-
-      if (!this.positionVisible(a.pos)) {
-        continue;
-      }
-
-      let dist = pos.euclideanDistance(a.pos);
-      if (dist < closestDistance) {
-        closestActor = a;
-        closestDistance = dist;
+    for(let i = 0 ; i < size; ++i) {
+      a = this.actors[i];
+      if (a !== null && !a.pos.equals(pos) && this.positionVisible(a.pos)) {
+        dist = pos.euclideanDistance(a.pos);
+        if (dist < closestDistance) {
+          closestActor = a;
+          closestDistance = dist;
+        }
       }
     }
 

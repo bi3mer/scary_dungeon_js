@@ -132,8 +132,11 @@ export function inventoryMenu(map: GameMap, player: Actor): Menu {
   } else {
     // get items
     let items: {[name: string]: [Item, number]} = {}; // [Item, count]
+    let item: Item;
+    const size = inventory.items.length;
 
-    for (let item of inventory.items) {
+    for(let i = 0; i < size; ++i) {
+      item = inventory.items[i];
       if (item.name in items) {
         ++items[item.name][1];
       } else {

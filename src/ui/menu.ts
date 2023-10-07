@@ -79,12 +79,15 @@ export class Menu {
     if (this.childMenu) {
       this.childMenu.render(ctx);
     } else {
-      for (let b of this.buttons) {
-        b.render(ctx);
+      let i: number;
+      const buttonsSize = this.buttons.length;
+      for(i = 0; i < buttonsSize; ++i) {
+        this.buttons[i].render(ctx);
       }
 
-      for (let t of this.text) {
-        t.render(ctx);
+      const textsSize = this.text.length;
+      for(i = 0; i < textsSize; ++i) {
+        this.text[i].render(ctx);
       }
     }
     this.shouldRender = false;

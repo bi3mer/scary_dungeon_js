@@ -18,7 +18,10 @@ export class Room {
   }
 
   intersects(others: Room[]): boolean {
-    for(let other of others) {
+    const size = others.length;
+    let other: Room;
+    for(let i = 0; i < size; ++i) {
+      other = others[i];
       if (
         this.x1-1 <= other.x2 && 
         this.x2+1 >= other.x1 && 

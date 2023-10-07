@@ -44,8 +44,9 @@ export class InputManager {
   }
 
   public static isKeyDown(...keys: Key[]): boolean {
-    for(let k of keys) {
-      if (InputManager._keys[k]) {
+    const size = keys.length;
+    for(let i = 0; i < size; ++i) {
+      if (InputManager._keys[keys[i]]) {
         return true;
       }
     }
