@@ -70,7 +70,7 @@ export function mainMenu(callback: ()=>void) : Menu {
     }
   });
 
-  const title = "Scary Dungeon";
+  const title = "Sisyphus's Dungeon";
   m.addText(new Text(Config.screenWidth/2, Config.screenHeight/4, title, colorYellow, true, 50));
 
   const attribution = "by Colan F. Biemer"
