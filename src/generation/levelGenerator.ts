@@ -28,22 +28,22 @@ export abstract class LevelGenerator {
     this.height = height;
 
     // We know every room in this dataset has the same dimensions
-    this.roomWidth  = LEVELS['0_0_0'][0].length; // room width
+    this.roomWidth = LEVELS['0_0_0'][0].length; // room width
     this.roomHeight = LEVELS['0_0_0'].length;    // room height
     this.levelNames = Object.keys(LEVELS);
 
     this.roomWidth = START_ROOM[0].length;
     this.roomHeight = START_ROOM.length;
-    
+
     // create the map with the correct number of tiles
-    this.widthMultiplier = this.roomWidth+Config.padding;
-    this.heightMultiplier = this.roomHeight+Config.padding;
-    this.map = new GameMap(width*this.widthMultiplier, height*this.heightMultiplier);
+    this.widthMultiplier = this.roomWidth + Config.padding;
+    this.heightMultiplier = this.roomHeight + Config.padding;
+    this.map = new GameMap(width * this.widthMultiplier, height * this.heightMultiplier);
   }
 
   setTile(pos: Point, tile: string): void {
-    switch(tile) {
-      case 'X': { 
+    switch (tile) {
+      case 'X': {
         // default is wall.
         break;
       }
@@ -53,7 +53,7 @@ export abstract class LevelGenerator {
       case 't':
         this.map.setTile(pos, tileFactory.grave);
         break;
-      case 'x': 
+      case 'x':
         this.map.setTile(pos, tileFactory.anvil);
         break;
       case '#': {
@@ -63,6 +63,10 @@ export abstract class LevelGenerator {
       }
       case '-': {
         this.map.setTile(pos, tileFactory.floor);
+        break;
+      }
+      case '~': {
+        this.map.setTile(pos, tileFactory.decoratedFloor);
         break;
       }
       case '/': {
@@ -92,7 +96,7 @@ export abstract class LevelGenerator {
           spawnConfusionScroll,
           spawnLightningScroll,
           spawnReturnToAltarScroll
-        ])(this.map, pos); 
+        ])(this.map, pos);
         break;
       }
       default: {
@@ -112,30 +116,32 @@ export abstract class LevelGenerator {
     }
   }
 
-  runWallRuleUpdates(): void {
-    // let p = new Point(0,0);
-    // for (let y = 0; y < this.map.height(); ++y) {
-    //   p.y = y;
-    //   for (let x = 0; x < this.map.height(); ++x) {
-    //     p.x = x;
+  decorate(): void {
+    let p = new Point(0, 0);
+    for (let y = 0; y < this.map.height(); ++y) {
+      p.y = y;
+      for (let x = 0; x < this.map.height(); ++x) {
+        p.x = x;
 
-    //     // Nothing to do if this is not a wall
-    //     if (this.map.isWalkable(p)) {
-    //       continue;
-    //     }
-        
-    //     // get neighbors for if it is wall or not
-    //     const [up, down, left, right] = this.map.getWallNeighbors(p);
+        // Wall decoration, if location is not walkable
+        if (!this.map.isWalkable(p)) {
+          // get neighbors for if it is wall or not
+          const [up, down, left, right] = this.map.getWallNeighbors(p);
 
-    //     if (up || down || left || right) {
-    //       // top middle 
-    //       this.setTile(p, '#');
-    //     } else {
-    //       this.setTile(p, choice(['T','t','x']));
-    //     }
-    //   }
-    // }
+          if (up || down || left || right) {
+            // top middle
+            // this.setTile(p, '#');
+          } else {
+            this.setTile(p, choice(['T', 't', 'x']));
+          }
+        } else if (Math.random() < 0.05) {
+          // random chance to decorate the ground with some cobblestones
+          this.setTile(p, '~');
+        }
+      }
+    }
   }
-  
+
+
   abstract generate(level: number, callback: (playerPos: Point) => void): void;
 }

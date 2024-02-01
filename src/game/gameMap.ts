@@ -30,9 +30,9 @@ export class GameMap {
 
   private potionCount: number = 0
 
-  private entities: (Entity|null)[] = []
-  private items: (Item|null)[] = []
-  private actors: (Actor|null)[] = []
+  private entities: (Entity | null)[] = []
+  private items: (Item | null)[] = []
+  private actors: (Actor | null)[] = []
 
   private entityIds: number[] = []
   private itemIds: number[] = []
@@ -40,7 +40,7 @@ export class GameMap {
 
   private actorIndex: number = 0;
   private playerWon: boolean = false;
-  
+
   constructor(rows: number, cols: number) {
     this.rows = rows;
     this.cols = cols;
@@ -48,23 +48,23 @@ export class GameMap {
     this.roomRows = START_ROOM.length + Config.padding;
     this.roomCols = START_ROOM[0].length + Config.padding;
 
-    this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
-    this.visible = Array(this.tiles.length).fill(0);  
-    this.explored = Array(this.tiles.length).fill(false); 
+    this.tiles = Array(this.rows * this.cols * this.roomRows * this.roomCols).fill(tileFactory.wall);
+    this.visible = Array(this.tiles.length).fill(0);
+    this.explored = Array(this.tiles.length).fill(false);
 
     this.actors.push(new Actor(
-      new Point(0,0),
+      new Point(0, 0),
       namePlayer,
       true,
-      '@', 
-      colorWhite, 
-      colorBlack, 
-      RenderOrder.Actor, 
+      '@',
+      colorWhite,
+      colorBlack,
+      RenderOrder.Actor,
       new PlayerBehavior())
     );
 
     this.actors.push(new Actor(
-      new Point(0,0),
+      new Point(0, 0),
       nameAltar,
       true,
       'A',
@@ -80,7 +80,7 @@ export class GameMap {
    * @returns width of the map
    */
   width(): number {
-    return this.cols*this.roomCols;
+    return this.cols * this.roomCols;
   }
 
   /**
@@ -88,13 +88,13 @@ export class GameMap {
    * @returns height of the map
    */
   height(): number {
-    return this.rows*this.roomRows;
+    return this.rows * this.roomRows;
   }
 
   reset(): void {
-    this.tiles = Array(this.rows*this.cols*this.roomRows*this.roomCols).fill(tileFactory.wall);
-    this.visible = Array(this.tiles.length).fill(0);  
-    this.explored = Array(this.tiles.length).fill(false); 
+    this.tiles = Array(this.rows * this.cols * this.roomRows * this.roomCols).fill(tileFactory.wall);
+    this.visible = Array(this.tiles.length).fill(0);
+    this.explored = Array(this.tiles.length).fill(false);
 
     this.potionCount = 0;
 
@@ -141,7 +141,7 @@ export class GameMap {
    * @returns true if the player is alive else false
    * @beta
    */
-  playerIsAlive(): boolean {  
+  playerIsAlive(): boolean {
     return this.player().char != '%';
   }
 
@@ -159,7 +159,7 @@ export class GameMap {
    * @returns corresponding index of xy coordinate to 1 d
    */
   private index(pos: Point): number {
-    return pos.y*(this.cols*this.roomCols) + pos.x;
+    return pos.y * (this.cols * this.roomCols) + pos.x;
   }
 
   /**
@@ -168,7 +168,7 @@ export class GameMap {
    * @returns true if in bounds else false
    */
   inBounds(pos: Point): boolean {
-    return pos.y * (this.cols*this.roomCols) + pos.x < this.tiles.length;
+    return pos.y * (this.cols * this.roomCols) + pos.x < this.tiles.length;
   }
 
   /**
@@ -197,15 +197,15 @@ export class GameMap {
   }
 
   render(display: Display): void {
-    const maxDist = Config.sightRadius*Config.sightRadius;
+    const maxDist = Config.sightRadius * Config.sightRadius;
     let y: number;
     let x: number;
 
     const playerPosition = this.player().pos;
 
-    const midX = Math.round(Config.width/2);
-    const midY = Math.round(Config.height/2);
-    let worldPosition = new Point(0,0);
+    const midX = Math.round(Config.width / 2);
+    const midY = Math.round(Config.height / 2);
+    let worldPosition = new Point(0, 0);
 
     // render the map
     for (y = -midY; y < midY; ++y) {
@@ -216,7 +216,7 @@ export class GameMap {
 
       worldPosition.y = worldY
 
-      for(x = -midX; x < midX; ++x) {
+      for (x = -midX; x < midX; ++x) {
         const worldX = playerPosition.x + x;
 
         if (worldX < 0) {
@@ -224,29 +224,29 @@ export class GameMap {
         }
 
         worldPosition.x = worldX;
-        
+
         let index = this.index(worldPosition);
         // let index = this.index(drawX, drawY);
         if (index >= this.visible.length) {
           continue;
         }
-          
+
         // draw tiles in relative position 
         const tile = this.tiles[index];
         const visibility = this.visible[index];
-        
+
         const p = new Point(worldX, worldY);
-        if(visibility > 0.1) {
+        if (visibility > 0.1) {
           if (playerPosition.equals(p)) {
-            display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
+            display.draw(x + midX, y + midY, tile.char, `rgba(0,0,0,0})`, colorTransparent);
           } else {
             const dist = playerPosition.unSquaredEuclideanDistance(p);
-            const color = `rgba(0,0,0,${Math.min(0.9, dist/maxDist)})`;
-            display.draw(x+midX, y+midY, tile.char, color, color);
+            const color = `rgba(0,0,0,${Math.min(0.9, dist / maxDist)})`;
+            display.draw(x + midX, y + midY, tile.char, color, color);
           }
         } else if (this.explored[index]) {
-          display.draw(x+midX, y+midY, tile.char, `rgba(0,0,0,${0.9})`, colorTransparent);
-        } 
+          display.draw(x + midX, y + midY, tile.char, `rgba(0,0,0,${0.9})`, colorTransparent);
+        }
       }
     }
 
@@ -286,7 +286,7 @@ export class GameMap {
   // ---------- Add
   addEntity(entity: Entity): void {
     assert(this.locationOccupied(entity.pos) === false);
-    
+
     if (this.entityIds.length > 0) {
       const id = this.entityIds.pop()!;
       entity.id = id;
@@ -300,7 +300,7 @@ export class GameMap {
   addActor(actor: Actor): void {
     assert(this.locationOccupied(actor.pos) === false);
 
-    if(this.actorIds.length > 0) {
+    if (this.actorIds.length > 0) {
       const id = this.actorIds.pop()!;
       actor.id = id;
       this.actors[id] = actor;
@@ -348,7 +348,7 @@ export class GameMap {
     const size = this.entities.length;
     let e: Entity | null;
 
-    for(let i = 0; i < size; ++i) {
+    for (let i = 0; i < size; ++i) {
       e = this.entities[i];
       if (e !== null && e.pos.equals(pos)) {
         return e;
@@ -382,14 +382,14 @@ export class GameMap {
         return item;
       }
     }
-    
+
     return null;
   }
 
   locationOccupied(pos: Point): boolean {
-    return this.entityAtLocation(pos) !== null || 
-           this.actorAtLocation(pos) !== null ||
-           this.itemAtLocation(pos) !== null;
+    return this.entityAtLocation(pos) !== null ||
+      this.actorAtLocation(pos) !== null ||
+      this.itemAtLocation(pos) !== null;
   }
 
   /**
@@ -408,7 +408,7 @@ export class GameMap {
     let dist: number;
     const size = this.actors.length;
 
-    for(let i = 0; i < size; ++i) {
+    for (let i = 0; i < size; ++i) {
       a = this.actors[i];
       if (a !== null && !a.pos.equals(pos)) {
         dist = pos.euclideanDistance(a.pos);
@@ -438,7 +438,7 @@ export class GameMap {
     let a: Actor | null;
     let size = this.actors.length;
 
-    for(let i = 0 ; i < size; ++i) {
+    for (let i = 0; i < size; ++i) {
       a = this.actors[i];
       if (a !== null && !a.pos.equals(pos) && this.positionVisible(a.pos)) {
         dist = pos.euclideanDistance(a.pos);
@@ -451,7 +451,7 @@ export class GameMap {
 
     return closestActor;
   }
-  
+
   /**
    * Test if a position is visible to the player.
    * @param pos - position
@@ -480,34 +480,34 @@ export class GameMap {
     this.visible.fill(0);
 
     fov.compute(
-      this.player().pos.x, 
-      this.player().pos.y, 
-      Config.sightRadius, 
+      this.player().pos.x,
+      this.player().pos.y,
+      Config.sightRadius,
       (x: number, y: number, r: number, visibility: number) => {
         const index = this.index(new Point(x, y));
         this.visible[index] = visibility;
         if (visibility === 1.0) {
           this.explored[index] = true;
-        } 
+        }
       }
     );
   }
-  
+
   /**
    * Run actors in the game.
    * @returns whether a render is required
    */
   runActors(): boolean {
     let shouldRender = false;
-    for(; this.actorIndex < this.actors.length; ++this.actorIndex) {
+    for (; this.actorIndex < this.actors.length; ++this.actorIndex) {
       if (this.actors[this.actorIndex] === null) {
         continue;
-        
+
       }
       const [requestAnotherTurn, requiresRender] = this.actors[this.actorIndex]!.act(this);
       shouldRender ||= requiresRender;
 
-      if(requestAnotherTurn) {
+      if (requestAnotherTurn) {
         // if true, then the act is telling us that the behavior wants another 
         // turn and the loop should end here before other actors can act.
         return shouldRender;
@@ -535,12 +535,11 @@ export class GameMap {
    * @returns if wall exists in up, down left, and right positions
    */
   getWallNeighbors(point: Point): [boolean, boolean, boolean, boolean] {
-
     return [
-      !this.isWalkable(new Point(point.x, point.y-1)),
-      !this.isWalkable(new Point(point.x, point.y+1)),
-      !this.isWalkable(new Point(point.x-1, point.y)),
-      !this.isWalkable(new Point(point.x+1, point.y)),
+      !this.isWalkable(new Point(point.x, point.y - 1)),
+      !this.isWalkable(new Point(point.x, point.y + 1)),
+      !this.isWalkable(new Point(point.x - 1, point.y)),
+      !this.isWalkable(new Point(point.x + 1, point.y)),
     ];
   }
 }

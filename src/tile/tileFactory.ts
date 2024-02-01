@@ -1,55 +1,61 @@
 import { colorBlack, colorDarkGray, colorIndigo, colorLightGray, colorTransparent, colorViolet, colorVisible } from "../utility/colors";
 import { Tile } from "./tile";
 
-let tileFactory: {[name: string]: Tile} = {};
+let tileFactory: { [name: string]: Tile } = {};
 
 tileFactory.floor = new Tile(
   '.',
   true,
   false,
-)
+);
+
+tileFactory.decoratedFloor = new Tile(
+  '~',
+  true,
+  false,
+);
 
 tileFactory.wall = new Tile(
   '#',
   false,
   true,
-)
+);
 
 tileFactory.tombstone = new Tile(
   'T',
   false,
   true,
-)
+);
 
 tileFactory.grave = new Tile(
   't',
   false,
   true,
-)
+);
 
 tileFactory.anvil = new Tile(
   'X',
   false,
   true,
-)
+);
 
 tileFactory.downStairs = new Tile(
   '>',
   false,
   false,
-)
+);
 
 tileFactory.forwardSlash = new Tile(
   '/',
   false,
   true,
-)
+);
 
 tileFactory.backwardSlash = new Tile(
   '\\',
   false,
   true,
-)
+);
 
 tileFactory.altarWall = new Tile(
   'g',
