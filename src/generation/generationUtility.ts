@@ -2,10 +2,10 @@ import { Point } from "../utility/point";
 
 // Based on: http://www.roguebasin.com/index.php/Bresenham%27s_Line_Algorithm
 export function bresenham(p1: Point, p2: Point, callback: (pos: Point) => void)
-: void {
+  : void {
   let temp: number;
-  let dx = p2.x-p1.x;
-  let dy = p2.y-p1.y;
+  let dx = p2.x - p1.x;
+  let dy = p2.y - p1.y;
 
   // rotate if the line is more y than x (steep)
   const isSteep = Math.abs(dy) > Math.abs(dx);
@@ -32,8 +32,8 @@ export function bresenham(p1: Point, p2: Point, callback: (pos: Point) => void)
   }
 
   // recalculate the differences
-  dy = p2.y-p1.y;
-  dx = p2.x-p1.x;
+  dy = p2.y - p1.y;
+  dx = p2.x - p1.x;
 
   // calculate the error
   let error = Math.round(dx / 2.0);
@@ -55,7 +55,7 @@ export function bresenham(p1: Point, p2: Point, callback: (pos: Point) => void)
     if (error < 0) {
       y += yStep;
       error += dx;
-      
+
       if (isSteep) {
         callback(new Point(y, x));
       } else {

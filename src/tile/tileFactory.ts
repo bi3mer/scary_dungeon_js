@@ -10,7 +10,7 @@ tileFactory.floor = new Tile(
 );
 
 tileFactory.decoratedFloor = new Tile(
-  '~',
+  ',',
   true,
   false,
 );
@@ -35,6 +35,16 @@ tileFactory.grave = new Tile(
 
 tileFactory.anvil = new Tile(
   'X',
+  false,
+  true,
+);
+
+// ...
+// X*X
+// XXX
+// * is where this wall should be placed
+tileFactory.bottomMiddleWall = new Tile(
+  '~',
   false,
   true,
 );

@@ -47,6 +47,9 @@ export abstract class LevelGenerator {
         // default is wall.
         break;
       }
+      case '~':
+        this.map.setTile(pos, tileFactory.bottomMiddleWall);
+        break;
       case 'T':
         this.map.setTile(pos, tileFactory.tombstone);
         break;
@@ -65,7 +68,7 @@ export abstract class LevelGenerator {
         this.map.setTile(pos, tileFactory.floor);
         break;
       }
-      case '~': {
+      case ',': {
         this.map.setTile(pos, tileFactory.decoratedFloor);
         break;
       }
@@ -125,18 +128,20 @@ export abstract class LevelGenerator {
 
         // Wall decoration, if location is not walkable
         if (!this.map.isWalkable(p)) {
+          // ERROR: this can't handle corners :/
           // get neighbors for if it is wall or not
           const [up, down, left, right] = this.map.getWallNeighbors(p);
 
-          if (up || down || left || right) {
-            // top middle
-            // this.setTile(p, '#');
-          } else {
+          if (!up && down && left && right) {
+            // Wall tile that is surrounded except for ground above it
+            this.setTile(p, '~');
+          } else if (!up && !down && !left && !right) {
+            // nothing around this tile
             this.setTile(p, choice(['T', 't', 'x']));
           }
         } else if (Math.random() < 0.05) {
           // random chance to decorate the ground with some cobblestones
-          this.setTile(p, '~');
+          this.setTile(p, ',');
         }
       }
     }

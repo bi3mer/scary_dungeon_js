@@ -43,20 +43,21 @@ export class Game {
       tileMap: {
         '@': [128, 224],
         's': [160, 224],  // Goes to a chest that can be opened... idk
-        'c': [224, 224],   // opened chest
-        '#': [128, 96],
+        'c': [224, 224], // opened chest
+        '#': [128, 96],  // enemy
         '.': [0, 128],   // ground
-        '~': [192, 96],  // decorated ground
+        ',': [192, 96],  // decorated ground
         'g': [224, 32],
         'G': [256, 32],
         'a': [224, 64],
         'A': [256, 64],
         'E': [64, 320],  // spider enemy
-        '*': [192, 288],  // green potion
+        '*': [192, 288], // green potion
         '%': [0, 288],   // ghost
         'X': [64, 192],  // anvil
         'T': [128, 160], // tombstone
         't': [160, 160], // grave
+        '~': [64, 64],   // bottom wall, middle in sequence, nothing above it
       },
     });
 
