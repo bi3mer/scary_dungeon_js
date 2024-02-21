@@ -22,10 +22,23 @@ const setAsyncInterval = (cb, interval) => {
 };
 
 async function build() {
-  await Bun.build({
+  let res = await Bun.build({
     entrypoints: ['./src/index.ts'],
     outdir: './dist'
   });
+
+  if (res.logs.length !== 0) {
+    var lines = process.stdout.getWindowSize()[1];
+    for (var i = 0; i < lines; i++) {
+      console.log('\r\n');
+    }
+
+    console.log();
+    console.log();
+    for (let l of res.logs) {
+      console.log(l);
+    }
+  }
 }
 
 setAsyncInterval(build, 750);

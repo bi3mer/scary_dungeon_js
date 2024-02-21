@@ -5,9 +5,9 @@ import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
 import { choice } from "../utility/random";
 import { LEVELS } from "./levels";
-import { Room } from "./room";
 
 import { START_ROOM } from "./rooms";
+
 
 
 export abstract class LevelGenerator {
@@ -49,6 +49,12 @@ export abstract class LevelGenerator {
       }
       case '~':
         this.map.setTile(pos, tileFactory.bottomMiddleWall);
+        break;
+      case '┐':
+        this.map.setTile(pos, tileFactory.bottomEastCornerWall);
+        break;
+      case '┌':
+        this.map.setTile(pos, tileFactory.bottomWestCornerWall);
         break;
       case 'T':
         this.map.setTile(pos, tileFactory.tombstone);
@@ -127,17 +133,20 @@ export abstract class LevelGenerator {
         p.x = x;
 
         // Wall decoration, if location is not walkable
-        if (!this.map.isWalkable(p)) {
-          // ERROR: this can't handle corners :/
+        if (!this.map.isWalkablePoint(p)) {
           // get neighbors for if it is wall or not
-          const [up, down, left, right] = this.map.getWallNeighbors(p);
+          const [nw, n, ne, e, se, s, sw, w] = this.map.getEightWallNeighbors(p);
 
-          if (!up && down && left && right) {
+          if (!n && s && w && e) {
             // Wall tile that is surrounded except for ground above it
             this.setTile(p, '~');
-          } else if (!up && !down && !left && !right) {
+          } else if (!n && !s && !e && !w) {
             // nothing around this tile
-            this.setTile(p, choice(['T', 't', 'x']));
+            this.setTile(p, choice(['T', 't', 'x'])); // TODO: I thinkt that this conditional is wrong
+          } else if (!n && !e && s && sw && w) {
+            this.setTile(p, '┐');
+          } else if (!n && !w && s && se && e) {
+            this.setTile(p, '┌');
           }
         } else if (Math.random() < 0.05) {
           // random chance to decorate the ground with some cobblestones
@@ -150,3 +159,5 @@ export abstract class LevelGenerator {
 
   abstract generate(level: number, callback: (playerPos: Point) => void): void;
 }
+
+

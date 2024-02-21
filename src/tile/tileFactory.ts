@@ -49,6 +49,27 @@ tileFactory.bottomMiddleWall = new Tile(
   true,
 );
 
+// ...
+// X*.
+// XX.
+// * is where this wall should be placed
+tileFactory.bottomEastCornerWall = new Tile(
+  '┐',
+  false,
+  true,
+);
+
+
+// ...
+// .*X
+// .XX
+// * is where this wall should be placed
+tileFactory.bottomWestCornerWall = new Tile(
+  '┌',
+  false,
+  true,
+);
+
 tileFactory.downStairs = new Tile(
   '>',
   false,

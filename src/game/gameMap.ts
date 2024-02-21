@@ -158,8 +158,12 @@ export class GameMap {
    * @param pos - x y coordinates 
    * @returns corresponding index of xy coordinate to 1 d
    */
-  private index(pos: Point): number {
+  private indexPoint(pos: Point): number {
     return pos.y * (this.cols * this.roomCols) + pos.x;
+  }
+
+  private index(x: number, y: number): number {
+    return y * (this.cols * this.roomCols) + x;
   }
 
   /**
@@ -176,8 +180,18 @@ export class GameMap {
    * @param pos - position to test
    * @returns true if the (x,y) coordinate is not blocked by a tile (e.g. wall)
    */
-  isWalkable(pos: Point): boolean {
-    const index = this.index(pos);
+  isWalkablePoint(pos: Point): boolean {
+    const index = this.indexPoint(pos);
+    if (index >= this.tiles.length || index < 0) {
+      return false;
+    }
+
+    return this.tiles[index].walkable;
+  }
+
+
+  isWalkable(x: number, y: number): boolean {
+    const index = this.index(x, y);
     if (index >= this.tiles.length || index < 0) {
       return false;
     }
@@ -191,7 +205,7 @@ export class GameMap {
    * @param tile - tile to set hte position to
    */
   setTile(pos: Point, tile: Tile): void {
-    const index = this.index(pos);
+    const index = this.indexPoint(pos);
     assert(index < this.tiles.length);
     this.tiles[index] = tile;
   }
@@ -225,7 +239,7 @@ export class GameMap {
 
         worldPosition.x = worldX;
 
-        let index = this.index(worldPosition);
+        let index = this.indexPoint(worldPosition);
         // let index = this.index(drawX, drawY);
         if (index >= this.visible.length) {
           continue;
@@ -258,7 +272,7 @@ export class GameMap {
     for (i = 0; i < entitiesLength; ++i) {
       e = this.entities[i];
       if (e !== null && this.positionVisible(e.pos)) {
-        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
+        e.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(e.pos)], maxDist);
       }
     }
 
@@ -268,7 +282,7 @@ export class GameMap {
     for (i = 0; i < itemsLength; ++i) {
       item = this.items[i];
       if (item !== null && this.positionVisible(item.pos)) {
-        item.render(display, playerPosition, midX, midY, this.visible[this.index(item.pos)], maxDist);
+        item.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(item.pos)], maxDist);
       }
     }
 
@@ -278,7 +292,7 @@ export class GameMap {
     for (i = 0; i < actorsLength; ++i) {
       actor = this.actors[i];
       if (actor !== null && this.positionVisible(actor.pos)) {
-        actor.render(display, playerPosition, midX, midY, this.visible[this.index(actor.pos)], maxDist);
+        actor.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(actor.pos)], maxDist);
       }
     }
   }
@@ -458,7 +472,7 @@ export class GameMap {
    * @returns true if the position is visible to the player else false
    */
   positionVisible(pos: Point): boolean {
-    const index = this.index(pos);
+    const index = this.indexPoint(pos);
     if (index < 0 || index >= this.visible.length) {
       return false;
     }
@@ -469,7 +483,7 @@ export class GameMap {
   // ---------- 
   computeFOV(): void {
     const fov = new PreciseShadowcasting((x, y) => {
-      const index = this.index(new Point(x, y));
+      const index = this.indexPoint(new Point(x, y));
       if (index < this.tiles.length && index >= 0) {
         return !this.tiles[index].blockFoV;
       }
@@ -484,7 +498,7 @@ export class GameMap {
       this.player().pos.y,
       Config.sightRadius,
       (x: number, y: number, r: number, visibility: number) => {
-        const index = this.index(new Point(x, y));
+        const index = this.indexPoint(new Point(x, y));
         this.visible[index] = visibility;
         if (visibility === 1.0) {
           this.explored[index] = true;
@@ -534,12 +548,51 @@ export class GameMap {
    * @param point - point to check neighbor for
    * @returns if wall exists in up, down left, and right positions
    */
-  getWallNeighbors(point: Point): [boolean, boolean, boolean, boolean] {
+  getCardinalWallNeighbors(point: Point): [boolean, boolean, boolean, boolean] {
     return [
-      !this.isWalkable(new Point(point.x, point.y - 1)),
-      !this.isWalkable(new Point(point.x, point.y + 1)),
-      !this.isWalkable(new Point(point.x - 1, point.y)),
-      !this.isWalkable(new Point(point.x + 1, point.y)),
+      !this.isWalkable(point.x, point.y - 1), // North
+      !this.isWalkable(point.x + 1, point.y), // East
+      !this.isWalkable(point.x, point.y + 1), // South
+      !this.isWalkable(point.x - 1, point.y), // West
+    ];
+  }
+
+  // NOTE: this would be better if it returned a bit map and we operated on that
+  // instead.
+  getEightWallNeighbors(point: Point): [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean] {
+    return [
+      !this.isWalkable(point.x - 1, point.y - 1), // North-West
+      !this.isWalkable(point.x, point.y - 1),     // North
+      !this.isWalkable(point.x + 1, point.y - 1), // North-East
+      !this.isWalkable(point.x + 1, point.y),     // East
+      !this.isWalkable(point.x + 1, point.y + 1), // South East
+      !this.isWalkable(point.x, point.y + 1),     // South
+      !this.isWalkable(point.x - 1, point.y + 1), // South-West
+      !this.isWalkable(point.x - 1, point.y),     // West
     ];
   }
 }
+
+/**
+Wanted to do a bitmap for get eight wall neighbors but I don't think we saved that much
+overall
+
+    return 0
+      // @ts-ignore
+      | (!this.isWalkable(point.x - 1, point.y - 1) << 1) // North-West 
+      // @ts-ignore
+      | (!this.isWalkable(point.x, point.y - 1) << 2) // North 
+      // @ts-ignore
+      | (!this.isWalkable(point.x + 1, point.y - 1) << 3) // North-East 
+      // @ts-ignore
+      | (!this.isWalkable(point.x + 1, point.y) << 4) // East 
+      // @ts-ignore
+      | (!this.isWalkable(point.x + 1, point.y + 1) << 5) // South-East 
+      // @ts-ignore
+      | (!this.isWalkable(point.x, point.y + 1) << 6) // South 
+      // @ts-ignore
+      | (!this.isWalkable(point.x - 1, point.y + 1) << 7) // South-West 
+      // @ts-ignore
+      | (!this.isWalkable(point.x - 1, point.y) << 8); // West 
+
+  */

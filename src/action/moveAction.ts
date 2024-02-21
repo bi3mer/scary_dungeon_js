@@ -9,11 +9,11 @@ export class MoveAction extends DirectionAction {
   constructor(dPos: Point) {
     super(dPos);
   }
-  
+
   execute(actor: Actor, map: GameMap): boolean {
     let pos = this.destination(actor);
-    
-    if (!map.isWalkable(pos)) {
+
+    if (!map.isWalkablePoint(pos)) {
       MessageLog.addMessage("That way is blocked", colorLightGray, true);
       return false;
     } else {

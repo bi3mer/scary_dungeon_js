@@ -1644,6 +1644,8 @@ tileFactory.tombstone = new Tile2("T", false, true);
 tileFactory.grave = new Tile2("t", false, true);
 tileFactory.anvil = new Tile2("X", false, true);
 tileFactory.bottomMiddleWall = new Tile2("~", false, true);
+tileFactory.bottomEastCornerWall = new Tile2("\u2510", false, true);
+tileFactory.bottomWestCornerWall = new Tile2("\u250C", false, true);
 tileFactory.downStairs = new Tile2(">", false, false);
 tileFactory.forwardSlash = new Tile2("/", false, true);
 tileFactory.backwardSlash = new Tile2("\\", false, true);
@@ -2068,7 +2070,7 @@ function bfs(start, target, map8) {
         moves.push(m);
         return moves;
       }
-      if (map8.isWalkable(newPos)) {
+      if (map8.isWalkablePoint(newPos)) {
         let newMoves = [...moves];
         newMoves.push(m);
         frontier.push([newPos, newMoves]);
@@ -2803,7 +2805,7 @@ class MoveAction extends DirectionAction {
   }
   execute(actor2, map8) {
     let pos = this.destination(actor2);
-    if (!map8.isWalkable(pos)) {
+    if (!map8.isWalkablePoint(pos)) {
       MessageLog.addMessage("That way is blocked", colorLightGray, true);
       return false;
     } else {
@@ -3069,21 +3071,31 @@ class GameMap {
   requiredPotions() {
     return this.potionCount;
   }
-  index(pos) {
+  indexPoint(pos) {
     return pos.y * (this.cols * this.roomCols) + pos.x;
+  }
+  index(x, y) {
+    return y * (this.cols * this.roomCols) + x;
   }
   inBounds(pos) {
     return pos.y * (this.cols * this.roomCols) + pos.x < this.tiles.length;
   }
-  isWalkable(pos) {
-    const index = this.index(pos);
+  isWalkablePoint(pos) {
+    const index = this.indexPoint(pos);
+    if (index >= this.tiles.length || index < 0) {
+      return false;
+    }
+    return this.tiles[index].walkable;
+  }
+  isWalkable(x, y) {
+    const index = this.index(x, y);
     if (index >= this.tiles.length || index < 0) {
       return false;
     }
     return this.tiles[index].walkable;
   }
   setTile(pos, tile3) {
-    const index = this.index(pos);
+    const index = this.indexPoint(pos);
     assert(index < this.tiles.length);
     this.tiles[index] = tile3;
   }
@@ -3107,7 +3119,7 @@ class GameMap {
           continue;
         }
         worldPosition.x = worldX;
-        let index = this.index(worldPosition);
+        let index = this.indexPoint(worldPosition);
         if (index >= this.visible.length) {
           continue;
         }
@@ -3133,7 +3145,7 @@ class GameMap {
     for (i = 0;i < entitiesLength; ++i) {
       e = this.entities[i];
       if (e !== null && this.positionVisible(e.pos)) {
-        e.render(display, playerPosition, midX, midY, this.visible[this.index(e.pos)], maxDist);
+        e.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(e.pos)], maxDist);
       }
     }
     let item2;
@@ -3141,7 +3153,7 @@ class GameMap {
     for (i = 0;i < itemsLength; ++i) {
       item2 = this.items[i];
       if (item2 !== null && this.positionVisible(item2.pos)) {
-        item2.render(display, playerPosition, midX, midY, this.visible[this.index(item2.pos)], maxDist);
+        item2.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(item2.pos)], maxDist);
       }
     }
     let actor3;
@@ -3149,7 +3161,7 @@ class GameMap {
     for (i = 0;i < actorsLength; ++i) {
       actor3 = this.actors[i];
       if (actor3 !== null && this.positionVisible(actor3.pos)) {
-        actor3.render(display, playerPosition, midX, midY, this.visible[this.index(actor3.pos)], maxDist);
+        actor3.render(display, playerPosition, midX, midY, this.visible[this.indexPoint(actor3.pos)], maxDist);
       }
     }
   }
@@ -3274,7 +3286,7 @@ class GameMap {
     return closestActor;
   }
   positionVisible(pos) {
-    const index = this.index(pos);
+    const index = this.indexPoint(pos);
     if (index < 0 || index >= this.visible.length) {
       return false;
     }
@@ -3282,7 +3294,7 @@ class GameMap {
   }
   computeFOV() {
     const fov4 = new PreciseShadowcasting((x, y) => {
-      const index = this.index(new Point(x, y));
+      const index = this.indexPoint(new Point(x, y));
       if (index < this.tiles.length && index >= 0) {
         return !this.tiles[index].blockFoV;
       }
@@ -3290,7 +3302,7 @@ class GameMap {
     });
     this.visible.fill(0);
     fov4.compute(this.player().pos.x, this.player().pos.y, Config.sightRadius, (x, y, r, visibility) => {
-      const index = this.index(new Point(x, y));
+      const index = this.indexPoint(new Point(x, y));
       this.visible[index] = visibility;
       if (visibility === 1) {
         this.explored[index] = true;
@@ -3320,12 +3332,24 @@ class GameMap {
   levelComplete() {
     return this.playerWon;
   }
-  getWallNeighbors(point11) {
+  getCardinalWallNeighbors(point11) {
     return [
-      !this.isWalkable(new Point(point11.x, point11.y - 1)),
-      !this.isWalkable(new Point(point11.x, point11.y + 1)),
-      !this.isWalkable(new Point(point11.x - 1, point11.y)),
-      !this.isWalkable(new Point(point11.x + 1, point11.y))
+      !this.isWalkable(point11.x, point11.y - 1),
+      !this.isWalkable(point11.x + 1, point11.y),
+      !this.isWalkable(point11.x, point11.y + 1),
+      !this.isWalkable(point11.x - 1, point11.y)
+    ];
+  }
+  getEightWallNeighbors(point11) {
+    return [
+      !this.isWalkable(point11.x - 1, point11.y - 1),
+      !this.isWalkable(point11.x, point11.y - 1),
+      !this.isWalkable(point11.x + 1, point11.y - 1),
+      !this.isWalkable(point11.x + 1, point11.y),
+      !this.isWalkable(point11.x + 1, point11.y + 1),
+      !this.isWalkable(point11.x, point11.y + 1),
+      !this.isWalkable(point11.x - 1, point11.y + 1),
+      !this.isWalkable(point11.x - 1, point11.y)
     ];
   }
 }
@@ -3763,6 +3787,12 @@ class LevelGenerator {
       case "~":
         this.map.setTile(pos, tileFactory_default.bottomMiddleWall);
         break;
+      case "\u2510":
+        this.map.setTile(pos, tileFactory_default.bottomEastCornerWall);
+        break;
+      case "\u250C":
+        this.map.setTile(pos, tileFactory_default.bottomWestCornerWall);
+        break;
       case "T":
         this.map.setTile(pos, tileFactory_default.tombstone);
         break;
@@ -3834,12 +3864,16 @@ class LevelGenerator {
       p.y = y;
       for (let x = 0;x < this.map.height(); ++x) {
         p.x = x;
-        if (!this.map.isWalkable(p)) {
-          const [up, down, left, right] = this.map.getWallNeighbors(p);
-          if (!up && down && left && right) {
+        if (!this.map.isWalkablePoint(p)) {
+          const [nw, n, ne, e, se, s, sw, w] = this.map.getEightWallNeighbors(p);
+          if (!n && s && w && e) {
             this.setTile(p, "~");
-          } else if (!up && !down && !left && !right) {
+          } else if (!n && !s && !e && !w) {
             this.setTile(p, choice(["T", "t", "x"]));
+          } else if (!n && !e && s && sw && w) {
+            this.setTile(p, "\u2510");
+          } else if (!n && !w && s && se && e) {
+            this.setTile(p, "\u250C");
           }
         } else if (Math.random() < 0.05) {
           this.setTile(p, ",");
@@ -4161,7 +4195,9 @@ class Game {
         X: [64, 192],
         T: [128, 160],
         t: [160, 160],
-        "~": [64, 64]
+        "~": [64, 64],
+        "\u2510": [160, 0],
+        "\u250C": [128, 0]
       }
     });
     this.map = new GameMap(Config.width, Config.height);

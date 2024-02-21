@@ -58,6 +58,8 @@ export class Game {
         'T': [128, 160], // tombstone
         't': [160, 160], // grave
         '~': [64, 64],   // bottom wall, middle in sequence, nothing above it
+        '┐': [160, 0],   // bottom wall corner with empty spaces n, ne, e
+        '┌': [128, 0],   // botoom wall corner with empty spaces n, nw, w
       },
     });
 
