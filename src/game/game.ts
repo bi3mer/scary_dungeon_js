@@ -60,6 +60,10 @@ export class Game {
         '~': [64, 64],   // bottom wall, middle in sequence, nothing above it
         '┐': [160, 0],   // bottom wall corner with empty spaces n, ne, e
         '┌': [128, 0],   // botoom wall corner with empty spaces n, nw, w
+        '|': [32, 32],   // Side wall with empty space to W and walls n, e, se
+        'i': [96, 32],   // Side wall with empty space to E and walls n, w, sw 
+        '┘': [96, 64],   // connects walls vertical and horizontal lines with empty space NE. 
+        '└': [32, 64],   // connects walls vertical and horizontal lines with empty space NW
       },
     });
 

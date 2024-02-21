@@ -1646,6 +1646,10 @@ tileFactory.anvil = new Tile2("X", false, true);
 tileFactory.bottomMiddleWall = new Tile2("~", false, true);
 tileFactory.bottomEastCornerWall = new Tile2("\u2510", false, true);
 tileFactory.bottomWestCornerWall = new Tile2("\u250C", false, true);
+tileFactory.sideWestWall = new Tile2("|", false, true);
+tileFactory.sideEastWall = new Tile2("i", false, true);
+tileFactory.cornerSouthEastWall = new Tile2("\u2518", false, true);
+tileFactory.cornerSouthWestWall = new Tile2("\u2514", false, true);
 tileFactory.downStairs = new Tile2(">", false, false);
 tileFactory.forwardSlash = new Tile2("/", false, true);
 tileFactory.backwardSlash = new Tile2("\\", false, true);
@@ -3784,15 +3788,6 @@ class LevelGenerator {
       case "X": {
         break;
       }
-      case "~":
-        this.map.setTile(pos, tileFactory_default.bottomMiddleWall);
-        break;
-      case "\u2510":
-        this.map.setTile(pos, tileFactory_default.bottomEastCornerWall);
-        break;
-      case "\u250C":
-        this.map.setTile(pos, tileFactory_default.bottomWestCornerWall);
-        break;
       case "T":
         this.map.setTile(pos, tileFactory_default.tombstone);
         break;
@@ -3867,13 +3862,21 @@ class LevelGenerator {
         if (!this.map.isWalkablePoint(p)) {
           const [nw, n, ne, e, se, s, sw, w] = this.map.getEightWallNeighbors(p);
           if (!n && s && w && e) {
-            this.setTile(p, "~");
+            this.map.setTile(p, tileFactory_default.bottomMiddleWall);
           } else if (!n && !s && !e && !w) {
             this.setTile(p, choice(["T", "t", "x"]));
           } else if (!n && !e && s && sw && w) {
-            this.setTile(p, "\u2510");
+            this.map.setTile(p, tileFactory_default.bottomEastCornerWall);
           } else if (!n && !w && s && se && e) {
-            this.setTile(p, "\u250C");
+            this.map.setTile(p, tileFactory_default.bottomWestCornerWall);
+          } else if (n && w && s && !e) {
+            this.map.setTile(p, tileFactory_default.sideWestWall);
+          } else if (n && e && s && !w) {
+            this.map.setTile(p, tileFactory_default.sideEastWall);
+          } else if (n && !nw && w) {
+            this.map.setTile(p, tileFactory_default.cornerSouthEastWall);
+          } else if (n && !ne && e) {
+            this.map.setTile(p, tileFactory_default.cornerSouthWestWall);
           }
         } else if (Math.random() < 0.05) {
           this.setTile(p, ",");
@@ -4197,7 +4200,11 @@ class Game {
         t: [160, 160],
         "~": [64, 64],
         "\u2510": [160, 0],
-        "\u250C": [128, 0]
+        "\u250C": [128, 0],
+        "|": [32, 32],
+        i: [96, 32],
+        "\u2518": [96, 64],
+        "\u2514": [32, 64]
       }
     });
     this.map = new GameMap(Config.width, Config.height);

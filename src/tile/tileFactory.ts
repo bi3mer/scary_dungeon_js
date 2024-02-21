@@ -70,6 +70,49 @@ tileFactory.bottomWestCornerWall = new Tile(
   true,
 );
 
+
+// XX.
+// X*.
+// XX.
+// * is where this wall should be placed
+tileFactory.sideWestWall = new Tile(
+  '|',
+  false,
+  true,
+);
+
+// .XX
+// .*X
+// .XX
+// * is where this wall should be placed
+tileFactory.sideEastWall = new Tile(
+  'i',
+  false,
+  true,
+);
+
+// XX.
+// X*.
+// ...
+// 
+// * is where this wall should be placed
+tileFactory.cornerSouthEastWall = new Tile(
+  '┘',
+  false,
+  true,
+);
+
+// XX.
+// X*.
+// ...
+// 
+// * is where this wall should be placed
+tileFactory.cornerSouthWestWall = new Tile(
+  '└',
+  false,
+  true,
+);
+
 tileFactory.downStairs = new Tile(
   '>',
   false,

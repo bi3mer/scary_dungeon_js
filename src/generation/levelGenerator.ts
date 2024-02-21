@@ -5,10 +5,7 @@ import tileFactory from "../tile/tileFactory";
 import { Point } from "../utility/point";
 import { choice } from "../utility/random";
 import { LEVELS } from "./levels";
-
 import { START_ROOM } from "./rooms";
-
-
 
 export abstract class LevelGenerator {
   map: GameMap
@@ -47,15 +44,6 @@ export abstract class LevelGenerator {
         // default is wall.
         break;
       }
-      case '~':
-        this.map.setTile(pos, tileFactory.bottomMiddleWall);
-        break;
-      case '┐':
-        this.map.setTile(pos, tileFactory.bottomEastCornerWall);
-        break;
-      case '┌':
-        this.map.setTile(pos, tileFactory.bottomWestCornerWall);
-        break;
       case 'T':
         this.map.setTile(pos, tileFactory.tombstone);
         break;
@@ -137,16 +125,25 @@ export abstract class LevelGenerator {
           // get neighbors for if it is wall or not
           const [nw, n, ne, e, se, s, sw, w] = this.map.getEightWallNeighbors(p);
 
+          // we avoid setTile to save some execution time because we know exactly 
+          // what we want to happen when decorating in this context
           if (!n && s && w && e) {
-            // Wall tile that is surrounded except for ground above it
-            this.setTile(p, '~');
+            this.map.setTile(p, tileFactory.bottomMiddleWall);
           } else if (!n && !s && !e && !w) {
             // nothing around this tile
             this.setTile(p, choice(['T', 't', 'x'])); // TODO: I thinkt that this conditional is wrong
           } else if (!n && !e && s && sw && w) {
-            this.setTile(p, '┐');
+            this.map.setTile(p, tileFactory.bottomEastCornerWall);
           } else if (!n && !w && s && se && e) {
-            this.setTile(p, '┌');
+            this.map.setTile(p, tileFactory.bottomWestCornerWall);
+          } else if (n && w && s && !e) {
+            this.map.setTile(p, tileFactory.sideWestWall);
+          } else if (n && e && s && !w) {
+            this.map.setTile(p, tileFactory.sideEastWall);
+          } else if (n && !nw && w) {
+            this.map.setTile(p, tileFactory.cornerSouthEastWall);
+          } else if (n && !ne && e) {
+            this.map.setTile(p, tileFactory.cornerSouthWestWall);
           }
         } else if (Math.random() < 0.05) {
           // random chance to decorate the ground with some cobblestones
