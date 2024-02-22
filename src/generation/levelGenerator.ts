@@ -62,10 +62,6 @@ export abstract class LevelGenerator {
         this.map.setTile(pos, tileFactory.floor);
         break;
       }
-      case ',': {
-        this.map.setTile(pos, tileFactory.decoratedFloor);
-        break;
-      }
       case '/': {
         this.map.setTile(pos, tileFactory.forwardSlash);
         break;
@@ -129,9 +125,9 @@ export abstract class LevelGenerator {
           // what we want to happen when decorating in this context
           if (!n && s && w && e) {
             this.map.setTile(p, tileFactory.bottomMiddleWall);
-          } else if (!n && !s && !e && !w) {
+          } else if (!n && !s && !e && !w) { // TODO: I thinkt this conditional is wrong 
             // nothing around this tile
-            this.setTile(p, choice(['T', 't', 'x'])); // TODO: I thinkt that this conditional is wrong
+            this.setTile(p, choice(['T', 't', 'x']));
           } else if (!n && !e && s && sw && w) {
             this.map.setTile(p, tileFactory.bottomEastCornerWall);
           } else if (!n && !w && s && se && e) {
@@ -145,9 +141,13 @@ export abstract class LevelGenerator {
           } else if (n && !ne && e) {
             this.map.setTile(p, tileFactory.cornerSouthWestWall);
           }
-        } else if (Math.random() < 0.05) {
-          // random chance to decorate the ground with some cobblestones
-          this.setTile(p, ',');
+        } else if (Math.random() < 0.08) {
+          // random chance to decorate the ground with some cobblestones or spots
+          if (Math.random() < 0.7) {
+            this.map.setTile(p, tileFactory.decoratedFloor2);
+          } else {
+            this.map.setTile(p, tileFactory.decoratedFloor1);
+          }
         }
       }
     }

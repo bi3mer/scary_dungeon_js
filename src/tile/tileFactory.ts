@@ -9,8 +9,14 @@ tileFactory.floor = new Tile(
   false,
 );
 
-tileFactory.decoratedFloor = new Tile(
+tileFactory.decoratedFloor1 = new Tile(
   ',',
+  true,
+  false,
+);
+
+tileFactory.decoratedFloor2 = new Tile(
+  '1',
   true,
   false,
 );
