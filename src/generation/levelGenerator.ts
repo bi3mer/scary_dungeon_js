@@ -118,6 +118,24 @@ export abstract class LevelGenerator {
 
         // Wall decoration, if location is not walkable
         if (!this.map.isWalkablePoint(p)) {
+          const bitmask = this.map.getNeighborBitMask(p);
+        } else if (Math.random() < 0.08) {
+          // random chance to decorate the ground with some cobblestones or spots
+          if (Math.random() < 0.7) {
+            this.map.setTile(p, tileFactory.decoratedFloor2);
+          } else {
+            this.map.setTile(p, tileFactory.decoratedFloor1);
+          }
+        }
+      }
+    }
+  }
+
+  abstract generate(level: number, callback: (playerPos: Point) => void): void;
+}
+
+/*
+
           // get neighbors for if it is wall or not
           const [nw, n, ne, e, se, s, sw, w] = this.map.getEightWallNeighbors(p);
 
@@ -140,21 +158,7 @@ export abstract class LevelGenerator {
             this.map.setTile(p, tileFactory.cornerSouthEastWall);
           } else if (n && !ne && e) {
             this.map.setTile(p, tileFactory.cornerSouthWestWall);
+          } else if (n && e && w && ne && nw) {
+            this.map.setTile(p, tile)
           }
-        } else if (Math.random() < 0.08) {
-          // random chance to decorate the ground with some cobblestones or spots
-          if (Math.random() < 0.7) {
-            this.map.setTile(p, tileFactory.decoratedFloor2);
-          } else {
-            this.map.setTile(p, tileFactory.decoratedFloor1);
-          }
-        }
-      }
-    }
-  }
-
-
-  abstract generate(level: number, callback: (playerPos: Point) => void): void;
-}
-
-
+*/

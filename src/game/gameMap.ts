@@ -571,6 +571,39 @@ export class GameMap {
       !this.isWalkable(point.x - 1, point.y),     // West
     ];
   }
+
+  /**
+   * Returns a 8 bit mask (2^8 possibilities) where each bit is true or false for 
+   * al eight directions for any point.
+   *
+   * 1 2 3
+   * 4 . 5
+   * 6 7 8
+   * 
+   * So the result when unwrapped is: 8 7 6 5 4 3 2 1
+   *
+   * Also, typescript doesn't want me doing bit operations with bools, but I 
+   * don't care which is why I am using ts-ignore for every line below.
+   */
+  getNeighborBitMask(p: Point): number {
+    return 0
+      // @ts-ignore
+      | (this.isWalkable(p.x - 1, p.y - 1))       // 1. North-West
+      // @ts-ignore
+      | (this.isWalkable(p.x, p.y - 1) << 1)      // 2. North
+      // @ts-ignore
+      | (this.isWalkable(p.x + 1, p.y - 1) << 2)  // 3. North-East
+      // @ts-ignore
+      | (this.isWalkable(p.x - 1, p.y) << 3)      // 4. West
+      // @ts-ignore
+      | (this.isWalkable(p.x + 1, p.y) << 4)      // 5. East
+      // @ts-ignore
+      | (this.isWalkable(p.x - 1, p.y + 1) << 5)  // 6. South-West
+      // @ts-ignore
+      | (this.isWalkable(p.x, p.y + 1) << 6)      // 7. South
+      // @ts-ignore
+      | (this.isWalkable(p.x + 1, p.y + 1) << 7)  // 8. South-East
+  }
 }
 
 /**
